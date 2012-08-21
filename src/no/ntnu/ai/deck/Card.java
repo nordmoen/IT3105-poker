@@ -38,14 +38,7 @@ public class Card implements Comparable<Card> {
 	 * @return -1 or 1 depending on which card has the higher suit
 	 */
 	private int compareSuits(Card other){
-		int suitCompare = this.suit.compareTo(other.getSuit());
-		if (suitCompare == 0){
-			return 0;
-		}else if (suitCompare > 0){
-			return -1;
-		}else{
-			return 1;
-		}
+		return this.suit.compareTo(other.getSuit());
 	}
 
 	@Override
