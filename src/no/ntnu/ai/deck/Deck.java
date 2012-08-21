@@ -1,6 +1,5 @@
 package no.ntnu.ai.deck;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -36,10 +35,10 @@ public class Deck{
 		return this.deck.pop();
 	}
 	
-	public ArrayList<Card> dealCards(int nr){
-		ArrayList<Card> res = new ArrayList<Card>(nr);
+	public Card[] dealCards(int nr){
+		Card[] res = new Card[nr];
 		for(int i = 0; i < nr; i++){
-			res.add(this.deck.pop());
+			res[i] = this.dealCard();
 		}
 		return res;
 	}

@@ -1,5 +1,8 @@
 package no.ntnu.ai.deck;
 
+/**
+ * A class representing a playing card
+ */
 public class Card implements Comparable<Card> {
 
 	private final Suit suit;
@@ -97,7 +100,7 @@ public class Card implements Comparable<Card> {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * Get the unicode representation of the suit
 	 * @return - The unicode representation of the suit

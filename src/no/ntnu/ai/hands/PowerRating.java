@@ -1,9 +1,10 @@
 package no.ntnu.ai.hands;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 import no.ntnu.ai.deck.Card;
+import no.ntnu.ai.deck.CardUtils;
 
 public class PowerRating implements Comparable<PowerRating> {
 
@@ -13,6 +14,9 @@ public class PowerRating implements Comparable<PowerRating> {
 	private final Card[] kickers;
 	//The cards used to calculate the selected rank
 	private final Card[] rankCards;
+	
+	private final Card[][] groupedByValues;
+	private final Card[][] groupedBySuits;
 
 	//The sum of kickers.length + rankCards.length must not be above 5!
 
@@ -24,6 +28,10 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * @param cards
 	 */
 	public PowerRating(Card[] cards){
+		
+		groupedByValues = CardUtils.groupByValues(cards);
+		groupedBySuits = CardUtils.groupBySuits(cards);
+		
 		//Sort cards descending
 		Arrays.sort(cards, java.util.Collections.reverseOrder());
 
@@ -39,20 +47,22 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * @return - A list of cards which can be used as kickers sorted in descending order
 	 */
 	private Card[] getKickers(Card[] cardsInRank, Card[] allCards) {
-		ArrayList<Card> kickers = new ArrayList<Card>(4); //Max size of kickers is 4
-		int i = 0;
-		int j = 0;
-		while(cardsInRank.length + kickers.size() < 5){
-			//Since both cardsInRank and allCards are sorted descending this
-			//should work
-			if(cardsInRank[j].getValue() == allCards[i].getValue()){
-				i++;
-				j++;
-			}else{
-				kickers.add(allCards[i]);
-				i++;
+		Stack<Card> kickers = new Stack<Card>();
+		for(int i = 0; i < allCards.length; i++){
+			kickers.push(allCards[i]);
+		}
+		//The stack now contains the weakest card at the top of the stack
+		if(!kickers.isEmpty()){
+			for(int i = 0; i < cardsInRank.length; i++){
+				kickers.remove(cardsInRank[i]);
+			}
+
+			while(kickers.size() + cardsInRank.length > 5 && !kickers.isEmpty()){
+				//Pop the weakest cards until we have enough cards
+				kickers.pop();
 			}
 		}
+
 		return (Card[]) kickers.toArray();
 	}
 
@@ -88,15 +98,25 @@ public class PowerRating implements Comparable<PowerRating> {
 			//If we get here this means that both hands had the same card values in their hand
 			//Compare kickers
 			Card[] otherKickers = arg0.getKickers();
-			for(int i = 0; i < this.kickers.length; i++){
+			for(int i = 0; i < this.kickers.length && i < otherKickers.length; i++){
+				//The list of kickers doesn't have to be the same length!
 				if(this.kickers[i].getValue() > otherKickers[i].getValue()){
 					return 1;
 				}else if(this.kickers[i].getValue() < otherKickers[i].getValue()){
 					return -1;
 				}
 			}
-			//Both power ratings have the same kickers, both hands are equal
-			return 0;
+			if(otherKickers.length == this.kickers.length){
+				//Both power ratings have the same kickers, both hands are equal
+				return 0;
+			}else{
+				//The one with the most kickers is now the best one
+				if(this.kickers.length > otherKickers.length){
+					return 1;
+				}else{
+					return -1;
+				}
+			}
 		}
 	}
 
@@ -106,7 +126,34 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * @return - A HandRank with the rank of the cards
 	 */
 	private HandRank getRank(Card[] cards){
-		return HandRank.FLUSH;
+		boolean flush = groupedBySuits.length == 1 && groupedBySuits[0].length == 5;
+		boolean straight = groupedByValues.length == 5;
+		
+		if(straight && flush){
+			return HandRank.STRAIGHT_FLUSH;
+		}else if(flush){
+			return HandRank.FLUSH;
+		}else if(straight){
+			return HandRank.STRAIGHT;
+		}else{
+			if(isFourOfAKind()){
+				return HandRank.FOUR_OF_A_KIND;
+			}else if(isFullHouse()){
+				return HandRank.FULL_HOUSE;
+			}
+		}
+	}
+	
+	private boolean isFourOfAKind(){
+		return groupedByValues.length == 2 && 
+				(groupedByValues[0].length == 4 || 
+				groupedByValues[1].length == 4);
+	}
+	
+	private boolean isFullHouse(){
+		return groupedByValues.length == 2 &&
+				((groupedByValues[0].length == 3 && groupedByValues[1].length == 2) ||
+						(groupedByValues[1].length == 3 && groupedByValues[0].length == 2));
 	}
 
 	public HandRank getRank() {
@@ -120,5 +167,4 @@ public class PowerRating implements Comparable<PowerRating> {
 	public Card[] getRankCards() {
 		return rankCards;
 	}
-
 }
