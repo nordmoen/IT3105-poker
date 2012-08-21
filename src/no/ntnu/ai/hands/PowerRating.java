@@ -64,7 +64,7 @@ public class PowerRating implements Comparable<PowerRating> {
 			}
 		}
 
-		return (Card[]) kickers.toArray();
+		return kickers.toArray(new Card[kickers.size()]);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class PowerRating implements Comparable<PowerRating> {
 			break;
 		}
 		java.util.Collections.sort(res, java.util.Collections.reverseOrder());
-		return (Card[]) res.toArray();
+		return res.toArray(new Card[res.size()]);
 	}
 	
 	private ArrayList<Card> removeNotInNumber(Card[] cards, int val){
