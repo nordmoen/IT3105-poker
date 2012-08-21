@@ -24,9 +24,9 @@ public class Deck{
 	 */
 	private void reset(){
 		this.deck.clear();
-		for(Suit s : Suit.values()){
+		for(int i = 3; i >= 0; i--){
 			for(int j = 14; j > 1; j--){
-				this.deck.add(new Card(j, s));
+				this.deck.add(new Card(j, Suit.values()[i]));
 			}
 		}
 	}

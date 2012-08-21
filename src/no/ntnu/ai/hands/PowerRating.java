@@ -179,7 +179,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		ArrayList<Card> res = new ArrayList<Card>();
 		int pairValue1 = -1;
 		int pairValue2 = -1;
-		for(int i = 0; i < groupedByValues.length; i++){
+		for(int i = groupedByValues.length - 1; i >= 0; i--){
 			if(groupedByValues[i] == 2){
 				if(pairValue1 == -1){
 					pairValue1 = i + 2;

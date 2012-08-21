@@ -22,8 +22,8 @@ public class TestCard {
 		
 		assertTrue("C3 less than C4", c3.compareTo(c4) == -1);
 		assertTrue("C5 value equals C1", c5.getValue() == c1.getValue());
-		assertEquals("C1 greater than C5", 1, c1.compareTo(c5));
-		assertEquals("C5 less than C1", -1, c5.compareTo(c1));
+		assertEquals("C1 greater than C5", -3, c1.compareTo(c5));
+		assertEquals("C5 less than C1", 3, c5.compareTo(c1));
 	}
 
 	@Test
@@ -46,11 +46,11 @@ public class TestCard {
 	
 	@Test
 	public void testToString(){
-		assertEquals("C1 toString", "10 of \u2665", c1.toString());
-		assertEquals("C2 toString", "Jack of \u2663", c2.toString());
-		assertEquals("C3 toString", "2 of \u2666", c3.toString());
-		assertEquals("C4 toString", "King of \u2665", c4.toString());
-		assertEquals("C5 toString", "10 of \u2660", c5.toString());
+		assertEquals("C1 toString", "10 of Hearts", c1.toString());
+		assertEquals("C2 toString", "Jack of Clubs", c2.toString());
+		assertEquals("C3 toString", "2 of Diamonds", c3.toString());
+		assertEquals("C4 toString", "King of Hearts", c4.toString());
+		assertEquals("C5 toString", "10 of Spades", c5.toString());
 	}
 	
 	@Test

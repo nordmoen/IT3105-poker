@@ -22,21 +22,21 @@ public class TestDeck {
 
 	@Test
 	public void testDealCard() {
-		assertEquals("The top card of a new deck is 2 of spades", 
-				new Card(2, Suit.SPADES), d1.dealCard());
-		assertEquals("After the one use 3 of spades should be at the top", 
-				new Card(3, Suit.SPADES), d1.dealCard());
+		assertEquals("The top card of a new deck is 2 of hearts", 
+				new Card(2, Suit.HEARTS), d1.dealCard());
+		assertEquals("After the one use 3 of hearts should be at the top", 
+				new Card(3, Suit.HEARTS), d1.dealCard());
 	}
 
 	@Test
 	public void testDealCards() {
 		ArrayList<Card> firstFive = new ArrayList<Card>(5);
-		firstFive.add(new Card(2, Suit.SPADES));
-		firstFive.add(new Card(3, Suit.SPADES));
-		firstFive.add(new Card(4, Suit.SPADES));
-		firstFive.add(new Card(5, Suit.SPADES));
-		firstFive.add(new Card(6, Suit.SPADES));
-		assertEquals("The first five cards", firstFive, d1.dealCards(5));
+		firstFive.add(new Card(2, Suit.HEARTS));
+		firstFive.add(new Card(3, Suit.HEARTS));
+		firstFive.add(new Card(4, Suit.HEARTS));
+		firstFive.add(new Card(5, Suit.HEARTS));
+		firstFive.add(new Card(6, Suit.HEARTS));
+		assertArrayEquals("The first five cards", firstFive.toArray(), d1.dealCards(5));
 	}
 
 	@Test
@@ -48,11 +48,11 @@ public class TestDeck {
 		assertEquals("D2 shuffled then sorted is equal to a d1 sorted", d1, d2);
 		
 		ArrayList<Card> first = new ArrayList<Card>(5);
-		first.add(new Card(2, Suit.SPADES));
-		first.add(new Card(2, Suit.DIAMONDS));
-		first.add(new Card(2, Suit.CLUBS));
 		first.add(new Card(2, Suit.HEARTS));
-		assertEquals("After D2 sorted top 4 cards smallest", first, d2.dealCards(4));
+		first.add(new Card(2, Suit.CLUBS));
+		first.add(new Card(2, Suit.DIAMONDS));
+		first.add(new Card(2, Suit.SPADES));
+		assertArrayEquals("After D2 sorted top 4 cards smallest", first.toArray(), d2.dealCards(4));
 	}
 
 	@Test
