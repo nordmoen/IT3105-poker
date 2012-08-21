@@ -11,7 +11,7 @@ public class Deck{
 	private final Random randomGen = new Random();
 
 	public Deck(int seed){
-		deck.setSize(51);
+		deck.setSize(52);
 		this.reset();
 		this.randomGen.setSeed(seed);
 	}
@@ -101,6 +101,14 @@ public class Deck{
 	 */
 	public void stdShuffle(){
 		this.shuffle(7);
+	}
+	
+	public boolean remove(Card remCard){
+		return deck.remove(remCard);
+	}
+	
+	public boolean contains(Card aCard){
+		return deck.contains(aCard);
 	}
 
 }

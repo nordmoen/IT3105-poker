@@ -77,5 +77,13 @@ public class TestDeck {
 		d2.shuffle(1);
 		assertFalse("D2 shuffled twice is not equal to D3", d2.equals(d3));
 	}
+	
+	@Test
+	public void testRemove() {
+		Card c1 = new Card(5, Suit.CLUBS);
+		assertTrue(d1.contains(c1));
+		d1.remove(c1);
+		assertFalse(d1.contains(c1));
+	}
 
 }
