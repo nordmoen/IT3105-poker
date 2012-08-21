@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.Suit;
+import no.ntnu.ai.hands.HandRank;
 import no.ntnu.ai.hands.PowerRating;
 
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class TestPowerRating {
 	public void testGetRank() {
 		Card[] h1 = {new Card(10, Suit.DIAMONDS), new Card(11, Suit.DIAMONDS), new Card(12, Suit.DIAMONDS),
 				new Card(13, Suit.DIAMONDS), new Card(14, Suit.DIAMONDS)};
-		Card[] h2 = {new Card(13, Suit.CLUBS), new Card(10, Suit.DIAMONDS), new Card(10, Suit.HEARTS),
+		Card[] h2 = {new Card(10, Suit.CLUBS), new Card(10, Suit.DIAMONDS), new Card(10, Suit.HEARTS),
 				new Card(10, Suit.SPADES), new Card(5, Suit.SPADES)};
 		Card[] h3 = {new Card(9, Suit.CLUBS), new Card(9, Suit.DIAMONDS), new Card(9, Suit.HEARTS),
 				new Card(5, Suit.CLUBS), new Card(5, Suit.SPADES)};
@@ -54,15 +55,15 @@ public class TestPowerRating {
 		PowerRating hp8 = new PowerRating(h8);
 		PowerRating hp9 = new PowerRating(h9);
 		
-		assertEquals(9, hp1.getRank());
-		assertEquals(8, hp2.getRank());
-		assertEquals(7, hp3.getRank());
-		assertEquals(6, hp4.getRank());
-		assertEquals(5, hp5.getRank());
-		assertEquals(4, hp6.getRank());
-		assertEquals(3, hp7.getRank());
-		assertEquals(2, hp8.getRank());
-		assertEquals(1, hp9.getRank());
+		assertEquals(HandRank.STRAIGHT_FLUSH, hp1.getRank());
+		assertEquals(HandRank.FOUR_OF_A_KIND, hp2.getRank());
+		assertEquals(HandRank.FULL_HOUSE, hp3.getRank());
+		assertEquals(HandRank.FLUSH, hp4.getRank());
+		assertEquals(HandRank.STRAIGHT, hp5.getRank());
+		assertEquals(HandRank.THREE_OF_A_KIND, hp6.getRank());
+		assertEquals(HandRank.TWO_PAIR, hp7.getRank());
+		assertEquals(HandRank.ONE_PAIR, hp8.getRank());
+		assertEquals(HandRank.HIGH_CARD, hp9.getRank());
 	}
 
 	@Test
@@ -80,8 +81,8 @@ public class TestPowerRating {
 	public void testGetRankCards() {
 		Card[] rh1 = {new Card(10, Suit.SPADES), new Card(11, Suit.HEARTS), new Card(8, Suit.HEARTS), 
 				new Card(5, Suit.CLUBS), new Card(10, Suit.CLUBS), new Card(11, Suit.SPADES), new Card(5, Suit.HEARTS)};
-		Card[] r1 = {new Card(11, Suit.HEARTS), new Card(11, Suit.SPADES), new Card(10, Suit.CLUBS),
-				new Card(10, Suit.SPADES)};
+		Card[] r1 = {new Card(11, Suit.SPADES), new Card(11, Suit.HEARTS), new Card(10, Suit.SPADES),
+				new Card(10, Suit.CLUBS)};
 		
 		PowerRating rp1 = new PowerRating(rh1);
 		
