@@ -1,8 +1,5 @@
 package no.ntnu.ai.deck;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  * Utility class for the card class
  */
@@ -11,21 +8,13 @@ public class CardUtils {
 	 * Create an array of arrays of cards where each sub-array is grouped by
 	 * values, meaning all cards of the same value is in the same sub-array.
 	 * @param cards - The cards to group
-	 * @return - An array of arrays
+	 * @return - An array giving the amount of cards with each value, offset by -2.
+	 * 			i.e. res[0] gives the amount of 2's in the hand.
 	 */
-	public static Card[][] groupByValues(Card[] cards){
-		HashMap<Integer, ArrayList<Card>> map = new HashMap<Integer, ArrayList<Card>>();
+	public static int[] groupByValues(Card[] cards){
+		int[] res = new int[13];
 		for(Card c : cards){
-			if(!map.containsKey(c.getValue())){
-				map.put(c.getValue(), new ArrayList<Card>());
-			}
-			map.get(c.getValue()).add(c);
-		}
-		Card[][] res = new Card[map.keySet().size()][];
-		int i = 0;
-		for(Integer j : map.keySet()){
-			res[i] = (Card[]) map.get(j).toArray();
-			i++;
+			res[c.getValue() - 2]++;
 		}
 		return res;
 	}
@@ -34,21 +23,12 @@ public class CardUtils {
 	 * Create an array of arrays of cards where each sub-array is grouped by
 	 * suits, meaning all cards of the same suit is in the same sub-array.
 	 * @param cards - The cards to group
-	 * @return - An array of arrays
+	 * @return - An array giving the amount of cards of each suit, following the numbering in the suit enum declaration.
 	 */
-	public static Card[][] groupBySuits(Card[] cards){
-		HashMap<Suit, ArrayList<Card>> map = new HashMap<Suit, ArrayList<Card>>();
+	public static int[] groupBySuits(Card[] cards){
+		int[] res = new int[4];
 		for(Card c : cards){
-			if(!map.containsKey(c.getSuit())){
-				map.put(c.getSuit(), new ArrayList<Card>());
-			}
-			map.get(c.getSuit()).add(c);
-		}
-		Card[][] res = new Card[map.keySet().size()][];
-		int i = 0;
-		for(Suit j : map.keySet()){
-			res[i] = (Card[]) map.get(j).toArray();
-			i++;
+			res[c.getSuit().ordinal()]++;
 		}
 		return res;
 	}
