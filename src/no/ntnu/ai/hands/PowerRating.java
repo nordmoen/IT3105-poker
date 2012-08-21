@@ -15,8 +15,8 @@ public class PowerRating implements Comparable<PowerRating> {
 	//The cards used to calculate the selected rank
 	private final Card[] rankCards;
 	
-	private final Card[][] groupedByValues;
-	private final Card[][] groupedBySuits;
+	private final int[] groupedByValues;
+	private final int[] groupedBySuits;
 
 	//The sum of kickers.length + rankCards.length must not be above 5!
 
@@ -126,8 +126,8 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * @return - A HandRank with the rank of the cards
 	 */
 	private HandRank getRank(Card[] cards){
-		boolean flush = groupedBySuits.length == 1 && groupedBySuits[0].length == 5;
-		boolean straight = groupedByValues.length == 5;
+		boolean flush = isFlush();
+		boolean straight = isStraight();
 		
 		if(straight && flush){
 			return HandRank.STRAIGHT_FLUSH;
@@ -140,20 +140,89 @@ public class PowerRating implements Comparable<PowerRating> {
 				return HandRank.FOUR_OF_A_KIND;
 			}else if(isFullHouse()){
 				return HandRank.FULL_HOUSE;
+			}else if(isThreeOfAKind()){
+				return HandRank.THREE_OF_A_KIND;
+			}else if (isTwoPair()){
+				return HandRank.TWO_PAIR;
+			}else if (isPair()){
+				return HandRank.ONE_PAIR;
+			}else{
+				return HandRank.HIGH_CARD;
 			}
 		}
 	}
 	
+
+	private boolean isFlush(){
+		for(Integer i : groupedBySuits){
+			if(i == 5){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isStraight(){
+		for(int i = 0; i < groupedByValues.length; i++){
+			if(groupedByValues[i] == 1){
+				return checkNextFour(i);
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkNextFour(int index){
+		for(int i = 1; i < 5; i++){
+			if(groupedByValues[i+index] != 1){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	private boolean isFourOfAKind(){
-		return groupedByValues.length == 2 && 
-				(groupedByValues[0].length == 4 || 
-				groupedByValues[1].length == 4);
+		for(Integer i : groupedByValues){
+			if(i == 4){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private boolean isFullHouse(){
-		return groupedByValues.length == 2 &&
-				((groupedByValues[0].length == 3 && groupedByValues[1].length == 2) ||
-						(groupedByValues[1].length == 3 && groupedByValues[0].length == 2));
+		return isThreeOfAKind() && isPair();
+	}
+
+	private boolean isThreeOfAKind() {
+		for(Integer i : groupedByValues){
+			if(i == 3){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isTwoPair() {
+		boolean found = false;
+		for(Integer i : groupedByValues){
+			if(i == 2){
+				if(!found){
+					found = true;
+				}else{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean isPair(){
+		for(Integer i : groupedByValues){
+			if(i == 2){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public HandRank getRank() {
