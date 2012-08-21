@@ -102,23 +102,23 @@ public class Card implements Comparable<Card> {
 	}
 
 	/**
-	 * Get the unicode representation of the suit
-	 * @return - The unicode representation of the suit
+	 * Get the name of the suit
+	 * @return - The full name of the suit
 	 */
 	private String getSuitName(){
 		String res = "";
 		switch (this.suit) {
 		case HEARTS:
-			res = "\u2665"; 
+			res = "Hearts"; 
 			break;
 		case DIAMONDS:
-			res = "\u2666";
+			res = "Diamonds";
 			break;
 		case CLUBS:
-			res = "\u2663";
+			res = "Clubs";
 			break;
 		case SPADES:
-			res = "\u2660";
+			res = "Spades";
 			break;
 		}
 		return res;
