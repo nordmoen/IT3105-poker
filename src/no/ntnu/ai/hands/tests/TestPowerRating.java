@@ -36,6 +36,8 @@ public class TestPowerRating {
 	Card[] h12 = {new Card(3, Suit.HEARTS), new Card(4, Suit.DIAMONDS), new Card(5, Suit.CLUBS),
 			new Card(6, Suit.HEARTS), new Card(7, Suit.DIAMONDS), new Card(3, Suit.SPADES),
 			new Card(3, Suit.CLUBS)};
+	Card[] h13 = {new Card(10, Suit.DIAMONDS), new Card(11, Suit.DIAMONDS), new Card(12, Suit.DIAMONDS),
+			new Card(13, Suit.DIAMONDS), new Card(9, Suit.DIAMONDS)};
 	
 	PowerRating hp1 = new PowerRating(h1);
 	PowerRating hp2 = new PowerRating(h2);
@@ -49,10 +51,13 @@ public class TestPowerRating {
 	PowerRating hp10 = new PowerRating(h10);
 	PowerRating hp11 = new PowerRating(h11);
 	PowerRating hp12 = new PowerRating(h12);
+	PowerRating hp13 = new PowerRating(h13);
 	
 	@Test
 	public void testCompareTo() {
 		assertEquals(1, hp1.compareTo(hp2));
+		assertEquals(1, hp1.compareTo(hp13));
+		assertEquals(-1, hp13.compareTo(hp1));
 	}
 
 	@Test
