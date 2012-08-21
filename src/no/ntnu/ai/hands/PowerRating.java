@@ -1,5 +1,6 @@
 package no.ntnu.ai.hands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -66,6 +67,13 @@ public class PowerRating implements Comparable<PowerRating> {
 		return (Card[]) kickers.toArray();
 	}
 
+	@Override
+	public String toString() {
+		return "PowerRating [rank=" + rank + ", kickers="
+				+ Arrays.toString(kickers) + ", rankCards="
+				+ Arrays.toString(rankCards) + "]";
+	}
+
 	/**
 	 * Extract the cards which can be used in the given rank
 	 * @param rank - The rank to match against
@@ -73,8 +81,130 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * @return - A list of cards sorted descending
 	 */
 	private Card[] getUsedCards(HandRank rank, Card[] cards) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Card> res = null;
+		switch (rank) {
+		case STRAIGHT_FLUSH:
+			res = removeNotInSuits(cards);
+			break;
+		case FOUR_OF_A_KIND:
+			res = removeNotInNumber(cards, 4);
+			break;
+		case FULL_HOUSE:
+			res = removeNotInFull(cards);
+			break;
+		case FLUSH:
+			res = removeNotInSuits(cards);
+			break;
+		case STRAIGHT:
+			res = removeNotInStraight(cards);
+			break;
+		case THREE_OF_A_KIND:
+			res = removeNotInNumber(cards, 3);
+			break;
+		case TWO_PAIR:
+			res = removeNotInTwoPair(cards);
+			break;
+		case ONE_PAIR:
+			res = removeNotInNumber(cards, 2);
+			break;
+		case HIGH_CARD:
+			res = new ArrayList<Card>();
+			res.add(cards[0]);
+			break;
+		}
+		java.util.Collections.sort(res, java.util.Collections.reverseOrder());
+		return (Card[]) res.toArray();
+	}
+	
+	private ArrayList<Card> removeNotInNumber(Card[] cards, int val){
+		ArrayList<Card> res = new ArrayList<Card>();
+		int pairValue = 0;
+		for(int i = 0; i < groupedByValues.length; i++){
+			if(groupedByValues[i] == val){
+				pairValue = i + 2;
+				break;
+			}
+		}
+		for(Card c : cards){
+			if(c.getValue() == pairValue){
+				res.add(c);
+			}
+		}
+		return res;
+	}
+
+	private ArrayList<Card> removeNotInFull(Card[] cards) {
+		ArrayList<Card> res = new ArrayList<Card>();
+		int pairValue1 = -1;
+		int pairValue2 = -1;
+		for(int i = 0; i < groupedByValues.length; i++){
+			if(groupedByValues[i] == 2){
+				pairValue1 = i + 2;
+			}else if(groupedByValues[i] == 3){
+				pairValue2 = i + 2;
+			}
+		}
+		for(Card c : cards){
+			if(c.getValue() == pairValue1 || c.getValue() == pairValue2){
+				res.add(c);
+			}
+		}
+		return res;
+	}
+
+	private ArrayList<Card> removeNotInStraight(Card[] cards) {
+		ArrayList<Card> res = new ArrayList<Card>();
+		int max = 0;
+		int min = 0;
+		
+		for(int i = 0; i < groupedByValues.length; i++){
+			if(groupedByValues[i] == 1){
+				if(this.checkNextFour(i)){
+					max = i + 2;
+					min = i - 5 + 2;
+					break;
+				}
+			}
+		}
+		for(Card c : cards){
+			if(c.getValue() >= min && c.getValue() <= max){
+				res.add(c);
+			}
+		}
+		
+		return res;
+	}
+
+	private ArrayList<Card> removeNotInTwoPair(Card[] cards) {
+		ArrayList<Card> res = new ArrayList<Card>();
+		int pairValue1 = -1;
+		int pairValue2 = -1;
+		for(int i = 0; i < groupedByValues.length; i++){
+			if(groupedByValues[i] == 2){
+				if(pairValue1 == -1){
+					pairValue1 = i + 2;
+				}else{
+					pairValue2 = i + 2;
+					break;
+				}
+			}
+		}
+		for(Card c : cards){
+			if(c.getValue() == pairValue1 || c.getValue() == pairValue2){
+				res.add(c);
+			}
+		}
+		return res;
+	}
+	
+	private ArrayList<Card> removeNotInSuits(Card[] cards){
+		ArrayList<Card> res = new ArrayList<Card>();
+		for(Card c : cards){
+			if(groupedBySuits[c.getSuit().ordinal()] == 5){
+				res.add(c);
+			}
+		}
+		return res;
 	}
 
 	@Override
