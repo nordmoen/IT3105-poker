@@ -157,8 +157,8 @@ public class PowerRating implements Comparable<PowerRating> {
 		int max = 0;
 		int min = 0;
 		
-		for(int i = 0; i < groupedByValues.length; i++){
-			if(groupedByValues[i] == 1){
+		for(int i = groupedByValues.length - 1; i >= 0; i--){
+			if(groupedByValues[i] != 0){
 				if(this.checkNextFour(i)){
 					max = i + 2;
 					min = i - 5 + 2;
@@ -168,7 +168,15 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		for(Card c : cards){
 			if(c.getValue() >= min && c.getValue() <= max){
-				res.add(c);
+				boolean found = false;
+				for(Card c2 : res){
+					if(c2.getValue() == c.getValue()){
+						found = true;
+					}
+				}
+				if(!found){
+					res.add(c);
+				}
 			}
 		}
 		
@@ -293,8 +301,8 @@ public class PowerRating implements Comparable<PowerRating> {
 	}
 	
 	private boolean isStraight(){
-		for(int i = 0; i < groupedByValues.length; i++){
-			if(groupedByValues[i] == 1){
+		for(int i = groupedByValues.length - 1; i >= 0; i--){
+			if(groupedByValues[i] != 0){
 				return checkNextFour(i);
 			}
 		}
@@ -303,7 +311,7 @@ public class PowerRating implements Comparable<PowerRating> {
 	
 	private boolean checkNextFour(int index){
 		for(int i = 1; i < 5; i++){
-			if(groupedByValues[i+index] != 1){
+			if(groupedByValues[index-i] == 0){
 				return false;
 			}
 		}
