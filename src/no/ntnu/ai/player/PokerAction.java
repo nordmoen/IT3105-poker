@@ -1,4 +1,4 @@
-package no.ntnu.ai.players;
+package no.ntnu.ai.player;
 
 public class PokerAction {
 	private final Action act;

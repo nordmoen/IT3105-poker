@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.CardUtils;
 import no.ntnu.ai.deck.Suit;
-import no.ntnu.ai.players.PokerHand;
+import no.ntnu.ai.player.PokerHand;
 
 import org.junit.Test;
 

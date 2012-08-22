@@ -1,13 +1,15 @@
 package no.ntnu.ai.table;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
-import no.ntnu.ai.players.PokerPlayer;
+import no.ntnu.ai.player.PokerPlayer;
 
 public class PokerTable {
 
-	private LinkedList<PokerPlayer> players = new LinkedList<PokerPlayer>();
+	private final LinkedList<PokerPlayer> players = new LinkedList<PokerPlayer>();
 	private final int maxPlayers;
+	private final HashMap<PokerPlayer, Integer> bets = new HashMap<PokerPlayer, Integer>(); 
 	private int dealer = 0;
 	private boolean playing = false;
 	private int smallBlind, bigBlind, round = 0;
@@ -57,6 +59,21 @@ public class PokerTable {
 		}
 	}
 	
+	public boolean nextRound(){
+		//We first need to check that both small blind and big blind
+		//players have put up their blinds.
+		if(bets.get(getCurrentSmallBlindPlayer()) >= smallBlind){
+			if (bets.get(getCurrentBigBlindPlayer()) >= bigBlind){
+				this.round++;
+				this.nextDealer();
+				this.playing = false;
+				this.bets.clear(); //Clear this rounds bets
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public PokerPlayer getCurrentDealer(){
 		return this.players.get(this.dealer);
 	}
@@ -99,6 +116,14 @@ public class PokerTable {
 	
 	public int getCurrentRound(){
 		return this.round;
+	}
+	
+	public int getPotSize(){
+		int pot = 0;
+		for(Integer i : bets.values()){
+			pot += i;
+		}
+		return pot;
 	}
 	
 

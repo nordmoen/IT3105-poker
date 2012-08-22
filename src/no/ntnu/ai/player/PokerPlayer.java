@@ -1,4 +1,4 @@
-package no.ntnu.ai.players;
+package no.ntnu.ai.player;
 
 import no.ntnu.ai.deck.Card;
 

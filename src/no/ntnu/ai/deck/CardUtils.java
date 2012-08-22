@@ -2,7 +2,7 @@ package no.ntnu.ai.deck;
 
 import java.util.ArrayList;
 
-import no.ntnu.ai.players.PokerHand;
+import no.ntnu.ai.player.PokerHand;
 
 /**
  * Utility class for the card class
