@@ -53,6 +53,9 @@ public class TestPowerRating {
 	PowerRating hp12 = new PowerRating(h12);
 	PowerRating hp13 = new PowerRating(h13);
 	
+	PowerRating[] ratings = {hp1, hp2, hp3, hp4, hp5, hp6, hp7, hp8, hp9, hp10, hp11,
+			hp12, hp13};
+	
 	@Test
 	public void testCompareTo() {
 		assertEquals(1, hp1.compareTo(hp2));
@@ -97,6 +100,19 @@ public class TestPowerRating {
 		PowerRating rp1 = new PowerRating(rh1);
 		
 		assertArrayEquals(r1, rp1.getRankCards());
+		
+		assertEquals(5, hp1.getRankCards().length);
+		assertEquals(4, hp2.getRankCards().length);
+		assertEquals(5, hp3.getRankCards().length);
+		assertEquals(5, hp4.getRankCards().length);
+		assertEquals(5, hp5.getRankCards().length);
+		assertEquals(3, hp6.getRankCards().length);
+		assertEquals(4, hp7.getRankCards().length);
+		assertEquals(2, hp8.getRankCards().length);
+		assertEquals(1, hp9.getRankCards().length);
+		assertEquals(5, hp10.getRankCards().length);
+		assertEquals(5, hp11.getRankCards().length);
+		assertEquals(5, hp12.getRankCards().length);
 	}
 
 }

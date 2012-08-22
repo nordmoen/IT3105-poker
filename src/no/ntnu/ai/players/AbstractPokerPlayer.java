@@ -18,7 +18,7 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 			chipCount -= pAct.getAmount();
 			break;
 		case CALL:
-			if(pAct.getAmount() != 0){
+			if(pAct.getAmount() > 0){
 				chipCount -= pAct.getAmount();
 			}
 			break;
