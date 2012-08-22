@@ -78,6 +78,29 @@ public class TestPowerRating {
 		assertEquals(HandRank.STRAIGHT, hp11.getRank());
 		assertEquals(HandRank.STRAIGHT, hp12.getRank());
 	}
+	
+	@Test
+	public void testNonDestructive(){
+		//Test that making a power rank does not change the original array
+		//This test will fail if the clone() in the PowerRating constructor is
+		//removed
+		Card[] h11 = {new Card(10, Suit.DIAMONDS), new Card(11, Suit.DIAMONDS), new Card(12, Suit.DIAMONDS),
+				new Card(13, Suit.DIAMONDS), new Card(14, Suit.DIAMONDS)};
+		Card[] h22 = {new Card(10, Suit.CLUBS), new Card(10, Suit.DIAMONDS), new Card(10, Suit.HEARTS),
+				new Card(10, Suit.SPADES), new Card(5, Suit.SPADES)};
+		Card[] h33 = {new Card(9, Suit.CLUBS), new Card(9, Suit.DIAMONDS), new Card(9, Suit.HEARTS),
+				new Card(5, Suit.CLUBS), new Card(5, Suit.SPADES)};
+		Card[] h44 = {new Card(2, Suit.SPADES), new Card(5, Suit.SPADES), new Card(7, Suit.SPADES),
+				new Card(11, Suit.SPADES), new Card(13, Suit.SPADES)};
+		Card[] h55 = {new Card(5, Suit.CLUBS), new Card(8, Suit.DIAMONDS), new Card(6, Suit.SPADES),
+				new Card(7, Suit.SPADES), new Card(9, Suit.CLUBS)};
+		
+		assertArrayEquals(h11, h1);
+		assertArrayEquals(h22, h2);
+		assertArrayEquals(h33, h3);
+		assertArrayEquals(h44, h4);
+		assertArrayEquals(h55, h5);
+	}
 
 	@Test
 	public void testGetKickers() {

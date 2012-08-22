@@ -26,19 +26,24 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * five cards are given, this will calculate the best hand in the 
 	 * cards and use the remaining cards as kickers if less than five cards where
 	 * used.
+	 * 
+	 * This Class will create a clone of the cards so the user should not have to
+	 * worry about restructuring of the cards given to this method.
 	 * @param cards
 	 */
 	public PowerRating(Card[] cards){
 		
-		groupedByValues = CardUtils.groupByValues(cards);
-		groupedBySuits = CardUtils.groupBySuits(cards);
+		Card[] cardsCopy = cards.clone();
+		
+		groupedByValues = CardUtils.groupByValues(cardsCopy);
+		groupedBySuits = CardUtils.groupBySuits(cardsCopy);
 		
 		//Sort cards descending
-		Arrays.sort(cards, java.util.Collections.reverseOrder());
+		Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
 
-		this.rank = this.getRank(cards);
-		this.rankCards = this.getUsedCards(this.rank, cards);
-		this.kickers = this.getKickers(this.rankCards, cards);
+		this.rank = this.getRank(cardsCopy);
+		this.rankCards = this.getUsedCards(this.rank, cardsCopy);
+		this.kickers = this.getKickers(this.rankCards, cardsCopy);
 	}
 
 	/**
