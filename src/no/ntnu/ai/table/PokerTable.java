@@ -49,7 +49,7 @@ public class PokerTable {
 		}
 		return false;
 	}
-	
+
 	public void nextDealer(){
 		if(playing){
 			this.dealer = (dealer + 1) % this.players.size();
@@ -58,8 +58,8 @@ public class PokerTable {
 					"table has not started to play");
 		}
 	}
-	
-	public boolean nextRound(){
+
+	public void nextRound(){
 		//We first need to check that both small blind and big blind
 		//players have put up their blinds.
 		if(bets.get(getCurrentSmallBlindPlayer()) >= smallBlind){
@@ -68,20 +68,33 @@ public class PokerTable {
 				this.nextDealer();
 				this.playing = false;
 				this.bets.clear(); //Clear this rounds bets
-				return true;
+				return;
 			}
 		}
-		return false;
+		throw new IllegalStateException("All blinds have not been payed");
 	}
-	
+
+	public void makeBet(PokerPlayer player, int amount){
+		if(this.players.contains(player)){
+			int actualAmount = amount;
+			if(this.bets.containsKey(player)){
+				actualAmount += this.bets.get(player);
+			}
+			this.bets.put(player, actualAmount);
+		}else{
+			throw new IllegalStateException("A player who is not playing at this " +
+					"table can not make a bet at this table");
+		}
+	}
+
 	public PokerPlayer getCurrentDealer(){
 		return this.players.get(this.dealer);
 	}
-	
+
 	public PokerPlayer getCurrentSmallBlindPlayer(){
 		return this.players.get(this.dealer + 1);
 	}
-	
+
 	public PokerPlayer getCurrentBigBlindPlayer(){
 		return this.players.get(this.dealer + 2);
 	}
@@ -113,11 +126,11 @@ public class PokerTable {
 	public boolean isPlaying() {
 		return playing;
 	}
-	
+
 	public int getCurrentRound(){
 		return this.round;
 	}
-	
+
 	public int getPotSize(){
 		int pot = 0;
 		for(Integer i : bets.values()){
@@ -125,6 +138,6 @@ public class PokerTable {
 		}
 		return pot;
 	}
-	
+
 
 }
