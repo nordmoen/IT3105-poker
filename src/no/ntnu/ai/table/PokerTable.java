@@ -33,7 +33,7 @@ public class PokerTable{
 			this.addPlayer(p);
 		}
 	}
-	
+
 	/**
 	 * Create a new Poker table with the given players
 	 * @param s - The starting small blind
@@ -94,6 +94,10 @@ public class PokerTable{
 		return players;
 	}
 
+	public int size() {
+		return players.size();
+	}
+
 	public int getCurrentRound(){
 		return this.round;
 	}
@@ -106,5 +110,17 @@ public class PokerTable{
 	 */
 	public PokerPlayer getPlayer(int index){
 		return this.players.get((this.dealer + index) % this.players.size());
+	}
+
+	/**
+	 * Get the betting player. This method will in the same round return the 
+	 * same player for the same index. The way the method works is that getBetterAt(0)
+	 * is the first better i.e. the player after big blind and getBetterAt(1) is
+	 * the player after this again. In the next round the structure will change.
+	 * @param index - The betting index to get the player at
+	 * @return - The poker player index positions after the first better
+	 */
+	public PokerPlayer getBetterAt(int index){
+		return this.getPlayer(index + 3);
 	}
 }
