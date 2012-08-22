@@ -1,13 +1,14 @@
 package no.ntnu.ai.table;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 
 import no.ntnu.ai.player.PokerPlayer;
 
 public class PokerTable{
 
-	private final LinkedList<PokerPlayer> players = new LinkedList<PokerPlayer>();
+	private final List<PokerPlayer> players = new ArrayList<PokerPlayer>();
 	private final int maxPlayers;
 	private final HashMap<PokerPlayer, Integer> bets = new HashMap<PokerPlayer, Integer>(); 
 	private int dealer = 0;
@@ -49,7 +50,7 @@ public class PokerTable{
 		}
 		return false;
 	}
-	
+
 	public boolean removePlayer(PokerPlayer player){
 		if(!playing){
 			this.players.remove(player);
@@ -58,13 +59,8 @@ public class PokerTable{
 		return false;
 	}
 
-	public void nextDealer(){
-		if(playing){
-			this.dealer = (dealer + 1) % this.players.size();
-		}else{
-			throw new IllegalStateException("Can't go to next dealer if this " +
-					"table has not started to play");
-		}
+	private void nextDealer(){
+		this.dealer = (dealer + 1) % this.players.size();
 	}
 
 	public void nextRound(){
@@ -120,7 +116,7 @@ public class PokerTable{
 		this.bigBlind = bigBlind;
 	}
 
-	public LinkedList<PokerPlayer> getPlayers() {
+	public List<PokerPlayer> getPlayers() {
 		return players;
 	}
 
@@ -143,7 +139,7 @@ public class PokerTable{
 		}
 		return pot;
 	}
-	
+
 	/**
 	 * Get the player which is index after the current dealer. This means that
 	 * getPlayer(0) returns the dealer, getPlayer(1) returns the smallBlind and so on.
