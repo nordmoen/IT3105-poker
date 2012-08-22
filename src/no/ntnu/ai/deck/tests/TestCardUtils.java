@@ -1,6 +1,6 @@
 package no.ntnu.ai.deck.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.CardUtils;
 import no.ntnu.ai.deck.Suit;

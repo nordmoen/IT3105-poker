@@ -1,7 +1,7 @@
 package no.ntnu.ai.hands.tests;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.Suit;
 import no.ntnu.ai.hands.HandRank;

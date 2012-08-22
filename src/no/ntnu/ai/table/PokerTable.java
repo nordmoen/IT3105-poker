@@ -33,6 +33,17 @@ public class PokerTable{
 			this.addPlayer(p);
 		}
 	}
+	
+	/**
+	 * Create a new Poker table with the given players
+	 * @param s - The starting small blind
+	 * @param b - The starting big blind
+	 * @param list - The list of players to add
+	 */
+	public PokerTable(int s, int b, List<PokerPlayer> list){
+		this(s, b);
+		this.players.addAll(list);
+	}
 
 	public void addPlayer(PokerPlayer player){
 		this.players.add(player);
