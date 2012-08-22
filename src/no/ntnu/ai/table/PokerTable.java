@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import no.ntnu.ai.player.PokerPlayer;
 
-public class PokerTable {
+public class PokerTable{
 
 	private final LinkedList<PokerPlayer> players = new LinkedList<PokerPlayer>();
 	private final int maxPlayers;
@@ -97,11 +97,11 @@ public class PokerTable {
 	}
 
 	public PokerPlayer getCurrentSmallBlindPlayer(){
-		return this.players.get(this.dealer + 1);
+		return this.getPlayer(1);
 	}
 
 	public PokerPlayer getCurrentBigBlindPlayer(){
-		return this.players.get(this.dealer + 2);
+		return this.getPlayer(2);
 	}
 
 	public int getSmallBlind() {
@@ -143,6 +143,14 @@ public class PokerTable {
 		}
 		return pot;
 	}
-
-
+	
+	/**
+	 * Get the player which is index after the current dealer. This means that
+	 * getPlayer(0) returns the dealer, getPlayer(1) returns the smallBlind and so on.
+	 * @param index - The index from the current dealer to get
+	 * @return - The poker player
+	 */
+	public PokerPlayer getPlayer(int index){
+		return this.players.get((this.dealer + index) % this.players.size());
+	}
 }
