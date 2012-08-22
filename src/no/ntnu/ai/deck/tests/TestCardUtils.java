@@ -23,9 +23,13 @@ public class TestCardUtils {
 				new PokerHand(new Card(5, Suit.HEARTS), new Card(10, Suit.DIAMONDS)),
 				new PokerHand(new Card(5, Suit.HEARTS), new Card(13, Suit.CLUBS)),
 				new PokerHand(new Card(10, Suit.DIAMONDS), new Card(13, Suit.CLUBS))};
+		PokerHand[] res2 = {new PokerHand(new Card(5, Suit.HEARTS), new Card(3, Suit.SPADES))};
+		PokerHand[] res3 = {new PokerHand(new Card(14, Suit.HEARTS), new Card(3, Suit.SPADES)),
+				new PokerHand(new Card(3, Suit.SPADES), new Card(3, Suit.DIAMONDS)),
+				new PokerHand(new Card(14, Suit.HEARTS), new Card(3, Suit.DIAMONDS))};
 		assertArrayEquals(res1, CardUtils.handPermutationsArray(c1));
-		assertArrayEquals(null, CardUtils.handPermutationsArray(c2));
-		assertArrayEquals(null, CardUtils.handPermutationsArray(c3));
+		assertArrayEquals(res2, CardUtils.handPermutationsArray(c2));
+		assertArrayEquals(res3, CardUtils.handPermutationsArray(c3));
 	}
 
 }
