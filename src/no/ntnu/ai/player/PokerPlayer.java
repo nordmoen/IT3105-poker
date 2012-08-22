@@ -1,10 +1,39 @@
 package no.ntnu.ai.player;
 
 import no.ntnu.ai.deck.Card;
+import no.ntnu.ai.hands.PowerRating;
 
 public interface PokerPlayer {
+	/**
+	 * Get a decision from a Player about what to do
+	 * @param table - The cards currently on the table
+	 * @return - A PokerAction with the decision
+	 */
 	public PokerAction getDecision(Card[] table);
-	public Card[] showCards();
+	
+	/**
+	 * Show the cards that make up the best hand the player can get, from the cards
+	 * on the table and on their hand.
+	 * @param table - The cards currently on the table
+	 * @return - The current best power rating of the player
+	 */
+	public PowerRating showCards(Card[] table);
+	
+	/**
+	 * Give the player a new hand to play in the coming round
+	 * @param newHand - The new hand to play
+	 */
 	public void newHand(PokerHand newHand);
+	
+	/**
+	 * Get the current hand of the player
+	 * @return - The current hand
+	 */
 	public PokerHand getHand();
+	
+	@Override
+	public boolean equals(Object o);
+	
+	@Override
+	public int hashCode();
 }

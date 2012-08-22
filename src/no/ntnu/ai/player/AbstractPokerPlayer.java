@@ -43,5 +43,23 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	public void giveChips(int amount){
 		this.chipCount += amount;
 	}
+	
+	/**
+	 * Helper method to test equality between players
+	 * @param player - The player to compare to
+	 * @return
+	 */
+	abstract public boolean playerEquals(AbstractPokerPlayer player);
+	
+	@Override
+	public boolean equals(Object o){
+		if(this == o){
+			return true;
+		}else if(this.getClass() != o.getClass()){
+			return false;
+		}else{
+			return this.playerEquals((AbstractPokerPlayer) o);
+		}
+	}
 
 }

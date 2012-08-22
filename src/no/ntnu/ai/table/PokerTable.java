@@ -36,7 +36,7 @@ public class PokerTable {
 	public PokerTable(int m, int s, int b, PokerPlayer[] players){
 		this(m, s, b);
 		for(PokerPlayer p : players){
-			this.players.add(p);
+			this.addPlayer(p);
 		}
 	}
 
@@ -46,6 +46,14 @@ public class PokerTable {
 				this.players.add(player);
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	public boolean removePlayer(PokerPlayer player){
+		if(!playing){
+			this.players.remove(player);
+			return true;
 		}
 		return false;
 	}
@@ -76,11 +84,8 @@ public class PokerTable {
 
 	public void makeBet(PokerPlayer player, int amount){
 		if(this.players.contains(player)){
-			int actualAmount = amount;
-			if(this.bets.containsKey(player)){
-				actualAmount += this.bets.get(player);
-			}
-			this.bets.put(player, actualAmount);
+			this.bets.put(player, amount + 
+					(bets.containsKey(player) ? bets.get(player) : 0));
 		}else{
 			throw new IllegalStateException("A player who is not playing at this " +
 					"table can not make a bet at this table");
