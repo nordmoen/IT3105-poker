@@ -1,9 +1,9 @@
 package no.ntnu.ai.simulator;
 
 public class TestResult {
-	private final int wins;
-	private final int ties;
-	private final int losses;
+	private final double wins;
+	private final double ties;
+	private final double losses;
 
 	public TestResult(int win, int tie, int lose){
 		this.wins = win;
@@ -11,15 +11,15 @@ public class TestResult {
 		this.losses = lose;
 	}
 
-	public int getWins() {
+	public double getWins() {
 		return wins;
 	}
 
-	public int getTies() {
+	public double getTies() {
 		return ties;
 	}
 
-	public int getLosses() {
+	public double getLosses() {
 		return losses;
 	}
 

@@ -30,7 +30,7 @@ public class RolloutSimulator implements Runnable {
 			cloneDeck.remove(testHand.getC1());
 			cloneDeck.remove(testHand.getC2());
 
-			PreFlopMaster master = new PreFlopMaster(testHand,0);
+			PreFlopMaster master = new PreFlopMaster(testHand);
 
 			HashMap<Integer, TestResult> results = new HashMap<Integer, TestResult>();
 
@@ -44,15 +44,10 @@ public class RolloutSimulator implements Runnable {
 				}
 			}
 			try {
-				output.put(new SimResult(testHand, ResultType.RESULT, results));
+				output.put(new SimResult(testHand, results));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
-		try {
-			output.put(new SimResult(null, ResultType.POISON, null));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 

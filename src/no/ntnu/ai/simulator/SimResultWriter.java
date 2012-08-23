@@ -32,20 +32,21 @@ public class SimResultWriter implements Runnable {
 					"Outputs: " + outputs + ", File writer: " + writer);
 		}
 		try{
+			int counter = 0;
 			while(!outputs.isEmpty()){
 				for(int i = 0; i < outputs.size(); i++){
 					BlockingQueue<SimResult> queue = outputs.get(i);
 					try {
 						SimResult res = queue.take();
-						if(res.getType() == ResultType.RESULT){
-							try{
-								writer.write(res.toString());
-								writer.newLine();
-							}catch (IOException e){
-								e.printStackTrace();
+						try{
+							writer.write(res.toString());
+							writer.newLine();
+							counter++;
+							if(counter == 169){
+								return;
 							}
-						}else{
-							outputs.remove(i);
+						}catch (IOException e){
+							e.printStackTrace();
 						}
 					} catch (InterruptedException e) {
 						e.printStackTrace();

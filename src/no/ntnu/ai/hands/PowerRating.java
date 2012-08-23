@@ -185,6 +185,15 @@ public class PowerRating implements Comparable<PowerRating> {
 			}
 		}
 		
+		if(res.size() > 5){
+			for(int i = 0; i < res.size() - 1; i++){
+				if(res.get(i).getValue() == res.get(i+1).getValue()){
+					res.remove(i+1);
+					i--;
+				}
+			}
+		}
+		
 		return res;
 	}
 
@@ -213,8 +222,11 @@ public class PowerRating implements Comparable<PowerRating> {
 	private ArrayList<Card> removeNotInSuits(Card[] cards){
 		ArrayList<Card> res = new ArrayList<Card>();
 		for(Card c : cards){
-			if(groupedBySuits[c.getSuit().ordinal()] == 5){
+			if(groupedBySuits[c.getSuit().ordinal()] > 4){
 				res.add(c);
+				if(res.size() == 5){
+					break;
+				}
 			}
 		}
 		return res;
@@ -229,6 +241,11 @@ public class PowerRating implements Comparable<PowerRating> {
 		}else{
 			//Equal rank, must use high cards and kickers
 			Card[] otherRankCards = arg0.getRankCards();
+			
+			if(this.rank == HandRank.STRAIGHT || this.rank == HandRank.STRAIGHT_FLUSH){
+				return this.rankCards[0].getValue() - otherRankCards[0].getValue();
+			}
+			
 			for(int i = 0; i < this.rankCards.length; i++){
 				//Since cards used in the rank are sorted descending
 				//we can compare card by card

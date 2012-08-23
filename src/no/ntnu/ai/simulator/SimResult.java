@@ -11,20 +11,15 @@ import no.ntnu.ai.player.PokerHand;
 public class SimResult{
 	
 	private final PokerHand hand;
-	private final ResultType type;
 	private final HashMap<Integer, TestResult> result;
 	
-	public SimResult(PokerHand hand, ResultType type, HashMap<Integer, TestResult> res){
+	public SimResult(PokerHand hand, HashMap<Integer, TestResult> res){
 		this.hand = hand;
-		this.type = type;
 		this.result = res;
 	}
-	
+
 	public PokerHand getHand() {
 		return hand;
-	}
-	public ResultType getType() {
-		return type;
 	}
 	public HashMap<Integer, TestResult> getResult() {
 		return result;
