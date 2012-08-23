@@ -14,7 +14,6 @@ public abstract class AbstractMaster {
 	protected Card[] flop = new Card[3];
 	protected Card turn;
 	protected Card river;
-	protected final Deck deck;
 	protected final ArrayList<PokerHand> hands = new ArrayList<PokerHand>();
 	protected boolean dealtCards = false;
 	protected boolean dealtFlop = false;
@@ -22,44 +21,43 @@ public abstract class AbstractMaster {
 	protected boolean dealtRiver = false;
 	protected HashMap<PowerRating, Integer> handPower = new HashMap<PowerRating, Integer>();
 	
-	public AbstractMaster(Deck deck, int numPlayers){
-		this.deck = deck;
+	public AbstractMaster(int numPlayers){
 		this.numPlayers = numPlayers;
 	}
 	
 	
-	public void dealCards(){
-		Card[] cards = deck.dealCards(numPlayers*2);
+	public void dealCards(Deck deck1){
+		Card[] cards = deck1.dealCards(numPlayers*2);
 		for(int i=0; i<numPlayers; i++){
 			hands.add(new PokerHand(cards[i], cards[numPlayers+i]));
 		}
 		this.dealtCards = true;
 	}
 	
-	public void dealFlop(){
+	public void dealFlop(Deck deck1){
 		if(!this.dealtCards){
 			throw new IllegalStateException("Must deal cards before the flop.");
 		}
-		deck.dealCard();
-		this.flop = deck.dealCards(3);
+		deck1.dealCard();
+		this.flop = deck1.dealCards(3);
 		this.dealtFlop = true;
 	}
 	
-	public void dealTurn(){
+	public void dealTurn(Deck deck1){
 		if(!this.dealtFlop){
 			throw new IllegalStateException("Must deal flop before the turn.");
 		}
-		deck.dealCard();
-		this.turn = deck.dealCard();
+		deck1.dealCard();
+		this.turn = deck1.dealCard();
 		this.dealtTurn = true;
 	}
 	
-	public void dealRiver(){
+	public void dealRiver(Deck deck1){
 		if(!this.dealtTurn){
 			throw new IllegalStateException("Must deal turn before the river.");
 		}
-		deck.dealCard();
-		this.river = deck.dealCard();
+		deck1.dealCard();
+		this.river = deck1.dealCard();
 		this.dealtRiver = true;
 	}
 	

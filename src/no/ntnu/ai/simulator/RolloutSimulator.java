@@ -30,13 +30,14 @@ public class RolloutSimulator implements Runnable {
 			cloneDeck.remove(testHand.getC1());
 			cloneDeck.remove(testHand.getC2());
 
-			PreFlopMaster master = new PreFlopMaster(testHand, (Deck) cloneDeck.clone(), 0);
+			PreFlopMaster master = new PreFlopMaster(testHand,0);
 
 			HashMap<Integer, TestResult> results = new HashMap<Integer, TestResult>();
 
 			for(int i = 2; i < maxPlayers + 1; i++){
+				master.addPlayer();
 				try {
-					TestResult res = master.simulate(nrSimulations);
+					TestResult res = master.simulate(nrSimulations, (Deck) cloneDeck.clone());
 					results.put(i, res);
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();

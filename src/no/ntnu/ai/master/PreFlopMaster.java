@@ -9,14 +9,14 @@ public class PreFlopMaster extends AbstractMaster{
 	private final PokerHand mycards;
 	private int numOtherPlayers;
 
-	public PreFlopMaster(PokerHand mycards, Deck deck, int numPlayers) {
-		super(deck, numPlayers);
+	public PreFlopMaster(PokerHand mycards, int numPlayers) {
+		super(numPlayers);
 		this.numOtherPlayers = numPlayers -1;
 		this.mycards = mycards;
 	}
 	
-	public PreFlopMaster(PokerHand mycards, Deck deck){
-		this(mycards, deck, 1);
+	public PreFlopMaster(PokerHand mycards){
+		this(mycards, 1);
 	}
 	
 	public boolean addPlayer(){
@@ -30,25 +30,25 @@ public class PreFlopMaster extends AbstractMaster{
 	}
 	
 	@Override
-	public void dealCards(){
-		Card[] cards = deck.dealCards(numOtherPlayers*2);
+	public void dealCards(Deck deck1){
+		Card[] cards = deck1.dealCards(numOtherPlayers*2);
 		for(int i=0; i<numOtherPlayers; i++){
 			hands.add(new PokerHand(cards[i], cards[numOtherPlayers+i]));
 		}
 		this.dealtCards = true;
 	}
 	
-	public TestResult simulate(int numSims) throws CloneNotSupportedException{
+	public TestResult simulate(int numSims, Deck deck) throws CloneNotSupportedException{
 		int[] res = new int[3];
 		for(int i=0; i<numSims; i++){
 			this.hands.add(this.mycards);
-			Deck dealDeck = (Deck) this.deck.clone();
+			deck.stdShuffle();
+			Deck dealDeck = (Deck) deck.clone();
 			
-			dealDeck.stdShuffle();
-			dealCards();
-			dealFlop();
-			dealTurn();
-			dealRiver();
+			dealCards(dealDeck);
+			dealFlop(dealDeck);
+			dealTurn(dealDeck);
+			dealRiver(dealDeck);
 			
 			boolean[] result = this.declareWinner();
 			boolean tie = false;
@@ -66,6 +66,7 @@ public class PreFlopMaster extends AbstractMaster{
 			}else{
 				res[2]++;
 			}
+			this.hands.clear();
 		}
 		return new TestResult(res[0], res[1], res[2]);
 	}
