@@ -20,7 +20,7 @@ public class TestDeck {
 	
 	@Before
 	public void before(){
-		d1 = new Deck();
+		d1 = Deck.getInstance();
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class TestDeck {
 
 	@Test
 	public void testSort() {
-		Deck d2 = new Deck();
+		Deck d2 = Deck.getInstance();
 		d2.stdShuffle();
 		d2.sort();
 		d1.sort();
@@ -69,11 +69,11 @@ public class TestDeck {
 
 	@Test
 	public void testShuffle() {
-		Deck d2 = new Deck();
+		Deck d2 = Deck.getInstance();
 		d2.shuffle(1);
 		assertFalse("D2 shuffled is not equal to D1", d2.equals(d1));
 		
-		Deck d3 = new Deck();
+		Deck d3 = Deck.getInstance();
 		d3.shuffle(1);
 		assertTrue("D3 shuffled is equal to D2 shuffled once", d3.equals(d2));
 		

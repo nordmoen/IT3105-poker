@@ -26,7 +26,7 @@ public class RolloutSimulator implements Runnable {
 	@Override
 	public void run() {
 		for(PokerHand testHand : this.hands){
-			Deck cloneDeck = new Deck();
+			Deck cloneDeck = Deck.getInstance();
 			cloneDeck.remove(testHand.getC1());
 			cloneDeck.remove(testHand.getC2());
 

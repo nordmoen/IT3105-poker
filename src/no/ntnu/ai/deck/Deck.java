@@ -9,14 +9,26 @@ public class Deck{
 	private Stack<Card> deck = new Stack<Card>();
 	private final Random randomGen = new Random();
 
-	public Deck(int seed){
+	private Deck(int seed){
 		deck.setSize(52);
-		this.reset();
+		//this.reset();
 		this.randomGen.setSeed(seed);
 	}
 	
-	public Deck(){
+	private Deck(){
 		this(42);
+	}
+	
+	public static Deck getInstance(int seed){
+		Deck result = new Deck(seed);
+		result.reset();
+		return result;
+	}
+	
+	public static Deck getInstance(){
+		Deck result = new Deck();
+		result.reset();
+		return result;
 	}
 
 	/**
