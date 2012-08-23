@@ -164,7 +164,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		
 		for(int i = groupedByValues.length - 1; i >= 0; i--){
 			if(groupedByValues[i] != 0){
-				if(this.checkNextFour(i)){
+				if(this.checkNextFour(i, groupedByValues)){
 					max = i + 2;
 					min = i - 5 + 2;
 					break;
@@ -270,12 +270,15 @@ public class PowerRating implements Comparable<PowerRating> {
 	 */
 	private HandRank getRank(Card[] cards){
 		boolean flush = isFlush();
-		boolean straight = isStraight();
+		boolean straight = isStraight(cards);
 		
-		if(straight && flush){
-			return HandRank.STRAIGHT_FLUSH;
-		}else if(flush){
-			return HandRank.FLUSH;
+		if(flush){
+			ArrayList<Card> flushList = this.removeNotInSuits(cards);
+			if(isStraight(flushList.toArray(new Card[flushList.size()]))){
+				return HandRank.STRAIGHT_FLUSH;
+			}else{
+				return HandRank.FLUSH;				
+			}
 		}else if(straight){
 			return HandRank.STRAIGHT;
 		}else{
@@ -298,25 +301,26 @@ public class PowerRating implements Comparable<PowerRating> {
 
 	private boolean isFlush(){
 		for(Integer i : groupedBySuits){
-			if(i == 5){
+			if(i > 4){
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	private boolean isStraight(){
-		for(int i = groupedByValues.length - 1; i >= 0; i--){
-			if(groupedByValues[i] != 0){
-				return checkNextFour(i);
+	private boolean isStraight(Card[] cards){
+		int[] values = CardUtils.groupByValues(cards);
+		for(int i = values.length - 1; i >= 0; i--){
+			if(values[i] != 0){
+				return checkNextFour(i, values);
 			}
 		}
 		return false;
 	}
 	
-	private boolean checkNextFour(int index){
+	private boolean checkNextFour(int index, int[] values){
 		for(int i = 1; i < 5; i++){
-			if(groupedByValues[index-i] == 0){
+			if(values[index-i] == 0){
 				return false;
 			}
 		}
