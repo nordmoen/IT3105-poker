@@ -37,4 +37,16 @@ public class CardUtils {
 		}
 		return res;
 	}
+	
+	public static List<PokerHand> generatePreFlop(){
+		ArrayList<PokerHand> preFlops = new ArrayList<PokerHand>(200);
+		for(int i=2; i<15; i++){
+			preFlops.add(new PokerHand(new Card(i, Suit.SPADES), new Card(i, Suit.HEARTS)));
+			for(int j=i+1; j<15; j++){
+				preFlops.add(new PokerHand(new Card(i, Suit.SPADES), new Card(j, Suit.SPADES)));
+				preFlops.add(new PokerHand(new Card(i, Suit.SPADES), new Card(j, Suit.HEARTS)));
+			}
+		}
+		return preFlops;
+	}
 }

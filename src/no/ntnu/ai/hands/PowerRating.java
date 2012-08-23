@@ -383,4 +383,35 @@ public class PowerRating implements Comparable<PowerRating> {
 	public Card[] getRankCards() {
 		return rankCards;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(kickers);
+		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+		result = prime * result + Arrays.hashCode(rankCards);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PowerRating other = (PowerRating) obj;
+		if (!Arrays.equals(kickers, other.kickers))
+			return false;
+		if (rank == null) {
+			if (other.rank != null)
+				return false;
+		} else if (!rank.equals(other.rank))
+			return false;
+		if (!Arrays.equals(rankCards, other.rankCards))
+			return false;
+		return true;
+	}
 }
