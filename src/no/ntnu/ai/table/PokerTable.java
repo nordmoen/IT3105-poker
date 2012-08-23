@@ -8,7 +8,6 @@ import no.ntnu.ai.player.PokerPlayer;
 public class PokerTable{
 
 	private final List<PokerPlayer> players = new ArrayList<PokerPlayer>();
-	private int dealer = 0;
 	private int smallBlind, bigBlind, round = 0;
 
 	/**
@@ -53,17 +52,12 @@ public class PokerTable{
 		this.players.remove(player);
 	}
 
-	private void nextDealer(){
-		this.dealer = (dealer + 1) % this.players.size();
-	}
-
 	public void nextRound(){
 		this.round++;
-		this.nextDealer();
 	}
 
 	public PokerPlayer getCurrentDealer(){
-		return this.players.get(this.dealer);
+		return this.getPlayer(0);
 	}
 
 	public PokerPlayer getCurrentSmallBlindPlayer(){
@@ -109,7 +103,7 @@ public class PokerTable{
 	 * @return - The poker player
 	 */
 	public PokerPlayer getPlayer(int index){
-		return this.players.get((this.dealer + index) % this.players.size());
+		return this.players.get((this.round + index) % this.players.size());
 	}
 
 	/**
