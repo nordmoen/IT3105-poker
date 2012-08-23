@@ -6,11 +6,13 @@ import java.util.Stack;
 
 public class Deck{
 
-	private final Stack<Card> deck = new Stack<Card>();
+	private Stack<Card> deck = new Stack<Card>();
 	private final Random randomGen = new Random();
+	private final int seed;
 
 	public Deck(int seed){
 		deck.setSize(52);
+		this.seed = seed;
 		this.reset();
 		this.randomGen.setSeed(seed);
 	}
@@ -51,10 +53,16 @@ public class Deck{
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return this.deck.clone();
+	public Object clone() throws CloneNotSupportedException {
+		Deck newDeck = new Deck(this.seed);
+		newDeck.setStack((Stack<Card>) this.deck.clone());
+		return newDeck;
 	}
 
+	private void setStack(Stack<Card> s){
+		this.deck = s;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
