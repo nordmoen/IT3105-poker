@@ -1,17 +1,15 @@
 package no.ntnu.ai.deck;
 
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.Stack;
 
 
 public class Deck{
 
-	private Stack<Card> deck = new Stack<Card>();
+	private ArrayList<Card> deck = new ArrayList<Card>(52);
 	private final Random randomGen = new Random();
 
 	private Deck(int seed){
-		deck.setSize(52);
-		//this.reset();
 		this.randomGen.setSeed(seed);
 	}
 	
@@ -44,7 +42,7 @@ public class Deck{
 	}
 	
 	public Card dealCard(){
-		return this.deck.pop();
+		return this.deck.remove(this.deck.size() - 1);
 	}
 	
 	public Card[] dealCards(int nr){
@@ -66,11 +64,11 @@ public class Deck{
 	@Override
 	public Object clone(){
 		Deck newDeck = new Deck(this.randomGen.nextInt());
-		newDeck.setStack((Stack<Card>) this.deck.clone());
+		newDeck.setStack((ArrayList<Card>) this.deck.clone());
 		return newDeck;
 	}
 
-	private void setStack(Stack<Card> s){
+	private void setStack(ArrayList<Card> s){
 		this.deck = s;
 	}
 	
