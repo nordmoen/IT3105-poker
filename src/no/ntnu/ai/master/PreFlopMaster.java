@@ -13,7 +13,20 @@ public class PreFlopMaster extends AbstractMaster{
 		super(deck, numPlayers);
 		this.numOtherPlayers = numPlayers -1;
 		this.mycards = mycards;
-		
+	}
+	
+	public PreFlopMaster(PokerHand mycards, Deck deck){
+		this(mycards, deck, 1);
+	}
+	
+	public boolean addPlayer(){
+		if(numPlayers > 9){
+			return false;
+		}else{
+			this.numPlayers++;
+			this.numOtherPlayers++;
+			return true;
+		}
 	}
 	
 	@Override
