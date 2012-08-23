@@ -1,8 +1,8 @@
 package no.ntnu.ai.simulator;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
-import no.ntnu.ai.hands.PokerResult;
 import no.ntnu.ai.player.PokerHand;
 
 /**
@@ -14,14 +14,12 @@ public class SimResult implements Serializable {
 	
 	private final PokerHand hand;
 	private final ResultType type;
-	private final PokerResult result;
-	private final int numPlayers;
+	private final HashMap<Integer, TestResult> result;
 	
-	public SimResult(PokerHand hand, ResultType type, PokerResult res, int numPlayers){
+	public SimResult(PokerHand hand, ResultType type, HashMap<Integer, TestResult> res){
 		this.hand = hand;
 		this.type = type;
 		this.result = res;
-		this.numPlayers = numPlayers;
 	}
 	
 	public PokerHand getHand() {
@@ -30,14 +28,20 @@ public class SimResult implements Serializable {
 	public ResultType getType() {
 		return type;
 	}
-	public PokerResult getResult() {
+	public HashMap<Integer, TestResult> getResult() {
 		return result;
 	}
-
-	public int getNumPlayers() {
-		return numPlayers;
-	}
 	
+	@Override
+	public String toString(){
+		StringBuilder res = new StringBuilder();
+		res.append(hand.getC1().getValue() + "," + hand.getC2().getValue());
+		res.append("," + (hand.getC1().getSuit() == hand.getC2().getSuit() ? "S":"U"));
+		for(Integer players : result.keySet()){
+			res.append("," + players + ":" + result.get(players));
+		}
+		return res.toString();
+	}
 	
 
 }

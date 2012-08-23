@@ -39,6 +39,7 @@ public class SimResultWriter implements Runnable {
 						if(res.getType() == ResultType.RESULT){
 							try{
 								writer.write(res.toString());
+								writer.newLine();
 							}catch (IOException e){
 								e.printStackTrace();
 							}

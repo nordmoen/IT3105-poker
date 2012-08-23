@@ -1,19 +1,21 @@
 package no.ntnu.ai.simulator;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 import no.ntnu.ai.deck.Deck;
+import no.ntnu.ai.master.PreFlopMaster;
 import no.ntnu.ai.player.PokerHand;
 
 public class RolloutSimulator implements Runnable {
-	
+
 	private final int maxPlayers;
-	private final long nrSimulations; 
+	private final int nrSimulations; 
 	private final BlockingQueue<SimResult> output;
 	private final List<PokerHand> hands; //hands to check
-	
-	public RolloutSimulator(int maxPlayers, long nrSimulations, BlockingQueue<SimResult> out,
+
+	public RolloutSimulator(int maxPlayers, int nrSimulations, BlockingQueue<SimResult> out,
 			List<PokerHand> hands){
 		this.maxPlayers = maxPlayers;
 		this.nrSimulations = nrSimulations;
@@ -27,10 +29,29 @@ public class RolloutSimulator implements Runnable {
 			Deck cloneDeck = new Deck();
 			cloneDeck.remove(testHand.getC1());
 			cloneDeck.remove(testHand.getC2());
-			
+
+			PreFlopMaster master = new PreFlopMaster(testHand, (Deck) cloneDeck.clone(), 0);
+
+			HashMap<Integer, TestResult> results = new HashMap<Integer, TestResult>();
+
 			for(int i = 2; i < maxPlayers + 1; i++){
-				
+				try {
+					TestResult res = master.simulate(nrSimulations);
+					results.put(i, res);
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
 			}
+			try {
+				output.put(new SimResult(testHand, ResultType.RESULT, results));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			output.put(new SimResult(null, ResultType.POISON, null));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 

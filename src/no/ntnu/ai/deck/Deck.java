@@ -52,8 +52,9 @@ public class Deck{
 		java.util.Collections.sort(this.deck, java.util.Collections.reverseOrder());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Object clone(){
 		Deck newDeck = new Deck(this.seed);
 		newDeck.setStack((Stack<Card>) this.deck.clone());
 		return newDeck;
