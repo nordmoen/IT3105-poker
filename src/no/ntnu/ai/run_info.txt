@@ -1,4 +1,5 @@
-Select output filename: test.txt
+------------------------------------------
+Select output filename: 100k.txt
 Select number of cores to run on: 8
 How many players should be simulated: 10
 Select number of simulations per preflop hand: 100000
@@ -6,3 +7,12 @@ Starting simulation
 ...
 Done!
 It took 1143872ms
+------------------------------------------
+Select output filename: 100k_v2.txt
+Select number of cores to run on: 8
+How many players should be simulated: 10
+Select number of simulations per preflop hand: 100000
+Starting simulation
+...
+Done!
+It took 1066627ms
