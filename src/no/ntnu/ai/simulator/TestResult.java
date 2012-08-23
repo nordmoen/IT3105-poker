@@ -23,6 +23,7 @@ public class TestResult {
 		return losses;
 	}
 	
+	@Override
 	public String toString(){
 		String str = "This test resulted in " + this.getWins() + " wins, " + this.getTies() + 
 		" ties and " + this.getLosses() + " losses.";
