@@ -1,9 +1,5 @@
 package no.ntnu.ai.deck;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import no.ntnu.ai.player.PokerHand;
 
 /**
  * Utility class for the card class
