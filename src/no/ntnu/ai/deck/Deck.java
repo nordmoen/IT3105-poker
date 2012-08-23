@@ -8,11 +8,9 @@ public class Deck{
 
 	private Stack<Card> deck = new Stack<Card>();
 	private final Random randomGen = new Random();
-	private final int seed;
 
 	public Deck(int seed){
 		deck.setSize(52);
-		this.seed = seed;
 		this.reset();
 		this.randomGen.setSeed(seed);
 	}
@@ -55,7 +53,7 @@ public class Deck{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone(){
-		Deck newDeck = new Deck(this.seed);
+		Deck newDeck = new Deck(this.randomGen.nextInt());
 		newDeck.setStack((Stack<Card>) this.deck.clone());
 		return newDeck;
 	}

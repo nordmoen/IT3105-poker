@@ -1,6 +1,5 @@
 package no.ntnu.ai.simulator;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 import no.ntnu.ai.player.PokerHand;
@@ -9,8 +8,7 @@ import no.ntnu.ai.player.PokerHand;
  * A class representing a simulation result
  *
  */
-@SuppressWarnings("serial")
-public class SimResult implements Serializable {
+public class SimResult{
 	
 	private final PokerHand hand;
 	private final ResultType type;
@@ -38,7 +36,7 @@ public class SimResult implements Serializable {
 		res.append(hand.getC1().getValue() + "," + hand.getC2().getValue());
 		res.append("," + (hand.getC1().getSuit() == hand.getC2().getSuit() ? "S":"U"));
 		for(Integer players : result.keySet()){
-			res.append("," + players + ":" + result.get(players));
+			res.append("," + players + ":" + result.get(players).getWinRatio());
 		}
 		return res.toString();
 	}

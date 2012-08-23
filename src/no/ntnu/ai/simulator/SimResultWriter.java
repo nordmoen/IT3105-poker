@@ -33,7 +33,8 @@ public class SimResultWriter implements Runnable {
 		}
 		try{
 			while(!outputs.isEmpty()){
-				for(BlockingQueue<SimResult> queue : outputs){
+				for(int i = 0; i < outputs.size(); i++){
+					BlockingQueue<SimResult> queue = outputs.get(i);
 					try {
 						SimResult res = queue.take();
 						if(res.getType() == ResultType.RESULT){
@@ -44,7 +45,7 @@ public class SimResultWriter implements Runnable {
 								e.printStackTrace();
 							}
 						}else{
-							outputs.remove(queue);
+							outputs.remove(i);
 						}
 					} catch (InterruptedException e) {
 						e.printStackTrace();

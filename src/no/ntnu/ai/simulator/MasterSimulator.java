@@ -28,10 +28,14 @@ public class MasterSimulator {
 		Thread wThread = new Thread(writer);
 		Thread sThread = new Thread(simer);
 		
+		long start = System.currentTimeMillis();
 		sThread.start();
 		wThread.start();
 		
 		wThread.join();
+		System.out.println("Simulation Done!");
+		System.out.println("Simulation tok " + (System.currentTimeMillis() - start) +
+				"ms");
 	}
 
 }
