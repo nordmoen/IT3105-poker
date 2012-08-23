@@ -41,6 +41,7 @@ public class CardUtils {
 	 * Generate all pairs of poker hands from a list of cards. This method
 	 * will not generate duplicates with the same cards. This means that given
 	 * 3 of spades, 2 of hearts and 13 of clubs this method will generate:
+	 * 3 of spades + 3 of spades
 	 * 3 of spades + 2 of hearts
 	 * 3 of spades + 13 of clubs
 	 * 2 of hearts + 13 of clubs
@@ -50,8 +51,11 @@ public class CardUtils {
 	public static ArrayList<PokerHand> handPermutations(Card[] cards){
 		ArrayList<PokerHand> res = new ArrayList<PokerHand>(cards.length*2);
 		for(int i = 0; i < cards.length - 1; i++){
+			res.add(new PokerHand(cards[i], cards[i]));
 			for(int j = i + 1; j < cards.length; j++){
-				res.add(new PokerHand(cards[i], cards[j]));
+				if(cards[i].getValue() != cards[j].getValue()){
+					res.add(new PokerHand(cards[i], cards[j]));
+				}
 			}
 		}
 		return res;
