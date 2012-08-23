@@ -319,6 +319,9 @@ public class PowerRating implements Comparable<PowerRating> {
 	}
 	
 	private boolean checkNextFour(int index, int[] values){
+		if(index < 4){
+			return false;
+		}
 		for(int i = 1; i < 5; i++){
 			if(values[index-i] == 0){
 				return false;
