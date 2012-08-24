@@ -1,7 +1,6 @@
 package no.ntnu.ai.master;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.Deck;
@@ -19,7 +18,6 @@ public abstract class AbstractMaster {
 	protected boolean dealtFlop = false;
 	protected boolean dealtTurn = false;
 	protected boolean dealtRiver = false;
-	protected HashMap<PowerRating, Integer> handPower = new HashMap<PowerRating, Integer>();
 	
 	public AbstractMaster(int numPlayers){
 		this.numPlayers = numPlayers;
@@ -80,8 +78,6 @@ public abstract class AbstractMaster {
 			PowerRating p = new PowerRating(cards);
 			
 			prs[i] = p;
-			
-			handPower.put(p, i);
 		}
 		
 		PowerRating winner = PowerUtils.max(prs);
@@ -90,7 +86,6 @@ public abstract class AbstractMaster {
 				winners[i] = true;
 			}
 		}
-		handPower.clear();
 		return winners;
 	}
 

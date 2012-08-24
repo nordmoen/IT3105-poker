@@ -52,21 +52,6 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * @return - A list of cards which can be used as kickers sorted in descending order
 	 */
 	private Card[] getKickers(Card[] cardsInRank, Card[] allCards) {
-		//		ArrayList<Card> kickers = new ArrayList<Card>();
-		//		for(int i = 0; i < allCards.length; i++){
-		//			kickers.add(allCards[i]);
-		//		}
-		//		//The stack now contains the weakest card at the top of the stack
-		//		if(!kickers.isEmpty()){
-		//			for(int i = 0; i < cardsInRank.length; i++){
-		//				kickers.remove(cardsInRank[i]);
-		//			}
-		//
-		//			while(kickers.size() + cardsInRank.length > 5 && !kickers.isEmpty()){
-		//				//Pop the weakest cards until we have enough cards
-		//				kickers.remove(kickers.size() - 1);
-		//			}
-		//		}
 		if(cardsInRank.length < 5){
 			Card[] kickers = new Card[5-cardsInRank.length];
 
