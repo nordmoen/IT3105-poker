@@ -280,11 +280,11 @@ public class PowerRating implements Comparable<PowerRating> {
 	 */
 	private HandRank getRank(Card[] cards){
 		boolean flush = isFlush();
-		boolean straight = isStraight(cards);
+		boolean straight = isStraight();
 
 		if(flush){
 			ArrayList<Card> flushList = this.removeNotInSuits(cards);
-			if(isStraight(flushList.toArray(new Card[flushList.size()]))){
+			if(straight && isStraight(flushList.toArray(new Card[flushList.size()]))){
 				return HandRank.STRAIGHT_FLUSH;
 			}else{
 				return HandRank.FLUSH;				
@@ -323,6 +323,15 @@ public class PowerRating implements Comparable<PowerRating> {
 		for(int i = values.length - 1; i >= 0; i--){
 			if(values[i] != 0){
 				return checkNextFour(i, values);
+			}
+		}
+		return false;
+	}
+	
+	private boolean isStraight(){
+		for(int i = groupedByValues.length - 1; i >= 0; i--){
+			if(groupedByValues[i] != 0){
+				return checkNextFour(i, groupedByValues);
 			}
 		}
 		return false;
