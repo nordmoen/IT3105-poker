@@ -67,13 +67,13 @@ public abstract class AbstractMaster {
 		}
 		boolean[] winners = new boolean[numPlayers];
 		PowerRating[] prs = new PowerRating[numPlayers];
+		Card[] cards = new Card[7];
+		cards[0] = flop[0];
+		cards[1] = flop[1];
+		cards[2] = flop[2];
+		cards[3] = this.turn;
+		cards[4] = this.river;
 		for(int i=0; i<numPlayers; i++){
-			Card[] cards = new Card[7];
-			cards[0] = flop[0];
-			cards[1] = flop[1];
-			cards[2] = flop[2];
-			cards[3] = this.turn;
-			cards[4] = this.river;
 			cards[5] = hands.get(i).getC1();
 			cards[6] = hands.get(i).getC2();
 			
