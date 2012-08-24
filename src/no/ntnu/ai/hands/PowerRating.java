@@ -2,7 +2,6 @@ package no.ntnu.ai.hands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.CardUtils;
@@ -15,7 +14,7 @@ public class PowerRating implements Comparable<PowerRating> {
 	private final Card[] kickers;
 	//The cards used to calculate the selected rank
 	private final Card[] rankCards;
-	
+
 	private final int[] groupedByValues;
 	private final int[] groupedBySuits;
 
@@ -32,12 +31,12 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * @param cards
 	 */
 	public PowerRating(Card[] cards){
-		
+
 		Card[] cardsCopy = cards.clone();
-		
+
 		groupedByValues = CardUtils.groupByValues(cardsCopy);
 		groupedBySuits = CardUtils.groupBySuits(cardsCopy);
-		
+
 		//Sort cards descending
 		Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
 
@@ -53,23 +52,32 @@ public class PowerRating implements Comparable<PowerRating> {
 	 * @return - A list of cards which can be used as kickers sorted in descending order
 	 */
 	private Card[] getKickers(Card[] cardsInRank, Card[] allCards) {
-		Stack<Card> kickers = new Stack<Card>();
-		for(int i = 0; i < allCards.length; i++){
-			kickers.push(allCards[i]);
-		}
-		//The stack now contains the weakest card at the top of the stack
-		if(!kickers.isEmpty()){
-			for(int i = 0; i < cardsInRank.length; i++){
-				kickers.remove(cardsInRank[i]);
+		//		ArrayList<Card> kickers = new ArrayList<Card>();
+		//		for(int i = 0; i < allCards.length; i++){
+		//			kickers.add(allCards[i]);
+		//		}
+		//		//The stack now contains the weakest card at the top of the stack
+		//		if(!kickers.isEmpty()){
+		//			for(int i = 0; i < cardsInRank.length; i++){
+		//				kickers.remove(cardsInRank[i]);
+		//			}
+		//
+		//			while(kickers.size() + cardsInRank.length > 5 && !kickers.isEmpty()){
+		//				//Pop the weakest cards until we have enough cards
+		//				kickers.remove(kickers.size() - 1);
+		//			}
+		//		}
+		if(cardsInRank.length < 5){
+			Card[] kickers = new Card[5-cardsInRank.length];
+
+			for(int i = 0; i < kickers.length; i++){
+				kickers[i] = allCards[i];
 			}
 
-			while(kickers.size() + cardsInRank.length > 5 && !kickers.isEmpty()){
-				//Pop the weakest cards until we have enough cards
-				kickers.pop();
-			}
+			return kickers;
+		}else{
+			return new Card[0];
 		}
-
-		return kickers.toArray(new Card[kickers.size()]);
 	}
 
 	@Override
@@ -120,7 +128,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		java.util.Collections.sort(res, java.util.Collections.reverseOrder());
 		return res.toArray(new Card[res.size()]);
 	}
-	
+
 	private ArrayList<Card> removeNotInNumber(Card[] cards, int val){
 		ArrayList<Card> res = new ArrayList<Card>();
 		int pairValue = 0;
@@ -161,7 +169,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		ArrayList<Card> res = new ArrayList<Card>();
 		int max = 0;
 		int min = 0;
-		
+
 		for(int i = groupedByValues.length - 1; i >= 0; i--){
 			if(groupedByValues[i] != 0){
 				if(this.checkNextFour(i, groupedByValues)){
@@ -184,7 +192,7 @@ public class PowerRating implements Comparable<PowerRating> {
 				}
 			}
 		}
-		
+
 		if(res.size() > 5){
 			for(int i = 0; i < res.size() - 1; i++){
 				if(res.get(i).getValue() == res.get(i+1).getValue()){
@@ -193,7 +201,7 @@ public class PowerRating implements Comparable<PowerRating> {
 				}
 			}
 		}
-		
+
 		return res;
 	}
 
@@ -218,7 +226,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		return res;
 	}
-	
+
 	private ArrayList<Card> removeNotInSuits(Card[] cards){
 		ArrayList<Card> res = new ArrayList<Card>();
 		for(Card c : cards){
@@ -241,11 +249,11 @@ public class PowerRating implements Comparable<PowerRating> {
 		}else{
 			//Equal rank, must use high cards and kickers
 			Card[] otherRankCards = arg0.getRankCards();
-			
+
 			if(this.rank == HandRank.STRAIGHT || this.rank == HandRank.STRAIGHT_FLUSH){
 				return this.rankCards[0].getValue() - otherRankCards[0].getValue();
 			}
-			
+
 			for(int i = 0; i < this.rankCards.length; i++){
 				//Since cards used in the rank are sorted descending
 				//we can compare card by card
@@ -288,7 +296,7 @@ public class PowerRating implements Comparable<PowerRating> {
 	private HandRank getRank(Card[] cards){
 		boolean flush = isFlush();
 		boolean straight = isStraight(cards);
-		
+
 		if(flush){
 			ArrayList<Card> flushList = this.removeNotInSuits(cards);
 			if(isStraight(flushList.toArray(new Card[flushList.size()]))){
@@ -314,7 +322,7 @@ public class PowerRating implements Comparable<PowerRating> {
 			}
 		}
 	}
-	
+
 
 	private boolean isFlush(){
 		for(Integer i : groupedBySuits){
@@ -324,7 +332,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		return false;
 	}
-	
+
 	private boolean isStraight(Card[] cards){
 		int[] values = CardUtils.groupByValues(cards);
 		for(int i = values.length - 1; i >= 0; i--){
@@ -334,7 +342,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		return false;
 	}
-	
+
 	private boolean checkNextFour(int index, int[] values){
 		if(index < 4){
 			return false;
@@ -346,7 +354,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		return true;
 	}
-	
+
 	private boolean isFourOfAKind(){
 		for(Integer i : groupedByValues){
 			if(i == 4){
@@ -355,7 +363,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		return false;
 	}
-	
+
 	private boolean isFullHouse(){
 		return isThreeOfAKind() && isPair();
 	}
@@ -368,7 +376,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		return false;
 	}
-	
+
 	private boolean isTwoPair() {
 		boolean found = false;
 		for(Integer i : groupedByValues){
@@ -382,7 +390,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		return false;
 	}
-	
+
 	private boolean isPair(){
 		for(Integer i : groupedByValues){
 			if(i == 2){
