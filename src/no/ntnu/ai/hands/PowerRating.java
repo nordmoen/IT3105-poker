@@ -55,8 +55,21 @@ public class PowerRating implements Comparable<PowerRating> {
 		if(cardsInRank.length < 5){
 			Card[] kickers = new Card[5-cardsInRank.length];
 
-			for(int i = 0; i < kickers.length; i++){
-				kickers[i] = allCards[i];
+			int index = 0;
+			for(int i = 0; i < allCards.length; i++){
+				boolean cont = false;
+				for(Card c : cardsInRank){
+					if(allCards[i] == c){
+						cont = true;;
+					}
+				}
+				if(cont){
+					continue;
+				}
+				kickers[index++] = allCards[i];
+				if(index == (5 - cardsInRank.length)){
+					break;
+				}
 			}
 
 			return kickers;
