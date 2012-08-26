@@ -8,21 +8,42 @@ public class Deck{
 
 	private ArrayList<Card> deck = new ArrayList<Card>(52);
 	private final Random randomGen = new Random();
+	private final int stdShuffles;
 
-	private Deck(int seed){
+	/**
+	 * Create a new Deck
+	 * @param seed - The seed for the random generator
+	 * @param shuffles - The amount of shuffles in a standard shuffle
+	 */
+	private Deck(int seed, int shuffles){
 		this.randomGen.setSeed(seed);
+		this.stdShuffles = shuffles;
 	}
 	
+	/**
+	 * Create a new default deck with the random generator and the amount of
+	 * shuffles in a standard shuffle set.
+	 */
 	private Deck(){
-		this(42);
+		this(42, 7);
 	}
 	
-	public static Deck getInstance(int seed){
-		Deck result = new Deck(seed);
+	/**
+	 * Get a Deck instance
+	 * @param seed - The seed to use for the deck random generator. Used when shuffling
+	 * @param shuffles - The number of shuffles in a standard shuffle
+	 * @return - A new Deck instance
+	 */
+	public static Deck getInstance(int seed, int shuffles){
+		Deck result = new Deck(seed, shuffles);
 		result.reset();
 		return result;
 	}
 	
+	/**
+	 * Get a default Deck
+	 * @return - A default deck. Created with a seed of 42 and a std shuffle of 7.
+	 */
 	public static Deck getInstance(){
 		Deck result = new Deck();
 		result.reset();
@@ -63,7 +84,7 @@ public class Deck{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone(){
-		Deck newDeck = new Deck(this.randomGen.nextInt());
+		Deck newDeck = new Deck(this.randomGen.nextInt(), stdShuffles);
 		newDeck.setStack((ArrayList<Card>) this.deck.clone());
 		return newDeck;
 	}
@@ -116,7 +137,7 @@ public class Deck{
 	 * Shuffle the deck 7 times to ensure randomness
 	 */
 	public void stdShuffle(){
-		this.shuffle(7);
+		this.shuffle(this.stdShuffles);
 	}
 	
 	public boolean remove(Card remCard){
