@@ -11,9 +11,11 @@ public class PowerRating implements Comparable<PowerRating> {
 	private final HandRank rank;
 	//Cards not used in the actual hand, but which can be used to determine
 	//the winner in case of a tie
-	private final Card[] kickers;
+	private Card[] kickers;
 	//The cards used to calculate the selected rank
-	private final Card[] rankCards;
+	private Card[] rankCards;
+
+	private final Card[] cardsCopy;
 
 	private final int[] groupedByValues;
 	private final int[] groupedBySuits;
@@ -32,7 +34,7 @@ public class PowerRating implements Comparable<PowerRating> {
 	 */
 	public PowerRating(Card[] cards){
 
-		Card[] cardsCopy = cards.clone();
+		cardsCopy = cards.clone();
 
 		groupedByValues = CardUtils.groupByValues(cardsCopy);
 		groupedBySuits = CardUtils.groupBySuits(cardsCopy);
@@ -41,7 +43,23 @@ public class PowerRating implements Comparable<PowerRating> {
 		Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
 
 		this.rank = this.getRank(cardsCopy);
+	}
+
+	/**
+	 * Perform only these operations when we need them. Since most of the times
+	 * we will compare rank only we don't need to evaluate rank cards and kickers
+	 * when we do need it call this method.
+	 */
+	private void lazyEvaluation(){
+		this.lazyEvalRank();
+		this.lazyEvalKickers();
+	}
+
+	private void lazyEvalRank(){
 		this.rankCards = this.getUsedCards(this.rank, cardsCopy);
+	}
+
+	private void lazyEvalKickers(){
 		this.kickers = this.getKickers(this.rankCards, cardsCopy);
 	}
 
@@ -80,9 +98,10 @@ public class PowerRating implements Comparable<PowerRating> {
 
 	@Override
 	public String toString() {
+		this.lazyEvaluation();
 		return "PowerRating [rank=" + rank + ", kickers="
-				+ Arrays.toString(kickers) + ", rankCards="
-				+ Arrays.toString(rankCards) + "]";
+		+ Arrays.toString(kickers) + ", rankCards="
+		+ Arrays.toString(rankCards) + "]";
 	}
 
 	/**
@@ -245,6 +264,7 @@ public class PowerRating implements Comparable<PowerRating> {
 			//One hand has a better rank
 			return compRank;
 		}else{
+			this.lazyEvalRank(); //Since we need rank cards now, we force evaluation
 			//Equal rank, must use high cards and kickers
 			Card[] otherRankCards = arg0.getRankCards();
 
@@ -263,6 +283,7 @@ public class PowerRating implements Comparable<PowerRating> {
 			}
 			//If we get here this means that both hands had the same card values in their hand
 			//Compare kickers
+			this.lazyEvalKickers(); //Since we need kickers now we force evauation
 			Card[] otherKickers = arg0.getKickers();
 			for(int i = 0; i < this.kickers.length && i < otherKickers.length; i++){
 				//The list of kickers doesn't have to be the same length!
@@ -340,7 +361,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		return false;
 	}
-	
+
 	private boolean isStraight(){
 		for(int i = groupedByValues.length - 1; i >= 0; i--){
 			if(groupedByValues[i] != 0){
@@ -412,15 +433,19 @@ public class PowerRating implements Comparable<PowerRating> {
 	}
 
 	public Card[] getKickers() {
+		this.lazyEvaluation(); //Force evaluation, we need rank cards for 
+		//kickers so we need to do both calculations now
 		return kickers;
 	}
 
 	public Card[] getRankCards() {
+		this.lazyEvalRank(); // Force evaluation
 		return rankCards;
 	}
 
 	@Override
 	public int hashCode() {
+		this.lazyEvaluation(); //Eval both kickers and rank cards.
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Arrays.hashCode(kickers);
@@ -431,6 +456,7 @@ public class PowerRating implements Comparable<PowerRating> {
 
 	@Override
 	public boolean equals(Object obj) {
+		this.lazyEvaluation();
 		if (this == obj)
 			return true;
 		if (obj == null)
