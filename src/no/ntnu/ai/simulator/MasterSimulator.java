@@ -24,7 +24,7 @@ public class MasterSimulator {
 		int rounded = (int) Math.floor((double)hands.size()/numCores);
 		String filename = System.getProperty("filename", "preflot_data.txt");
 		
-		System.out.println("Running preflot simulator on " + numCores + " cores. ");
+		System.out.println("Running preflop simulator on " + numCores + " cores. ");
 		System.out.println("Simulating " + maxP + " players.");
 		System.out.println("Running " + numSims + " simulations per poker hand.");
 		System.out.println("Each core will have about " + rounded + " poker hands each.");
