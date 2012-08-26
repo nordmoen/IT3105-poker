@@ -25,3 +25,13 @@ Starting simulation
 ...
 Done!
 It took 990142ms
+------------------------------------------
+Running preflot simulator on 8 cores. 
+Simulating 10 players.
+Running 100000 simulations per poker hand.
+Each core will have about 21 poker hands each.
+Results will end up in 100k_v4.txt
+Starting simulation
+...
+Done!
+It took 940026ms
