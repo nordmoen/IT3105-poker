@@ -19,6 +19,8 @@ public class PowerRating implements Comparable<PowerRating> {
 
 	private final int[] groupedByValues;
 	private final int[] groupedBySuits;
+	
+	private boolean sorted = false;
 
 	//The sum of kickers.length + rankCards.length must not be above 5!
 
@@ -40,7 +42,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		groupedBySuits = CardUtils.groupBySuits(cardsCopy);
 
 		//Sort cards descending
-		Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
+		//Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
 
 		this.rank = this.getRank(cardsCopy);
 	}
@@ -56,11 +58,20 @@ public class PowerRating implements Comparable<PowerRating> {
 	}
 
 	private void lazyEvalRank(){
+		this.sortCardCopy();
 		this.rankCards = this.getUsedCards(this.rank, cardsCopy);
 	}
 
 	private void lazyEvalKickers(){
+		this.sortCardCopy();
 		this.kickers = this.getKickers(this.rankCards, cardsCopy);
+	}
+	
+	private void sortCardCopy(){
+		if(!this.sorted){
+			Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
+			this.sorted = true;
+		}
 	}
 
 	/**
