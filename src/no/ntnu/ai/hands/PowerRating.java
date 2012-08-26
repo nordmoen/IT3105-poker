@@ -456,7 +456,6 @@ public class PowerRating implements Comparable<PowerRating> {
 
 	@Override
 	public boolean equals(Object obj) {
-		this.lazyEvaluation();
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -464,14 +463,16 @@ public class PowerRating implements Comparable<PowerRating> {
 		if (getClass() != obj.getClass())
 			return false;
 		PowerRating other = (PowerRating) obj;
-		if (!Arrays.equals(kickers, other.kickers))
-			return false;
 		if (rank == null) {
 			if (other.rank != null)
 				return false;
 		} else if (!rank.equals(other.rank))
 			return false;
+		this.lazyEvalRank();
 		if (!Arrays.equals(rankCards, other.rankCards))
+			return false;
+		this.lazyEvalKickers();
+		if (!Arrays.equals(kickers, other.kickers))
 			return false;
 		return true;
 	}
