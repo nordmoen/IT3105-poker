@@ -1,8 +1,5 @@
 package no.ntnu.ai.simulator;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -18,20 +15,27 @@ public class MasterSimulator {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws InterruptedException {
-		InputStreamReader converter = new InputStreamReader(System.in);
-		BufferedReader in = new BufferedReader(converter);
+
+		List<PokerHand> hands = CardUtils.generatePreFlop();
+		int numCores = Integer.parseInt(System.getProperty("numCores", 
+				Runtime.getRuntime().availableProcessors() + ""));
+		int maxP = Integer.parseInt(System.getProperty("maxPlayers", "2"));
+		int numSims = Integer.parseInt(System.getProperty("numSims", "1000"));
+		int rounded = (int) Math.floor((double)hands.size()/numCores);
+		String filename = System.getProperty("filename", "preflot_data.txt");
+		
+		System.out.println("Running preflot simulator on " + numCores + " cores. ");
+		System.out.println("Simulating " + maxP + " players.");
+		System.out.println("Running " + numSims + " simulations per poker hand.");
+		System.out.println("Each core will have about " + rounded + " poker hands each.");
+		System.out.println("Results will end up in " + filename);
+		
 		SimResultWriter writer = SimResultWriter.getInstance();
 		BlockingQueue<SimResult> queue = new LinkedBlockingQueue<SimResult>();
 		writer.addOutput(queue);
-		writer.setOutputFilename(getOutName(in));
-
-		List<PokerHand> hands = CardUtils.generatePreFlop();
+		writer.setOutputFilename(filename);
 
 		List<RolloutSimulator> sims = new ArrayList<RolloutSimulator>();
-		int numCores = getNumCores(in);
-		int maxP = getMaxPlayers(in);
-		int numSims = getNumSims(in);
-		int rounded = (int) Math.floor((double)hands.size()/numCores);
 
 		for(int i = 0; i < numCores - 1; i++){
 			sims.add(new RolloutSimulator(maxP, numSims, queue, hands.subList(i*rounded, rounded*(i+1))));
@@ -49,54 +53,6 @@ public class MasterSimulator {
 		wThread.join();
 		System.out.println("Done!");
 		System.out.println("It took " + (System.currentTimeMillis() - start) + "ms");
-	}
-
-	private static int getNumSims(BufferedReader in) {
-		System.out.print("Select number of simulations per preflop hand: ");
-		try {
-			return Integer.parseInt(in.readLine());
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return 100;
-	}
-
-	private static int getMaxPlayers(BufferedReader in) {
-		System.out.print("How many players should be simulated: ");
-		try {
-			return Integer.parseInt(in.readLine());
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return 2;
-	}
-
-	private static String getOutName(BufferedReader in){
-		System.out.print("Select output filename: ");
-		try {
-			return in.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return "TestResult.txt";
-		}
-	}
-
-	private static int getNumCores(BufferedReader in){
-		System.out.print("Select number of cores to run on: ");
-		try {
-			return Integer.parseInt(in.readLine());
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			return 1;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return 1;
-		}
 	}
 
 }
