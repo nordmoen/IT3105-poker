@@ -51,7 +51,7 @@ public class PreFlopMaster extends AbstractMaster{
 			boolean[] result = this.declareWinner();
 			boolean tie = false;
 			if(result[0]){
-				for(int j=1; j<numPlayers; j++){
+				for(int j=1; j<numPlayers && !tie; j++){ //Stop to loop once we get a tie
 					if(result[j]){
 						tie = true;
 					}
