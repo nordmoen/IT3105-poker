@@ -36,4 +36,6 @@ public interface PokerPlayer {
 	
 	@Override
 	public int hashCode();
+	
+	public void getBlind(int sum);
 }

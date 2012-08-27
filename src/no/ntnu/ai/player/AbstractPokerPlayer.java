@@ -61,5 +61,9 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 			return this.playerEquals((AbstractPokerPlayer) o);
 		}
 	}
+	
+	public void getBlind(int sum){
+		this.chipCount -= sum;
+	}
 
 }
