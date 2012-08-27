@@ -71,7 +71,7 @@ public abstract class AbstractMaster {
 		cards[2] = flop[2];
 		cards[3] = this.turn;
 		cards[4] = this.river;
-		for(int i=0; i<numPlayers; i++){
+		for(int i=0; i<hands.size(); i++){
 			cards[5] = hands.get(i).getC1();
 			cards[6] = hands.get(i).getC2();
 			
@@ -81,7 +81,7 @@ public abstract class AbstractMaster {
 		}
 		
 		PowerRating winner = PowerUtils.max(prs);
-		for(int i=0; i<numPlayers; i++){
+		for(int i=0; i<hands.size(); i++){
 			if(prs[i].equals(winner)){
 				winners[i] = true;
 			}
