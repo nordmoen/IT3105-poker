@@ -18,6 +18,14 @@ public class PokerHand implements Comparable<PokerHand>{
 	public Card getC2() {
 		return c2;
 	}
+	
+	public boolean getPocket(){
+		return c1.getValue() == c2.getValue();
+	}
+	
+	public boolean getSuited(){
+		return c1.getSuit() == c2.getSuit();
+	}
 
 	@Override
 	public int compareTo(PokerHand o) {

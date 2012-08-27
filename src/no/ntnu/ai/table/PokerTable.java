@@ -47,6 +47,10 @@ public class PokerTable{
 	public void addPlayer(PokerPlayer player){
 		this.players.add(player);
 	}
+	
+	public void addAll(List<PokerPlayer> list){
+		this.players.addAll(list);
+	}
 
 	public void removePlayer(PokerPlayer player){
 		this.players.remove(player);
