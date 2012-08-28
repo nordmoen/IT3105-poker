@@ -36,6 +36,9 @@ public class Phase1Player extends AbstractPokerPlayer {
 			if(random < simpleRating){
 				return new PokerAction(Action.FOLD);
 			}else if (simpleRating > 0.3){
+				//TODO: need to know how many chips we need to bet and subtract that amount from our chipcount.
+				// the players that have payed blinds/called/betted have a different amount of chips needed to bet/call.
+				
 				return new PokerAction(Action.BET, pTable.getBigBlind());
 			}else{
 				return new PokerAction(Action.CALL);
@@ -52,8 +55,14 @@ public class Phase1Player extends AbstractPokerPlayer {
 
 	@Override
 	public PowerRating showCards(Card[] table) {
-		// TODO Auto-generated method stub
-		return null;
+		Card[] cards = new Card[table.length +2];
+		cards[0] = this.currentHand.getC1();
+		cards[1] = this.currentHand.getC2();
+		for(int i=0; i<table.length; i++){
+			cards[i+2] = table[i];
+		}
+		PowerRating pwr = new PowerRating(cards);
+		return pwr;
 	}
 
 }
