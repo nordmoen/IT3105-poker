@@ -7,6 +7,7 @@ import no.ntnu.ai.deck.Deck;
 import no.ntnu.ai.hands.PowerRating;
 import no.ntnu.ai.hands.PowerUtils;
 import no.ntnu.ai.player.PokerHand;
+import no.ntnu.ai.player.PokerPlayer;
 
 public abstract class AbstractMaster {
 	protected int numPlayers;
@@ -84,6 +85,34 @@ public abstract class AbstractMaster {
 		for(int i=0; i<hands.size(); i++){
 			if(prs[i].equals(winner)){
 				winners[i] = true;
+			}
+		}
+		return winners;
+	}
+	
+	public ArrayList<PokerPlayer> declareWinner(ArrayList<PokerPlayer> players){
+		ArrayList<PokerPlayer> winners = new ArrayList<PokerPlayer>();
+		
+		PowerRating[] rats = new PowerRating[players.size()];
+		Card[] cards = new Card[7];
+		cards[0] = flop[0];
+		cards[1] = flop[1];
+		cards[2] = flop[2];
+		cards[3] = turn;
+		cards[4] = river;
+		for(int i = 0; i < players.size(); i++){
+			cards[5] = players.get(i).getHand().getC1();
+			cards[6] = players.get(i).getHand().getC2();
+			
+			PowerRating pow = new PowerRating(cards);
+			
+			rats[i] = pow;
+		}
+		
+		PowerRating winner = PowerUtils.max(rats);
+		for(int i=0; i<players.size(); i++){
+			if(rats[i].equals(winner)){
+				winners.add(players.get(i));
 			}
 		}
 		return winners;

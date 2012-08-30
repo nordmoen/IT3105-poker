@@ -41,6 +41,8 @@ public class PokerMaster extends AbstractMaster {
 
 		for(int i = 0; i < numSims; i++){
 			log.fine("Round " + i + " starting");
+			log.fine("Small blind player: " + table.getCurrentSmallBlindPlayer());
+			log.fine("Big blind player: " + table.getCurrentBigBlindPlayer());
 			folded.clear();
 			bets.clear();
 
@@ -120,9 +122,24 @@ public class PokerMaster extends AbstractMaster {
 				}
 			}
 			if(winners.size() > 1){
-				//Need to show cards here
+				log.fine("Showdown between players:");
+				for(PokerPlayer p : winners){
+					log.fine(p.toString() + " has hand " + p.getHand());
+				}
 			}
-			boolean[] wins = this.declareWinner();
+			ArrayList<PokerPlayer> win = this.declareWinner(winners);
+			if(win.size() > 1){
+				log.fine("Pot is split between players");
+				int split = potSum(bets) / win.size();
+				for(PokerPlayer p : win){
+					log.fine(p + " won " + split);
+					((AbstractPokerPlayer) p).giveChips(split);
+				}
+			}{
+				log.fine("We have a winner");
+				log.fine(win.get(0) + " won " + potSum(bets));
+				((AbstractPokerPlayer) win.get(0)).giveChips(potSum(bets));
+			}
 		}
 	}
 
@@ -202,5 +219,6 @@ public class PokerMaster extends AbstractMaster {
 
 			}
 		}
+		log.fine("Pot is at " + potSum(bets));
 	}
 }
