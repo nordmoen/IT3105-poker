@@ -33,7 +33,7 @@ public class PokerMaster extends AbstractMaster {
 		PokerPlayer winner = this.winner(folded);
 		if(winner != null){
 			AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
-			System.out.println(winner + " won the game with " + (cards2 == null ? wp.getHand() : wp.showCards(cards2)));
+//			System.out.println(winner + " won the game with " + (cards2 == null ? wp.getHand() : wp.showCards(cards2)));
 			wp.giveChips(potSum(bets));
 			return true;
 		}
@@ -53,8 +53,8 @@ public class PokerMaster extends AbstractMaster {
 			this.reset();
 			System.out.println("------------------------");
 			System.out.println("Round " + table.getCurrentRound() + " starting");
-			System.out.println("Small blind player: " + table.getCurrentSmallBlindPlayer());
-			System.out.println("Big blind player: " + table.getCurrentBigBlindPlayer());
+//			System.out.println("Small blind player: " + table.getCurrentSmallBlindPlayer());
+//			System.out.println("Big blind player: " + table.getCurrentBigBlindPlayer());
 			folded.clear();
 			bets.clear();
 
@@ -62,7 +62,7 @@ public class PokerMaster extends AbstractMaster {
 			deck.stdShuffle();
 
 			//Deal cards to players
-			System.out.println("Dealing cards to all players");
+//			System.out.println("Dealing cards to all players");
 			this.dealCards(deck);
 			for(int j = 0; j < table.size(); j++){
 				this.table.getBetterAt(j).newHand(this.hands.get(j));
@@ -80,7 +80,7 @@ public class PokerMaster extends AbstractMaster {
 			System.out.println("Big blind: " + this.table.getBigBlind());
 
 			//Pre-flop betting
-			System.out.println("Pre-flop betting");
+//			System.out.println("Pre-flop betting");
 			this.bettingRound(null, bets, folded);
 			
 			if(singleWin(bets, folded, null)){
@@ -89,11 +89,11 @@ public class PokerMaster extends AbstractMaster {
 			
 
 			//Deal flop
-			System.out.println("Dealing flop");
+//			System.out.println("Dealing flop");
 			this.dealFlop(deck);
-			System.out.println("Flop: " + Arrays.toString(this.flop));
+//			System.out.println("Flop: " + Arrays.toString(this.flop));
 			//Post-flop betting
-			System.out.println("Post-flop betting");
+//			System.out.println("Post-flop betting");
 			this.bettingRound(this.flop, bets, folded);
 
 			if(singleWin(bets, folded, flop)){
@@ -101,11 +101,11 @@ public class PokerMaster extends AbstractMaster {
 			}
 
 			//Deal turn
-			System.out.println("Dealing turn");
+//			System.out.println("Dealing turn");
 			this.dealTurn(deck);
-			System.out.println("Turn: " + this.turn);
+//			System.out.println("Turn: " + this.turn);
 			//Post-turn betting
-			System.out.println("Post-turn betting");
+//			System.out.println("Post-turn betting");
 			this.bettingRound(this.getCards(false), bets, folded);
 
 			if(singleWin(bets, folded, getCards(false))){
@@ -113,11 +113,11 @@ public class PokerMaster extends AbstractMaster {
 			}
 
 			//Deal river
-			System.out.println("Dealing river");
+//			System.out.println("Dealing river");
 			this.dealRiver(deck);
-			System.out.println("River: " + this.river);
+//			System.out.println("River: " + this.river);
 			//Post-river betting
-			System.out.println("Post-river betting");
+//			System.out.println("Post-river betting");
 			this.bettingRound(this.getCards(true), bets, folded);
 
 
@@ -139,15 +139,15 @@ public class PokerMaster extends AbstractMaster {
 			}
 			ArrayList<PokerPlayer> win = this.declareWinner(winners);
 			if(win.size() > 1){
-				System.out.println("Pot is split between players");
+//				System.out.println("Pot is split between players");
 				int split = potSum(bets) / win.size();
 				for(PokerPlayer p : win){
-					System.out.println(p + " won " + split + " with " + win.get(0).showCards(getCards(true)));
+//					System.out.println(p + " won " + split + " with " + win.get(0).showCards(getCards(true)));
 					((AbstractPokerPlayer) p).giveChips(split);
 				}
 			}else{
-				System.out.println("We have a winner");
-				System.out.println(win.get(0) + " won " + potSum(bets) + " with " + win.get(0).showCards(getCards(true)));
+//				System.out.println("We have a winner");
+//				System.out.println(win.get(0) + " won " + potSum(bets) + " with " + win.get(0).showCards(getCards(true)));
 				((AbstractPokerPlayer) win.get(0)).giveChips(potSum(bets));
 			}
 			
@@ -233,14 +233,14 @@ public class PokerMaster extends AbstractMaster {
 						int prevAmount = bets.get(better) == null ? 0 : bets.get(better);
 						switch (act.getAct()) {
 						case BET:
-							System.out.println(better + ": Betted " + act.getAmount());
+//							System.out.println(better + ": Betted " + act.getAmount());
 							bets.put(better, act.getAmount() + prevAmount); 
 							lastBetter = better; break;
 						case CALL:
-							System.out.println(better + ": Called");
+//							System.out.println(better + ": Called");
 							bets.put(better, act.getAmount() + prevAmount); break;
 						case FOLD:
-							System.out.println(better + ": Folded");
+//							System.out.println(better + ": Folded");
 							folded.put(better, true); break;
 						}
 					}else{
@@ -249,6 +249,6 @@ public class PokerMaster extends AbstractMaster {
 				}
 			}
 		}
-		System.out.println("Pot is at " + potSum(bets));
+//		System.out.println("Pot is at " + potSum(bets));
 	}
 }
