@@ -58,6 +58,10 @@ public class PokerTable{
 
 	public void nextRound(){
 		this.round++;
+		if(this.round % (players.size()*5) == 0 && this.bigBlind<1000){
+			this.smallBlind *= 1.5;
+			this.bigBlind *= 1.5;
+		}
 	}
 
 	public PokerPlayer getCurrentDealer(){

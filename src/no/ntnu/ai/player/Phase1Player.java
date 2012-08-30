@@ -30,8 +30,8 @@ public class Phase1Player extends AbstractPokerPlayer {
 				cards[i+2] = table[i];
 			}
 			PowerRating myHand = new PowerRating(cards);
-			double simpleRating = (myHand.getRank().ordinal() + 1) / 9;
-			if(random < simpleRating){
+			double simpleRating = (double)(myHand.getRank().ordinal() + 1) / 9;
+			if(random*random > simpleRating){
 				return new PokerAction(Action.FOLD);
 			}else if (simpleRating > 0.3){
 				//TODO: need to know how many chips we need to bet and subtract that amount from our chipcount.
