@@ -65,7 +65,7 @@ public class Phase1Player extends AbstractPokerPlayer {
 	
 	@Override
 	public String toString(){
-		return this.name + ", chip count: " + super.getChipCount();
+		return "Phase 1, " + this.name + ", chip count: " + super.getChipCount();
 	}
 
 }
