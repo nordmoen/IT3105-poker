@@ -117,5 +117,16 @@ public abstract class AbstractMaster {
 		}
 		return winners;
 	}
+	
+	public void reset(){
+		this.hands.clear();
+		this.flop = null;
+		this.river = null;
+		this.turn = null;
+		this.dealtCards = false;
+		this.dealtFlop = false;
+		this.dealtRiver = false;
+		this.dealtTurn = false;
+	}
 
 }

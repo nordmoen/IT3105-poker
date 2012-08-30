@@ -28,6 +28,17 @@ public class PokerMaster extends AbstractMaster {
 		this.players.addAll(players);
 		this.table.addAll(players);
 	}
+	
+	public boolean singleWin(Map<PokerPlayer, Integer> bets, Map<PokerPlayer, Boolean> folded, Card[] cards2){
+		PokerPlayer winner = this.winner(folded);
+		if(winner != null){
+			AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
+			System.out.println(winner + " won the game with " + (cards2 == null ? wp.getHand() : wp.showCards(cards2)));
+			wp.giveChips(potSum(bets));
+			return true;
+		}
+		return false;
+	}
 
 	public void simulate(int numSims){
 		Map<PokerPlayer, Integer> bets = new HashMap<PokerPlayer, Integer>();
@@ -39,6 +50,7 @@ public class PokerMaster extends AbstractMaster {
 
 		for(int i = 0; i < numSims; i++){
 			this.table.nextRound();
+			this.reset();
 			System.out.println("------------------------");
 			System.out.println("Round " + table.getCurrentRound() + " starting");
 			System.out.println("Small blind player: " + table.getCurrentSmallBlindPlayer());
@@ -71,11 +83,7 @@ public class PokerMaster extends AbstractMaster {
 			System.out.println("Pre-flop betting");
 			this.bettingRound(null, bets, folded);
 			
-			PokerPlayer winner = this.winner(folded);
-			if(winner != null){
-				AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
-				System.out.println(winner + " won the game!");
-				wp.giveChips(potSum(bets));
+			if(singleWin(bets, folded, null)){
 				continue;
 			}
 			
@@ -88,11 +96,7 @@ public class PokerMaster extends AbstractMaster {
 			System.out.println("Post-flop betting");
 			this.bettingRound(this.flop, bets, folded);
 
-			winner = this.winner(folded);
-			if(winner != null){
-				AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
-				System.out.println(winner + " won the game!");
-				wp.giveChips(potSum(bets));
+			if(singleWin(bets, folded, flop)){
 				continue;
 			}
 
@@ -104,11 +108,7 @@ public class PokerMaster extends AbstractMaster {
 			System.out.println("Post-turn betting");
 			this.bettingRound(this.getCards(false), bets, folded);
 
-			winner = this.winner(folded);
-			if(winner != null){
-				AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
-				System.out.println(winner + " won the game!");
-				wp.giveChips(potSum(bets));
+			if(singleWin(bets, folded, getCards(false))){
 				continue;
 			}
 
@@ -131,8 +131,10 @@ public class PokerMaster extends AbstractMaster {
 			}
 			if(winners.size() > 1){
 				System.out.println("Showdown between players:");
+				System.out.println("The table is " + Arrays.toString(getCards(true)));
 				for(PokerPlayer p : winners){
-					System.out.println(p.toString() + " has hand " + p.getHand());
+					System.out.println(p.toString() + " has hand " + p.getHand()); 
+					//TODO: show hands to the opponentModeler
 				}
 			}
 			ArrayList<PokerPlayer> win = this.declareWinner(winners);
@@ -140,7 +142,7 @@ public class PokerMaster extends AbstractMaster {
 				System.out.println("Pot is split between players");
 				int split = potSum(bets) / win.size();
 				for(PokerPlayer p : win){
-					System.out.println(p + " won " + split + " with " + win.get(0).showCards(getCards(true)).getRankCards());
+					System.out.println(p + " won " + split + " with " + win.get(0).showCards(getCards(true)));
 					((AbstractPokerPlayer) p).giveChips(split);
 				}
 			}else{
@@ -220,6 +222,9 @@ public class PokerMaster extends AbstractMaster {
 			for(int j = 0; j < table.size(); j++){
 				PokerPlayer better = table.getBetterAt(j);
 				if(folded.get(better) == null || !folded.get(better)){
+					if(folded.size() == players.size() -1){
+						return;
+					}
 					if(better != lastBetter){
 						int amount = java.util.Collections.max(bets.values()) - (bets.get(better) == null ? 0: bets.get(better));
 						PokerAction act = better.getDecision(cards, 
