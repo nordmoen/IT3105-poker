@@ -2,27 +2,25 @@ package no.ntnu.ai.player;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.hands.PowerRating;
-import no.ntnu.ai.table.PokerTable;
 
 public class Phase1Player extends AbstractPokerPlayer {
+	private final String name;
 	
-	private PokerTable pTable;
-	
-	public Phase1Player(PokerTable table){
-		this.chipCount = 1000;
-		this.pTable = table;
+	public Phase1Player(String name, int amount){
+		super(amount);
+		this.name = name;
 	}
 
 	@Override
-	public PokerAction makeDecision(Card[] table) {
+	public PokerAction makeDecision(Card[] table, int smallBlind, int bigBlind, int amount, int chipCount) {
 		double random = Math.random();
 		if(table == null){
 			if(random>0.7){
 				return new PokerAction(Action.FOLD);
 			}else if(random >0.3){
-				return new PokerAction(Action.CALL);
+				return new PokerAction(Action.CALL, amount);
 			}else{
-				return new PokerAction(Action.BET, pTable.getBigBlind());
+				return new PokerAction(Action.BET, bigBlind + amount);
 			}
 		}else{
 			Card[] cards = new Card[table.length+2];
@@ -39,9 +37,9 @@ public class Phase1Player extends AbstractPokerPlayer {
 				//TODO: need to know how many chips we need to bet and subtract that amount from our chipcount.
 				// the players that have payed blinds/called/betted have a different amount of chips needed to bet/call.
 				
-				return new PokerAction(Action.BET, pTable.getBigBlind());
+				return new PokerAction(Action.BET, bigBlind + amount);
 			}else{
-				return new PokerAction(Action.CALL);
+				return new PokerAction(Action.CALL, amount);
 			}
 		}
 		
@@ -63,6 +61,11 @@ public class Phase1Player extends AbstractPokerPlayer {
 		}
 		PowerRating pwr = new PowerRating(cards);
 		return pwr;
+	}
+	
+	@Override
+	public String toString(){
+		return this.name + ", chip count: " + super.getChipCount();
 	}
 
 }

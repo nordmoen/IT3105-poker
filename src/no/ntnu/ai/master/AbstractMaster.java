@@ -83,7 +83,7 @@ public abstract class AbstractMaster {
 		
 		PowerRating winner = PowerUtils.max(prs);
 		for(int i=0; i<hands.size(); i++){
-			if(prs[i].equals(winner)){
+			if(prs[i].compareTo(winner) == 0){
 				winners[i] = true;
 			}
 		}
@@ -111,7 +111,7 @@ public abstract class AbstractMaster {
 		
 		PowerRating winner = PowerUtils.max(rats);
 		for(int i=0; i<players.size(); i++){
-			if(rats[i].equals(winner)){
+			if(rats[i].compareTo(winner) == 0){
 				winners.add(players.get(i));
 			}
 		}

@@ -110,9 +110,7 @@ public class PowerRating implements Comparable<PowerRating> {
 	@Override
 	public String toString() {
 		this.lazyEvaluation();
-		return "PowerRating [rank=" + rank + ", kickers="
-		+ Arrays.toString(kickers) + ", rankCards="
-		+ Arrays.toString(rankCards) + "]";
+		return this.rank + " consisting of " + Arrays.toString(rankCards);
 	}
 
 	/**

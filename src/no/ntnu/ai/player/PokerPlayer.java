@@ -4,12 +4,16 @@ import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.hands.PowerRating;
 
 public interface PokerPlayer {
+	
 	/**
 	 * Get a decision from a Player about what to do
-	 * @param table - The cards currently on the table
-	 * @return - A PokerAction with the decision
+	 * @param table - The cards on the table
+	 * @param smallBlind - The small blind amount
+	 * @param bigBlind - The big blind amount
+	 * @param amount - The amount the player must add to call
+	 * @return - The desired action
 	 */
-	public PokerAction getDecision(Card[] table);
+	public PokerAction getDecision(Card[] table, int smallBlind, int bigBlind, int amount);
 	
 	/**
 	 * Show the cards that make up the best hand the player can get, from the cards

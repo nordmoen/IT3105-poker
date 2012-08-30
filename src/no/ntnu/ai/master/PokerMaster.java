@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.Deck;
@@ -18,38 +17,38 @@ public class PokerMaster extends AbstractMaster {
 
 	private final ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
 	private final PokerTable table;
-	private final static Logger log = Logger.getLogger(PokerMaster.class.toString());
 
-	public PokerMaster(int numPlayers, int small, int big) {
+	public PokerMaster(int numPlayers, PokerTable table) {
 		super(numPlayers);
-		this.table = new PokerTable(small, big);
+		this.table = table;
 	}
 
-	public PokerMaster(List<PokerPlayer> players, int small, int big){
-		this(players.size(), small, big);
+	public PokerMaster(List<PokerPlayer> players, PokerTable table){
+		this(players.size(), table);
 		this.players.addAll(players);
-		this.table.addAll(this.players);
+		this.table.addAll(players);
 	}
 
 	public void simulate(int numSims){
 		Map<PokerPlayer, Integer> bets = new HashMap<PokerPlayer, Integer>();
 		Map<PokerPlayer, Boolean> folded = new HashMap<PokerPlayer, Boolean>();
 
-		log.fine("------Texas Hold 'Em------");
-		log.fine("There are " + this.numPlayers + " players");
-		log.fine("Simulating " + numSims + " poker rounds");
+		System.out.println("------Texas Hold 'Em------");
+		System.out.println("There are " + this.numPlayers + " players");
+		System.out.println("Simulating " + numSims + " poker rounds");
 
 		for(int i = 0; i < numSims; i++){
-			log.fine("Round " + i + " starting");
-			log.fine("Small blind player: " + table.getCurrentSmallBlindPlayer());
-			log.fine("Big blind player: " + table.getCurrentBigBlindPlayer());
+			System.out.println("Round " + i + " starting");
+			System.out.println("Small blind player: " + table.getCurrentSmallBlindPlayer());
+			System.out.println("Big blind player: " + table.getCurrentBigBlindPlayer());
 			folded.clear();
 			bets.clear();
 
-			Deck deck = Deck.getInstance();
+			Deck deck = Deck.getInstance((int) System.currentTimeMillis(), 7);
+			deck.stdShuffle();
 
 			//Deal cards to players
-			log.fine("Dealing cards to all players");
+			System.out.println("Dealing cards to all players");
 			this.dealCards(deck);
 			for(int j = 0; j < table.size(); j++){
 				this.table.getBetterAt(j).newHand(this.hands.get(j));
@@ -59,57 +58,55 @@ public class PokerMaster extends AbstractMaster {
 			PokerPlayer smallBlind = this.table.getCurrentSmallBlindPlayer();
 			smallBlind.getBlind(this.table.getSmallBlind());
 			bets.put(smallBlind, this.table.getSmallBlind());
-			log.fine("Small blind: " + this.table.getSmallBlind());
+			System.out.println("Small blind: " + this.table.getSmallBlind());
 
 			PokerPlayer bigBlind = this.table.getCurrentBigBlindPlayer();
-			smallBlind.getBlind(this.table.getBigBlind());
+			bigBlind.getBlind(this.table.getBigBlind());
 			bets.put(bigBlind, this.table.getBigBlind());
-			log.fine("Big blind: " + this.table.getBigBlind());
+			System.out.println("Big blind: " + this.table.getBigBlind());
 
 			//Pre-flop betting
-			log.fine("Pre-flop betting");
+			System.out.println("Pre-flop betting");
 			this.bettingRound(null, bets, folded);
 
-			//TODO: Fix cases where there is a winner before showdown!
-
 			//Deal flop
-			log.fine("Dealing flop");
+			System.out.println("Dealing flop");
 			this.dealFlop(deck);
-			log.fine("Flop: " + Arrays.toString(this.flop));
+			System.out.println("Flop: " + Arrays.toString(this.flop));
 			//Post-flop betting
-			log.fine("Post-flop betting");
+			System.out.println("Post-flop betting");
 			this.bettingRound(this.flop, bets, folded);
 
 			PokerPlayer winner = this.winner(bets, folded);
 			if(winner != null){
 				AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
-				log.fine(winner + " won the game!");
+				System.out.println(winner + " won the game!");
 				wp.giveChips(potSum(bets));
 				continue;
 			}
 
 			//Deal turn
-			log.fine("Dealing turn");
+			System.out.println("Dealing turn");
 			this.dealTurn(deck);
-			log.fine("Turn: " + this.turn);
+			System.out.println("Turn: " + this.turn);
 			//Post-turn betting
-			log.fine("Post-turn betting");
+			System.out.println("Post-turn betting");
 			this.bettingRound(this.getCards(false), bets, folded);
 
 			winner = this.winner(bets, folded);
 			if(winner != null){
 				AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
-				log.fine(winner + " won the game!");
+				System.out.println(winner + " won the game!");
 				wp.giveChips(potSum(bets));
 				continue;
 			}
 
 			//Deal river
-			log.fine("Dealing river");
+			System.out.println("Dealing river");
 			this.dealRiver(deck);
-			log.fine("River: " + this.river);
+			System.out.println("River: " + this.river);
 			//Post-river betting
-			log.fine("Post-river betting");
+			System.out.println("Post-river betting");
 			this.bettingRound(this.getCards(true), bets, folded);
 
 
@@ -122,38 +119,44 @@ public class PokerMaster extends AbstractMaster {
 				}
 			}
 			if(winners.size() > 1){
-				log.fine("Showdown between players:");
+				System.out.println("Showdown between players:");
 				for(PokerPlayer p : winners){
-					log.fine(p.toString() + " has hand " + p.getHand());
+					System.out.println(p.toString() + " has hand " + p.getHand());
 				}
 			}
 			ArrayList<PokerPlayer> win = this.declareWinner(winners);
 			if(win.size() > 1){
-				log.fine("Pot is split between players");
+				System.out.println("Pot is split between players");
 				int split = potSum(bets) / win.size();
 				for(PokerPlayer p : win){
-					log.fine(p + " won " + split);
+					System.out.println(p + " won " + split + " with " + win.get(0).showCards(getCards(true)).getRankCards());
 					((AbstractPokerPlayer) p).giveChips(split);
 				}
 			}{
-				log.fine("We have a winner");
-				log.fine(win.get(0) + " won " + potSum(bets));
+				System.out.println("We have a winner");
+				System.out.println(win.get(0) + " won " + potSum(bets) + " with " + win.get(0).showCards(getCards(true)));
 				((AbstractPokerPlayer) win.get(0)).giveChips(potSum(bets));
 			}
 		}
+		System.out.println("After " + numSims + " rounds the status is:");
+		for(PokerPlayer p : this.players){
+			System.out.println(p);
+		}
 	}
 
-	private boolean equalBets(Map<PokerPlayer, Integer> bets){
+	private boolean equalBets(Map<PokerPlayer, Integer> bets, Map<PokerPlayer, Boolean> folded){
 		if(bets.isEmpty()){
 			return true;
 		}else{
 			int bet = -1;
 			for(PokerPlayer p : bets.keySet()){
-				if(bet == -1){
-					bet = bets.get(p);
-				}else{
-					if(bets.get(p) != bet)
-						return false;
+				if(folded.get(p) == null || !folded.get(p)){
+					if(bet == -1){
+						bet = bets.get(p);
+					}else{
+						if(bets.get(p) != bet)
+							return false;
+					}
 				}
 			}
 			return true;
@@ -188,8 +191,8 @@ public class PokerMaster extends AbstractMaster {
 
 	private PokerPlayer winner(Map<PokerPlayer, Integer> bets, Map<PokerPlayer, Boolean> folded){
 		if(bets.size() == folded.size() + 1){
-			for(PokerPlayer p : folded.keySet()){
-				if(!bets.containsKey(p)){
+			for(PokerPlayer p : bets.keySet()){
+				if(!folded.containsKey(p)){
 					return p;
 				}
 			}
@@ -198,27 +201,37 @@ public class PokerMaster extends AbstractMaster {
 	}
 
 	private void bettingRound(Card[] cards, Map<PokerPlayer, Integer> bets, Map<PokerPlayer, Boolean> folded){
-		while(!equalBets(bets)){
+		PokerPlayer lastBetter = null;
+		boolean started = false;
+		while(!equalBets(bets, folded) || !started){
+			started = true;
 			for(int j = 0; j < table.size(); j++){
 				PokerPlayer better = table.getBetterAt(j);
 				if(folded.get(better) == null || !folded.get(better)){
-					PokerAction act = better.getDecision(cards);
-					int prevAmount = bets.get(better) == null ? 0 : bets.get(better);
-					switch (act.getAct()) {
-					case BET:
-						log.fine(better + ": Betted " + act.getAmount());
-						bets.put(better, act.getAmount() + prevAmount); break;
-					case CALL:
-						log.fine(better + ": Called");
-						bets.put(better, act.getAmount() + prevAmount); break;
-					case FOLD:
-						log.fine(better + ": Folded");
-						folded.put(better, true); break;
+					if(better != lastBetter){
+						int amount = java.util.Collections.max(bets.values()) - (bets.get(better) == null ? 0: bets.get(better));
+						PokerAction act = better.getDecision(cards, 
+								table.getSmallBlind(), table.getBigBlind(), 
+								amount);
+						int prevAmount = bets.get(better) == null ? 0 : bets.get(better);
+						switch (act.getAct()) {
+						case BET:
+							System.out.println(better + ": Betted " + act.getAmount());
+							bets.put(better, act.getAmount() + prevAmount); 
+							lastBetter = better; break;
+						case CALL:
+							System.out.println(better + ": Called");
+							bets.put(better, act.getAmount() + prevAmount); break;
+						case FOLD:
+							System.out.println(better + ": Folded");
+							folded.put(better, true); break;
+						}
+					}else{
+						break;
 					}
 				}
-
 			}
 		}
-		log.fine("Pot is at " + potSum(bets));
+		System.out.println("Pot is at " + potSum(bets));
 	}
 }
