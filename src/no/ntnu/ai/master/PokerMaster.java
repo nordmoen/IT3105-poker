@@ -38,13 +38,15 @@ public class PokerMaster extends AbstractMaster {
 		System.out.println("Simulating " + numSims + " poker rounds");
 
 		for(int i = 0; i < numSims; i++){
-			System.out.println("Round " + i + " starting");
+			this.table.nextRound();
+			System.out.println("------------------------");
+			System.out.println("Round " + table.getCurrentRound() + " starting");
 			System.out.println("Small blind player: " + table.getCurrentSmallBlindPlayer());
 			System.out.println("Big blind player: " + table.getCurrentBigBlindPlayer());
 			folded.clear();
 			bets.clear();
 
-			Deck deck = Deck.getInstance((int) System.currentTimeMillis(), 7);
+			Deck deck = Deck.getInstance((int)(Math.random()*Integer.MAX_VALUE), (int)(Math.random()*4) + 3);
 			deck.stdShuffle();
 
 			//Deal cards to players
@@ -68,6 +70,15 @@ public class PokerMaster extends AbstractMaster {
 			//Pre-flop betting
 			System.out.println("Pre-flop betting");
 			this.bettingRound(null, bets, folded);
+			
+			PokerPlayer winner = this.winner(folded);
+			if(winner != null){
+				AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
+				System.out.println(winner + " won the game!");
+				wp.giveChips(potSum(bets));
+				continue;
+			}
+			
 
 			//Deal flop
 			System.out.println("Dealing flop");
@@ -77,7 +88,7 @@ public class PokerMaster extends AbstractMaster {
 			System.out.println("Post-flop betting");
 			this.bettingRound(this.flop, bets, folded);
 
-			PokerPlayer winner = this.winner(bets, folded);
+			winner = this.winner(folded);
 			if(winner != null){
 				AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
 				System.out.println(winner + " won the game!");
@@ -93,7 +104,7 @@ public class PokerMaster extends AbstractMaster {
 			System.out.println("Post-turn betting");
 			this.bettingRound(this.getCards(false), bets, folded);
 
-			winner = this.winner(bets, folded);
+			winner = this.winner(folded);
 			if(winner != null){
 				AbstractPokerPlayer wp = (AbstractPokerPlayer) winner;
 				System.out.println(winner + " won the game!");
@@ -132,11 +143,12 @@ public class PokerMaster extends AbstractMaster {
 					System.out.println(p + " won " + split + " with " + win.get(0).showCards(getCards(true)).getRankCards());
 					((AbstractPokerPlayer) p).giveChips(split);
 				}
-			}{
+			}else{
 				System.out.println("We have a winner");
 				System.out.println(win.get(0) + " won " + potSum(bets) + " with " + win.get(0).showCards(getCards(true)));
 				((AbstractPokerPlayer) win.get(0)).giveChips(potSum(bets));
 			}
+			
 		}
 		System.out.println("After " + numSims + " rounds the status is:");
 		for(PokerPlayer p : this.players){
@@ -189,9 +201,9 @@ public class PokerMaster extends AbstractMaster {
 		return cs;		
 	}
 
-	private PokerPlayer winner(Map<PokerPlayer, Integer> bets, Map<PokerPlayer, Boolean> folded){
-		if(bets.size() == folded.size() + 1){
-			for(PokerPlayer p : bets.keySet()){
+	private PokerPlayer winner(Map<PokerPlayer, Boolean> folded){
+		if(folded.size() == this.players.size() -1){
+			for(PokerPlayer p : players){
 				if(!folded.containsKey(p)){
 					return p;
 				}
