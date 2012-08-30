@@ -10,7 +10,7 @@ public class Phase1Master {
 	
 	private final static int numbPlayers = Integer.parseInt(System.getProperty("players", "4"));
 	private final static int smallBlind = Integer.parseInt(System.getProperty("smallBlind", "10"));
-	private final static int bigBlind = Integer.parseInt(System.getProperty("bigBlind", "12"));
+	private final static int bigBlind = Integer.parseInt(System.getProperty("bigBlind", "20"));
 	private final static int simulations = Integer.parseInt(System.getProperty("sims", "1000"));
 	
 	
