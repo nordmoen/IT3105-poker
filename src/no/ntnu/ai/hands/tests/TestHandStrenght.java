@@ -19,6 +19,10 @@ public class TestHandStrenght {
 		PokerHand p2 = new PokerHand(new Card(6, Suit.DIAMONDS), new Card(10, Suit.CLUBS));
 		PokerHand p3 = new PokerHand(new Card(2, Suit.CLUBS), new Card(9, Suit.CLUBS));
 		
+		//P1 is the best because it has a straight and therefore it should get
+		//a higher hand strength
+		//P2 is better than P3 because it has a pair of 6s'
+		
 		for(int i = 1; i < 11; i++){
 			assertTrue(HandStrength.calculateHandStrength(p1, cards, i) > 
 				HandStrength.calculateHandStrength(p2, cards, i));
@@ -28,6 +32,23 @@ public class TestHandStrenght {
 			
 			assertTrue(HandStrength.calculateHandStrength(p2, cards, i) > 
 			HandStrength.calculateHandStrength(p3, cards, i));
+		}
+		
+		Card[] cards2 = {new Card(4, Suit.HEARTS), new Card(5, Suit.DIAMONDS), 
+				new Card(6, Suit.HEARTS), new Card(9, Suit.HEARTS)};
+		
+		//P1 is still the better hand because of the straight, but P3 should
+		//now be better than P2 because it has a pair of 9s'
+		
+		for(int i = 1; i < 11; i++){
+			assertTrue(HandStrength.calculateHandStrength(p1, cards2, i) > 
+				HandStrength.calculateHandStrength(p2, cards2, i));
+			
+			assertTrue(HandStrength.calculateHandStrength(p1, cards2, i) > 
+			HandStrength.calculateHandStrength(p3, cards2, i));
+			
+			assertTrue(HandStrength.calculateHandStrength(p2, cards2, i) < 
+			HandStrength.calculateHandStrength(p3, cards2, i));
 		}
 	}
 
