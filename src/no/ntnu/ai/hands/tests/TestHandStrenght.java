@@ -59,6 +59,18 @@ public class TestHandStrenght {
 		//Nothing can beat P4 with the given cards and thus hand strength should be 1.0
 		
 		assertEquals(1.0, HandStrength.calculateHandStrength(p4, cards3, 1), 0);
+		
+		//Values below are taken from ai-poker-player.pdf
+		Card[] cards4 = {new Card(14, Suit.SPADES), new Card(2, Suit.SPADES), 
+				new Card(3, Suit.SPADES)};
+		
+		PokerHand p5 = new PokerHand(new Card(14, Suit.DIAMONDS), new Card(14, Suit.HEARTS));
+		PokerHand p6 = new PokerHand(new Card(4, Suit.SPADES), new Card(5, Suit.SPADES));
+		PokerHand p7 = new PokerHand(new Card(4, Suit.HEARTS), new Card(5, Suit.HEARTS));
+		
+		assertEquals(0.944, HandStrength.calculateHandStrength(p5, cards4, 1), 0.001); // Our number is a bit more accurate
+		assertEquals(1.0, HandStrength.calculateHandStrength(p6, cards4, 1), 0);
+		assertEquals(0.955, HandStrength.calculateHandStrength(p7, cards4, 1), 0.001);
 	}
 
 }
