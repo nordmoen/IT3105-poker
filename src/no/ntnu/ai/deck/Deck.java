@@ -118,14 +118,17 @@ public class Deck{
 		return true;
 	}
 
-	public int size() {
-		return this.deck.size();
-	}
-
 	public void shuffle(int nr){
 		for(int i = 0; i < nr; i++){
 			java.util.Collections.shuffle(this.deck, this.randomGen);
 		}
+	}
+	
+	/**
+	 * Shuffle the deck 7 times to ensure randomness
+	 */
+	public void stdShuffle(){
+		this.shuffle(this.stdShuffles);
 	}
 
 	@Override
@@ -133,11 +136,8 @@ public class Deck{
 		return "Deck (" + deck + ")";
 	}
 
-	/**
-	 * Shuffle the deck 7 times to ensure randomness
-	 */
-	public void stdShuffle(){
-		this.shuffle(this.stdShuffles);
+	public int size() {
+		return this.deck.size();
 	}
 	
 	public boolean remove(Card remCard){
@@ -146,6 +146,10 @@ public class Deck{
 	
 	public boolean contains(Card aCard){
 		return deck.contains(aCard);
+	}
+	
+	public Card get(int index){
+		return this.deck.get(index);
 	}
 
 }

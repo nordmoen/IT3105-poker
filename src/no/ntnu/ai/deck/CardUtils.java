@@ -50,4 +50,19 @@ public class CardUtils {
 		}
 		return preFlops;
 	}
+	
+	/**
+	 * Create all the PokerHand permutations from a given Deck
+	 * @param d - The deck to get the permutations from
+	 * @return - A list of all the PokreHand permutations
+	 */
+	public static List<PokerHand> permuteDeck(Deck d){
+		List<PokerHand> res = new ArrayList<PokerHand>();
+		for(int i = 0; i < d.size(); i++){
+			for(int j = i + 1; j < d.size(); j++){
+				res.add(new PokerHand(d.get(i), d.get(j)));
+			}
+		}
+		return res;
+	}
 }
