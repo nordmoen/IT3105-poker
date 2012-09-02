@@ -90,6 +90,12 @@ public class TestPowerRating {
 				new Card(6, Suit.HEARTS), new Card(9, Suit.HEARTS)};
 		
 		assertEquals(HandRank.STRAIGHT, new PowerRating(p1, cards).getRank());
+		
+		PokerHand p2 = new PokerHand(new Card(2, Suit.SPADES), new Card(3, Suit.SPADES));
+		Card[] cards2 = {new Card(4, Suit.HEARTS), new Card(5, Suit.DIAMONDS), 
+				new Card(14, Suit.HEARTS)};
+		
+		assertEquals(HandRank.STRAIGHT, new PowerRating(p2, cards2).getRank());
 	}
 	
 	@Test

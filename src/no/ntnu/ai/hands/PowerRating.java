@@ -20,7 +20,7 @@ public class PowerRating implements Comparable<PowerRating> {
 
 	private final int[] groupedByValues;
 	private final int[] groupedBySuits;
-	
+
 	private boolean sorted = false;
 
 	//The sum of kickers.length + rankCards.length must not be above 5!
@@ -44,7 +44,7 @@ public class PowerRating implements Comparable<PowerRating> {
 
 		this.rank = this.getRank(cardsCopy);
 	}
-	
+
 	public PowerRating(PokerHand hand, Card[] cards){
 		cardsCopy = new Card[cards.length + 2];
 		for(int i = 0; i < cards.length; i++){
@@ -52,10 +52,10 @@ public class PowerRating implements Comparable<PowerRating> {
 		}
 		cardsCopy[cards.length] = hand.getC1();
 		cardsCopy[cards.length + 1] = hand.getC2();
-		
+
 		groupedByValues = CardUtils.groupByValues(cardsCopy);
 		groupedBySuits = CardUtils.groupBySuits(cardsCopy);
-		
+
 		this.rank = this.getRank(cardsCopy);
 	}
 
@@ -78,7 +78,7 @@ public class PowerRating implements Comparable<PowerRating> {
 		this.sortCardCopy();
 		this.kickers = this.getKickers(this.rankCards, cardsCopy);
 	}
-	
+
 	private void sortCardCopy(){
 		if(!this.sorted){
 			Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
@@ -401,15 +401,24 @@ public class PowerRating implements Comparable<PowerRating> {
 	}
 
 	private boolean checkNextFour(int index, int[] values){
-		if(index < 4){
+		if(index < 3){
 			return false;
-		}
-		for(int i = 1; i < 5; i++){
-			if(values[index-i] == 0){
-				return false;
+		}else if(index == 3){
+			//Possibility for a ace low straight
+			for(int i = 1; i < 4; i++){
+				if(values[index-i] == 0){
+					return false;
+				}
 			}
+			return values[12] > 0;
+		}else{
+			for(int i = 1; i < 5; i++){
+				if(values[index-i] == 0){
+					return false;
+				}
+			}
+			return true;
 		}
-		return true;
 	}
 
 	private boolean isFourOfAKind(){
