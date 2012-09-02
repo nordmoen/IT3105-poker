@@ -65,4 +65,22 @@ public class CardUtils {
 		}
 		return res;
 	}
+	
+	/**
+	 * Split a list into a given number of sublists. Each sublist will be about
+	 * the same size with the exception of the last list, which may be smaller then
+	 * all the other lists
+	 * @param list - The list to split
+	 * @param numberToSplit - The number of times to split the list
+	 * @return - A list of lists where each sublist is about the same size
+	 */
+	public static <T> List<List<T>> splitList(List<T> list, int numberToSplit){
+		int rounded = (int) Math.floor((double)list.size()/numberToSplit);
+		List<List<T>> res = new ArrayList<List<T>>();
+		for(int i = 0; i < numberToSplit - 1; i++){
+			res.add(list.subList(rounded * i, rounded * (i+1)));
+		}
+		res.add(list.subList((numberToSplit-1)*rounded, list.size()));
+		return res;
+	}
 }

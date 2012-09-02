@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.CardUtils;
+import no.ntnu.ai.player.PokerHand;
 
 public class PowerRating implements Comparable<PowerRating> {
 
@@ -44,6 +45,20 @@ public class PowerRating implements Comparable<PowerRating> {
 		//Sort cards descending
 		//Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
 
+		this.rank = this.getRank(cardsCopy);
+	}
+	
+	public PowerRating(PokerHand hand, Card[] cards){
+		cardsCopy = new Card[cards.length + 2];
+		for(int i = 0; i < cards.length; i++){
+			cardsCopy[i] = cards[i];
+		}
+		cardsCopy[cards.length] = hand.getC1();
+		cardsCopy[cards.length + 1] = hand.getC2();
+		
+		groupedByValues = CardUtils.groupByValues(cardsCopy);
+		groupedBySuits = CardUtils.groupBySuits(cardsCopy);
+		
 		this.rank = this.getRank(cardsCopy);
 	}
 
