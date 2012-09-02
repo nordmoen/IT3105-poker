@@ -56,6 +56,8 @@ public class TestHandStrenght {
 		
 		PokerHand p4 = new PokerHand(new Card(7, Suit.HEARTS), new Card(8, Suit.HEARTS));
 		
+		//Nothing can beat P4 with the given cards and thus hand strength should be 1.0
+		
 		assertEquals(1.0, HandStrength.calculateHandStrength(p4, cards3, 1), 0);
 	}
 
