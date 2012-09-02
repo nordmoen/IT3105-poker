@@ -60,7 +60,6 @@ public class HandStrength {
 			wins[1] += hsr.getTies();
 			wins[2] += hsr.getLoses();
 		}
-		
 		double a = (wins[0] + wins[1]/2) / (wins[0] + wins[1] + wins[2]);
 		
 		return Math.pow(a, numOppns);

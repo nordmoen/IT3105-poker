@@ -42,9 +42,6 @@ public class PowerRating implements Comparable<PowerRating> {
 		groupedByValues = CardUtils.groupByValues(cardsCopy);
 		groupedBySuits = CardUtils.groupBySuits(cardsCopy);
 
-		//Sort cards descending
-		//Arrays.sort(cardsCopy, java.util.Collections.reverseOrder());
-
 		this.rank = this.getRank(cardsCopy);
 	}
 	
@@ -380,7 +377,11 @@ public class PowerRating implements Comparable<PowerRating> {
 		int[] values = CardUtils.groupByValues(cards);
 		for(int i = values.length - 1; i >= 0; i--){
 			if(values[i] != 0){
-				return checkNextFour(i, values);
+				if(checkNextFour(i, values)){
+					return true;
+				}else{
+					continue;
+				}
 			}
 		}
 		return false;
@@ -389,7 +390,11 @@ public class PowerRating implements Comparable<PowerRating> {
 	private boolean isStraight(){
 		for(int i = groupedByValues.length - 1; i >= 0; i--){
 			if(groupedByValues[i] != 0){
-				return checkNextFour(i, groupedByValues);
+				if(checkNextFour(i, groupedByValues)){
+					return true;
+				}else{
+					continue;
+				}
 			}
 		}
 		return false;

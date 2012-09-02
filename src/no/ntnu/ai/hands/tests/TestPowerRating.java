@@ -6,6 +6,7 @@ import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.Suit;
 import no.ntnu.ai.hands.HandRank;
 import no.ntnu.ai.hands.PowerRating;
+import no.ntnu.ai.player.PokerHand;
 
 import org.junit.Test;
 
@@ -81,6 +82,14 @@ public class TestPowerRating {
 		assertEquals(HandRank.STRAIGHT, hp11.getRank());
 		assertEquals(HandRank.STRAIGHT, hp12.getRank());
 		assertEquals(HandRank.FLUSH, hp14.getRank());
+		
+		
+
+		PokerHand p1 = new PokerHand(new Card(2, Suit.SPADES), new Card(3, Suit.SPADES));
+		Card[] cards = {new Card(4, Suit.HEARTS), new Card(5, Suit.DIAMONDS), 
+				new Card(6, Suit.HEARTS), new Card(9, Suit.HEARTS)};
+		
+		assertEquals(HandRank.STRAIGHT, new PowerRating(p1, cards).getRank());
 	}
 	
 	@Test

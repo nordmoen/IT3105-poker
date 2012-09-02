@@ -1,6 +1,6 @@
 package no.ntnu.ai.hands.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.Suit;
 import no.ntnu.ai.hands.HandStrength;
@@ -50,6 +50,13 @@ public class TestHandStrenght {
 			assertTrue(HandStrength.calculateHandStrength(p2, cards2, i) < 
 			HandStrength.calculateHandStrength(p3, cards2, i));
 		}
+		
+		Card[] cards3 = {new Card(4, Suit.HEARTS), new Card(5, Suit.HEARTS), 
+				new Card(6, Suit.HEARTS)};
+		
+		PokerHand p4 = new PokerHand(new Card(7, Suit.HEARTS), new Card(8, Suit.HEARTS));
+		
+		assertEquals(1.0, HandStrength.calculateHandStrength(p4, cards3, 1), 0);
 	}
 
 }
