@@ -23,7 +23,11 @@ public class PokerHand implements Comparable<PokerHand>{
 		return c1.getValue() == c2.getValue();
 	}
 	
-	public boolean getSuited(){
+	/**
+	 * Check whether or not this hand is suited, ie. have the same suit.
+	 * @return - True if suited
+	 */
+	public boolean isSuited(){
 		return c1.getSuit() == c2.getSuit();
 	}
 

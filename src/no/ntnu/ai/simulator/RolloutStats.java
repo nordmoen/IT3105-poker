@@ -13,7 +13,7 @@ import no.ntnu.ai.player.PokerHand;
 
 public class RolloutStats {
 
-	private static RolloutStats instance = null;
+	private static Map<String, RolloutStats> instances = new HashMap<String, RolloutStats>();
 	private final Map<Integer, Map<PokerHand, Double>> stats;
 	private final Suit suit1 = Suit.SPADES;
 	private final Suit suit2 = Suit.HEARTS;
@@ -63,14 +63,17 @@ public class RolloutStats {
 	}
 
 	public double getStat(int players, PokerHand hand){
-		return this.stats.get(players).get(hand);
+		Card c1 = new Card(hand.getC1().getValue(), suit1);
+		Card c2 = new Card(hand.getC2().getValue(), (hand.isSuited() ? suit1 : suit2));
+		PokerHand h1 = new PokerHand(c1, c2);
+		return this.stats.get(players).get(h1);
 	}
 
 	public static RolloutStats getInstance(String name){
-		if(instance == null){
-			instance = new RolloutStats(name);
+		if(!instances.containsKey(name)){
+			instances.put(name, new RolloutStats(name));
 		}
-		return instance;
+		return instances.get(name);
 	}
 
 }
