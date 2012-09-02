@@ -1,7 +1,12 @@
 package no.ntnu.ai.hands;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.CardUtils;
@@ -9,7 +14,7 @@ import no.ntnu.ai.deck.Deck;
 import no.ntnu.ai.player.PokerHand;
 
 public class HandStrength {
-	
+
 	/**
 	 * Calculate the hand strength of a given poker hand with a given set of
 	 * community cards and calculate the strength compared to a certain number 
@@ -21,48 +26,42 @@ public class HandStrength {
 	 */
 	public static double calculateHandStrength(PokerHand hand, Card[] comCards, int numOppns){
 		int numCores = Runtime.getRuntime().availableProcessors();
-		
+
 		Deck d = Deck.getInstance();
 		d.remove(hand.getC1());
 		d.remove(hand.getC2());
 		for(Card c : comCards){
 			d.remove(c);
 		}
-		
-		
+
+		PowerRating pow = new PowerRating(hand, comCards);
+
 		List<PokerHand> otherHands = CardUtils.permuteDeck(d);
 		List<List<PokerHand>> splitOther = CardUtils.splitList(otherHands, numCores);
-		
-		List<HandStrengthRunner> runners = new ArrayList<HandStrengthRunner>();
-		PowerRating pow = new PowerRating(hand, comCards);
+		ExecutorService pool = Executors.newFixedThreadPool(numCores);
+
+		Set<Future<double[]>> results = new HashSet<Future<double[]>>();
 		for(List<PokerHand> ls : splitOther){			
-			runners.add(new HandStrengthRunner(ls, comCards, pow)); //Add to threads
+			results.add(pool.submit(new HandStrengthRunner(ls, comCards, pow)));
 		}
-		
-		List<Thread> threads = new ArrayList<Thread>();
-		for(Runnable r : runners){
-			Thread t = new Thread(r);
-			threads.add(t);
-			t.start();
-		}
-		
-		for(Thread t : threads){
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
+
 		double[] wins = new double[3]; //0 = Wins, 1 = ties and 2 = loses
-		for(HandStrengthRunner hsr : runners){
-			wins[0] += hsr.getWins();
-			wins[1] += hsr.getTies();
-			wins[2] += hsr.getLoses();
+		try {
+			for(Future<double[]> fut : results){
+				double[] res;
+				res = fut.get();
+				wins[0] += res[0];
+				wins[1] += res[1];
+				wins[2] += res[2];
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
 		}
 		double a = (wins[0] + wins[1]/2) / (wins[0] + wins[1] + wins[2]);
-		
+
 		return Math.pow(a, numOppns);
 	}
-	
+
 }
