@@ -21,14 +21,8 @@ public class HandStrengthRunner implements Runnable{
 
 	@Override
 	public void run() {
-		Card[] cs = new Card[comCards.length + 2];
-		for(int i = 0; i < comCards.length; i++){
-			cs[i] = comCards[i];
-		}
 		for(PokerHand h : hands){
-			cs[comCards.length] = h.getC1();
-			cs[comCards.length + 1] = h.getC2();
-			PowerRating pow = new PowerRating(cs);
+			PowerRating pow = new PowerRating(h, comCards);
 			
 			int comp = powerRating.compareTo(pow);
 			
