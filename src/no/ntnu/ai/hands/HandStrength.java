@@ -17,7 +17,7 @@ public class HandStrength {
 	 * @param hand - The hand to check the strength off
 	 * @param comCards - The community cards on the table
 	 * @param numOppns - The number of opponents to calculate against
-	 * @return - A value between [0, 1) giving strength of the hand
+	 * @return - A value between (0, 1] giving strength of the hand
 	 */
 	public static double calculateHandStrength(PokerHand hand, Card[] comCards, int numOppns){
 		int numCores = Runtime.getRuntime().availableProcessors();
