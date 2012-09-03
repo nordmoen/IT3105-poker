@@ -6,10 +6,12 @@ import no.ntnu.ai.deck.Card;
 public abstract class AbstractPokerPlayer implements PokerPlayer {
 
 	protected PokerHand currentHand;
+	protected final String name;
 	private int chipCount = 0;
 	
-	public AbstractPokerPlayer(int count){
+	public AbstractPokerPlayer(String name, int count){
 		this.chipCount = count;
+		this.name = name;
 	}
 
 	abstract public PokerAction makeDecision(Card[] table, int small, int big, int amount, int chipCount);
