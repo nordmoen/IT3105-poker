@@ -4,11 +4,9 @@ import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.hands.PowerRating;
 
 public class Phase1Player extends AbstractPokerPlayer {
-	private final String name;
 	
 	public Phase1Player(String name, int amount){
-		super(amount);
-		this.name = name;
+		super(name, amount);
 	}
 
 	@Override
