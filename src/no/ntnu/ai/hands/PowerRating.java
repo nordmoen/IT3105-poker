@@ -147,6 +147,9 @@ public class PowerRating implements Comparable<PowerRating> {
 			break;
 		case FLUSH:
 			res = removeNotInSuits(cards);
+			while(res.size() > 5){
+				res.remove(res.size() - 1);
+			}
 			break;
 		case STRAIGHT:
 			res = removeNotInStraight(cards);
@@ -292,6 +295,7 @@ public class PowerRating implements Comparable<PowerRating> {
 				return this.rankCards[0].getValue() - otherRankCards[0].getValue();
 			}
 
+			//System.out.println(Arrays.toString(rankCards));
 			for(int i = 0; i < this.rankCards.length; i++){
 				//Since cards used in the rank are sorted descending
 				//we can compare card by card
