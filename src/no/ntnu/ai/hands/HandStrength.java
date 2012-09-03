@@ -64,4 +64,59 @@ public class HandStrength {
 		return Math.pow(a, numOppns);
 	}
 
+	public static double advCalculateHandStrength(PokerHand hand, Card[] comCards, int numOppns){
+		int numCores = Runtime.getRuntime().availableProcessors();
+
+		Deck d = Deck.getInstance();
+		d.remove(hand.getC1());
+		d.remove(hand.getC2());
+		for(Card c : comCards){
+			d.remove(c);
+		}
+
+		ExecutorService pool = Executors.newFixedThreadPool(numCores);
+		Set<Future<double[]>> results = new HashSet<Future<double[]>>();
+		Card[] cs = new Card[5];
+
+		for(int i = 0; i < comCards.length; i++){
+			cs[i] = comCards[i];
+		}
+
+		for(int i = 0; i < d.size(); i++){
+			for(int j = i + 1; j < d.size(); j++){
+				Deck d1 = (Deck) d.clone();
+				cs[3] = d.get(i);
+				cs[4] = d.get(j);
+				d1.remove(cs[3]);
+				d1.remove(cs[4]);
+
+				List<PokerHand> otherHands = CardUtils.permuteDeck(d1);
+				List<List<PokerHand>> splitOtherHands = CardUtils.splitList(otherHands, numCores);
+				PowerRating rs = new PowerRating(hand, cs);
+				for(List<PokerHand> ls : splitOtherHands){
+					results.add(pool.submit(new HandStrengthRunner(ls, cs, rs)));
+				}
+			}
+		}
+
+		double[] wins = new double[3]; //0 = Wins, 1 = ties and 2 = loses
+		try {
+			for(Future<double[]> fut : results){
+				double[] res;
+				res = fut.get();
+				wins[0] += res[0];
+				wins[1] += res[1];
+				wins[2] += res[2];
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		double a = (wins[0] + wins[1]/2) / (wins[0] + wins[1] + wins[2]);
+
+		return Math.pow(a, numOppns);
+	}
+
 }

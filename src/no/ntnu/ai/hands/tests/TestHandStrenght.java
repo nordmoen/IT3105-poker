@@ -71,6 +71,16 @@ public class TestHandStrenght {
 		assertEquals(0.944, HandStrength.calculateHandStrength(p5, cards4, 1), 0.001); // Our number is a bit more accurate
 		assertEquals(1.0, HandStrength.calculateHandStrength(p6, cards4, 1), 0);
 		assertEquals(0.955, HandStrength.calculateHandStrength(p7, cards4, 1), 0.001);
+		
+		//assertEquals(0.944, HandStrength.advCalculateHandStrength(p5, cards4, 1), 0.001); // Our number is a bit more accurate
+		assertEquals(1.0, HandStrength.advCalculateHandStrength(p6, cards4, 1), 0.001);
+		//assertEquals(0.955, HandStrength.advCalculateHandStrength(p7, cards4, 1), 0.001);
+		
+		Card[] cards5 = {new Card(14, Suit.SPADES), new Card(13, Suit.SPADES), 
+				new Card(12, Suit.SPADES)};
+		
+		PokerHand p8 = new PokerHand(new Card(11, Suit.SPADES), new Card(10, Suit.SPADES));
+		assertEquals(1.0, HandStrength.advCalculateHandStrength(p8, cards5, 1), 0);
 	}
 
 }

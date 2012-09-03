@@ -136,6 +136,8 @@ public class PowerRating implements Comparable<PowerRating> {
 		switch (rank) {
 		case STRAIGHT_FLUSH:
 			res = removeNotInSuits(cards);
+			ArrayList<Card> res2 = removeNotInStraight(res.toArray(new Card[res.size()]));
+			res = res2;
 			break;
 		case FOUR_OF_A_KIND:
 			res = removeNotInNumber(cards, 4);
@@ -270,9 +272,6 @@ public class PowerRating implements Comparable<PowerRating> {
 		for(Card c : cards){
 			if(groupedBySuits[c.getSuit().ordinal()] > 4){
 				res.add(c);
-				if(res.size() == 5){
-					break;
-				}
 			}
 		}
 		return res;
