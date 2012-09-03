@@ -46,12 +46,6 @@ public class Phase1Player extends AbstractPokerPlayer {
 	}
 
 	@Override
-	public boolean playerEquals(AbstractPokerPlayer player) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public PowerRating showCards(Card[] table) {
 		Card[] cards = new Card[table.length +2];
 		cards[0] = this.currentHand.getC1();

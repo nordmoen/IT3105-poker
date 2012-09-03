@@ -1,6 +1,7 @@
 package no.ntnu.ai.player;
 
 import no.ntnu.ai.deck.Card;
+import no.ntnu.ai.hands.PowerRating;
 
 
 public abstract class AbstractPokerPlayer implements PokerPlayer {
@@ -60,22 +61,39 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 		this.chipCount += amount;
 	}
 
-	/**
-	 * Helper method to test equality between players
-	 * @param player - The player to compare to
-	 * @return
-	 */
-	abstract public boolean playerEquals(AbstractPokerPlayer player);
+	@Override
+	public PowerRating showCards(Card[] table){
+		return new PowerRating(this.currentHand, table);
+	}
+
 
 	@Override
-	public boolean equals(Object o){
-		if(this == o){
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + chipCount;
+		result = prime * result
+				+ ((currentHand == null) ? 0 : currentHand.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}else if(this.getClass() != o.getClass()){
+		if (obj == null)
 			return false;
-		}else{
-			return this.playerEquals((AbstractPokerPlayer) o);
-		}
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractPokerPlayer other = (AbstractPokerPlayer) obj;
+		if (chipCount != other.chipCount)
+			return false;
+		if (currentHand == null) {
+			if (other.currentHand != null)
+				return false;
+		} else if (!currentHand.equals(other.currentHand))
+			return false;
+		return true;
 	}
 
 	public void getBlind(int sum){
