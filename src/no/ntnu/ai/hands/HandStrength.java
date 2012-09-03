@@ -74,30 +74,12 @@ public class HandStrength {
 			d.remove(c);
 		}
 
-		ExecutorService pool = Executors.newFixedThreadPool(numCores);
-		Set<Future<double[]>> results = new HashSet<Future<double[]>>();
 		Card[] cs = new Card[5];
 
 		for(int i = 0; i < comCards.length; i++){
 			cs[i] = comCards[i];
 		}
-
-		for(int i = 0; i < d.size(); i++){
-			for(int j = i + 1; j < d.size(); j++){
-				Deck d1 = (Deck) d.clone();
-				cs[3] = d.get(i);
-				cs[4] = d.get(j);
-				d1.remove(cs[3]);
-				d1.remove(cs[4]);
-
-				List<PokerHand> otherHands = CardUtils.permuteDeck(d1);
-				List<List<PokerHand>> splitOtherHands = CardUtils.splitList(otherHands, numCores);
-				PowerRating rs = new PowerRating(hand, cs);
-				for(List<PokerHand> ls : splitOtherHands){
-					results.add(pool.submit(new HandStrengthRunner(ls, cs, rs)));
-				}
-			}
-		}
+		Set<Future<double[]>> results = createHandStrengthRunners(hand, cs, d, numCores);
 
 		double[] wins = new double[3]; //0 = Wins, 1 = ties and 2 = loses
 		try {
@@ -119,4 +101,49 @@ public class HandStrength {
 		return Math.pow(a, numOppns);
 	}
 
+	private static Set<Future<double[]>> createHandStrengthRunners(PokerHand hand, Card[] cs, Deck d, int numToSplit){
+		ExecutorService pool = Executors.newFixedThreadPool(numToSplit);
+		Set<Future<double[]>> results = new HashSet<Future<double[]>>();
+
+		if(d.size() == 47){
+			for(int i = 0; i < d.size(); i++){
+				for(int j = i + 1; j < d.size(); j++){
+					Deck d1 = (Deck) d.clone();
+					cs[3] = d.get(i);
+					cs[4] = d.get(j);
+					d1.remove(cs[3]);
+					d1.remove(cs[4]);
+
+					List<PokerHand> otherHands = CardUtils.permuteDeck(d1);
+					List<List<PokerHand>> splitOtherHands = CardUtils.splitList(otherHands, numToSplit);
+					PowerRating rs = new PowerRating(hand, cs);
+					for(List<PokerHand> ls : splitOtherHands){
+						results.add(pool.submit(new HandStrengthRunner(ls, cs, rs)));
+					}
+				}
+			}
+		}else if(d.size() == 46){
+			for(int i = 0; i < d.size(); i++){
+				Deck d1 = (Deck)d.clone();
+				cs[4] = d1.get(i);
+				d1.remove(cs[4]);
+				
+				List<PokerHand> otherHands = CardUtils.permuteDeck(d1);
+				List<List<PokerHand>> splitOtherHands = CardUtils.splitList(otherHands, numToSplit);
+				PowerRating rs = new PowerRating(hand, cs);
+				for(List<PokerHand> ls : splitOtherHands){
+					results.add(pool.submit(new HandStrengthRunner(ls, cs, rs)));
+				}
+			}
+		}else{			
+			List<PokerHand> otherHands = CardUtils.permuteDeck(d);
+			List<List<PokerHand>> splitOtherHands = CardUtils.splitList(otherHands, numToSplit);
+			PowerRating rs = new PowerRating(hand, cs);
+			for(List<PokerHand> ls : splitOtherHands){
+				results.add(pool.submit(new HandStrengthRunner(ls, cs, rs)));
+			}
+		}
+
+		return results;
+	}
 }

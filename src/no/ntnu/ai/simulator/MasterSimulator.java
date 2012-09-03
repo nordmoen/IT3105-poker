@@ -22,7 +22,7 @@ public class MasterSimulator {
 		int maxP = Integer.parseInt(System.getProperty("maxPlayers", "2"));
 		int numSims = Integer.parseInt(System.getProperty("numSims", "1000"));
 		int rounded = (int) Math.floor((double)hands.size()/numCores);
-		String filename = System.getProperty("filename", "preflot_data.txt");
+		String filename = System.getProperty("filename", "preflop_data.txt");
 		
 		System.out.println("Running preflop simulator on " + numCores + " cores. ");
 		System.out.println("Simulating " + maxP + " players.");

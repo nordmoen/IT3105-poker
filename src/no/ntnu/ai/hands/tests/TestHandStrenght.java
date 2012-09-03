@@ -81,6 +81,12 @@ public class TestHandStrenght {
 		
 		PokerHand p8 = new PokerHand(new Card(11, Suit.SPADES), new Card(10, Suit.SPADES));
 		assertEquals(1.0, HandStrength.advCalculateHandStrength(p8, cards5, 1), 0);
+		
+		Card[] cards6 = {new Card(14, Suit.SPADES), new Card(13, Suit.SPADES), 
+				new Card(12, Suit.SPADES), new Card(4, Suit.DIAMONDS)};
+		
+		PokerHand p9 = new PokerHand(new Card(11, Suit.SPADES), new Card(10, Suit.SPADES));
+		assertEquals(1.0, HandStrength.advCalculateHandStrength(p9, cards6, 1), 0);
 	}
 
 }

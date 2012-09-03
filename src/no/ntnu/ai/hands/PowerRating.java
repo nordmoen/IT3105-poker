@@ -168,7 +168,6 @@ public class PowerRating implements Comparable<PowerRating> {
 			res.add(cards[0]);
 			break;
 		}
-		java.util.Collections.sort(res, java.util.Collections.reverseOrder());
 		return res.toArray(new Card[res.size()]);
 	}
 
