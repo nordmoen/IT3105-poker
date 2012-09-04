@@ -105,9 +105,9 @@ public class PokerContext {
 	private PotOddsSize getOddsBucket(double odds){
 		//We could add more types below, but it needs to be somewhat
 		//general so I think we should do some testing
-		if(odds >= 0.5){
+		if(odds >= 0.45){
 			return PotOddsSize.SMALL;
-		}else if(odds >= 0.3){
+		}else if(odds >= 0.25){
 			return PotOddsSize.MEDIUM;
 		}else{
 			return PotOddsSize.LARGE;
