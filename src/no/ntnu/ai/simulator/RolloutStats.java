@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import no.ntnu.ai.config.Config;
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.Suit;
 import no.ntnu.ai.player.PokerHand;
@@ -69,9 +70,22 @@ public class RolloutStats {
 		return this.stats.get(players).get(h1);
 	}
 
+	/**
+	 * Get an RolloutStats instance with the name equal to the file one wants to
+	 * get the statistics from. There is a default where name is "" where 
+	 * Config.ROLLOUT_FILE_NAME is used which get the name from the command line
+	 * argument "-DsimFile=value"
+	 * @param name - The name of the file to get the instance for
+	 * @return - A RolloutStats instance which has read the file and compiled the
+	 * statistics.
+	 */
 	public static RolloutStats getInstance(String name){
 		if(!instances.containsKey(name)){
-			instances.put(name, new RolloutStats(name));
+			if(name.equals("")){
+				instances.put("", new RolloutStats(Config.ROLLOUT_FILE_NAME));
+			}else{
+				instances.put(name, new RolloutStats(name));
+			}
 		}
 		return instances.get(name);
 	}

@@ -96,5 +96,12 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	public void getBlind(int sum){
 		this.chipCount -= sum;
 	}
+	
+	abstract public String getPhaseName();
+	
+	@Override
+	public String toString(){
+		return getPhaseName() + ", " + this.name + ", chip count: " + this.getChipCount();
+	}
 
 }

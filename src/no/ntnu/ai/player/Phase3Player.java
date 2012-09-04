@@ -21,5 +21,9 @@ public class Phase3Player extends Phase2Player{
 		return 0.0;
 	}
 
+	@Override
+	public String getPhaseName(){
+		return "Phase 3";
+	}
 
 }

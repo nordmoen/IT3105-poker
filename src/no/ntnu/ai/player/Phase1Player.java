@@ -42,22 +42,10 @@ public class Phase1Player extends AbstractPokerPlayer {
 		}
 		
 	}
-
-	@Override
-	public PowerRating showCards(Card[] table) {
-		Card[] cards = new Card[table.length +2];
-		cards[0] = this.currentHand.getC1();
-		cards[1] = this.currentHand.getC2();
-		for(int i=0; i<table.length; i++){
-			cards[i+2] = table[i];
-		}
-		PowerRating pwr = new PowerRating(cards);
-		return pwr;
-	}
 	
 	@Override
-	public String toString(){
-		return "Phase 1, " + this.name + ", chip count: " + super.getChipCount();
+	public String getPhaseName(){
+		return "Phase 1";
 	}
 
 }

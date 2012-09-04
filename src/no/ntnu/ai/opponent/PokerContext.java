@@ -6,7 +6,7 @@ import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.player.Action;
 import no.ntnu.ai.player.PokerPlayer;
 
-public class PokerContex {
+public class PokerContext {
 
 	private final Card[] cards;
 	private final int numPlayers;
@@ -14,7 +14,7 @@ public class PokerContex {
 	private final PokerPlayer player;
 	private final PotOddsSize potOdds;
 
-	public PokerContex(PokerPlayer p, Card[] commCards, int numPlayers, Action act, int callAmount, int potSize){
+	public PokerContext(PokerPlayer p, Card[] commCards, int numPlayers, Action act, int callAmount, int potSize){
 		this.player = p;
 		if(commCards != null){
 			this.cards = commCards;
@@ -86,7 +86,7 @@ public class PokerContex {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PokerContex other = (PokerContex) obj;
+		PokerContext other = (PokerContext) obj;
 		if (action != other.action)
 			return false;
 		if (cards.length != other.cards.length) // We are only interested in which round it is
@@ -113,6 +113,13 @@ public class PokerContex {
 		}else{
 			return PotOddsSize.LARGE;
 		}
+	}
+
+	@Override
+	public String toString(){
+		return this.player.toString() + ", Action: " + this.action + ", Community cards: " + 
+				Arrays.toString(this.cards) + ", Pot odds" + this.potOdds + 
+				", Number of players still in play: " + this.numPlayers;
 	}
 
 }

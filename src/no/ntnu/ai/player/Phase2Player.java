@@ -2,7 +2,6 @@ package no.ntnu.ai.player;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.hands.HandStrength;
-import no.ntnu.ai.hands.PowerRating;
 import no.ntnu.ai.simulator.RolloutStats;
 
 public class Phase2Player extends AbstractPokerPlayer{
@@ -50,18 +49,10 @@ public class Phase2Player extends AbstractPokerPlayer{
 		//TODO: need actual test here
 		return 0.0;
 	}
-
-	@Override
-	public boolean playerEquals(AbstractPokerPlayer player) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public PowerRating showCards(Card[] table) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
+	@Override
+	public String getPhaseName(){
+		return "Phase 2";
+	}
 
 }
