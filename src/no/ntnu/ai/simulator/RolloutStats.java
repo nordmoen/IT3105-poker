@@ -8,19 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import no.ntnu.ai.config.Config;
-import no.ntnu.ai.deck.Card;
-import no.ntnu.ai.deck.Suit;
+import no.ntnu.ai.hands.HandTuple;
 import no.ntnu.ai.player.PokerHand;
 
 public class RolloutStats {
 
 	private static Map<String, RolloutStats> instances = new HashMap<String, RolloutStats>();
-	private final Map<Integer, Map<PokerHand, Double>> stats;
-	private final Suit suit1 = Suit.SPADES;
-	private final Suit suit2 = Suit.HEARTS;
+	private final Map<Integer, Map<HandTuple, Double>> stats;
 
 	private RolloutStats(String name){
-		stats = new HashMap<Integer, Map<PokerHand,Double>>();
+		stats = new HashMap<Integer, Map<HandTuple, Double>>();
 		this.readFile(name);
 	}
 
@@ -34,24 +31,18 @@ public class RolloutStats {
 				if(input != null){
 					res = input.split(",");
 
-					Card c1 = new Card(Integer.parseInt(res[0]), suit1);
-					Suit s;
-					if(res[2].equals("S")){
-						s = suit1;
-					}else{
-						s = suit2;
-					}
-					Card c2 = new Card(Integer.parseInt(res[1]), s);
+					int c1Value = Integer.parseInt(res[0]);
+					int c2Value = Integer.parseInt(res[1]);
+					boolean suited = res[2].equals("S");
 
 					for(int i = 3; i < res.length; i++){
 						String[] splited = res[i].split(":");
 						int j = Integer.parseInt(splited[0]);
-						if(!stats.containsKey(j)){
-							stats.put(j, new HashMap<PokerHand, Double>());
-						}
 						double val = Double.parseDouble(splited[1]);
-						stats.get(j).put(new PokerHand(c1, c2), val);
-						stats.get(j).put(new PokerHand(c2, c1), val);
+						if(!stats.containsKey(j)){
+							stats.put(j, new HashMap<HandTuple, Double>());
+						}
+						stats.get(j).put(new HandTuple(c1Value, c2Value, suited), val);
 					}
 				}
 
@@ -64,10 +55,14 @@ public class RolloutStats {
 	}
 
 	public double getStat(int players, PokerHand hand){
-		Card c1 = new Card(hand.getC1().getValue(), suit1);
-		Card c2 = new Card(hand.getC2().getValue(), (hand.isSuited() ? suit1 : suit2));
-		PokerHand h1 = new PokerHand(c1, c2);
-		return this.stats.get(players).get(h1);
+		Double val = this.stats.get(players).get(new HandTuple(hand.getC1().getValue(), 
+				hand.getC2().getValue(), hand.isSuited()));
+		if(val == null){
+			return this.stats.get(players).get(new HandTuple(hand.getC2().getValue(), 
+					hand.getC1().getValue(), hand.isSuited()));
+		}else{
+			return val;
+		}
 	}
 
 	/**

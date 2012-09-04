@@ -60,7 +60,9 @@ public class HandStrength {
 			e.printStackTrace();
 		}
 		double a = (wins[0] + wins[1]/2) / (wins[0] + wins[1] + wins[2]);
-
+		
+		pool.shutdown();
+		
 		return Math.pow(a, numOppns);
 	}
 
@@ -143,7 +145,7 @@ public class HandStrength {
 				results.add(pool.submit(new HandStrengthRunner(ls, cs, rs)));
 			}
 		}
-
+		pool.shutdown();
 		return results;
 	}
 }

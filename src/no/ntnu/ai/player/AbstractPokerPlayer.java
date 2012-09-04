@@ -101,7 +101,11 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	
 	@Override
 	public String toString(){
-		return getPhaseName() + ", " + this.name + ", chip count: " + this.getChipCount();
+		return getName() + ", chip count: " + this.getChipCount();
+	}
+	
+	public String getName(){
+		return getPhaseName() + ", " + this.name;
 	}
 
 }

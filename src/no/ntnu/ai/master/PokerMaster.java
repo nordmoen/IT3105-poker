@@ -8,8 +8,11 @@ import java.util.Map;
 
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.deck.Deck;
+import no.ntnu.ai.opponent.OpponentModeller;
+import no.ntnu.ai.opponent.PokerContext;
 import no.ntnu.ai.player.AbstractPokerPlayer;
 import no.ntnu.ai.player.PokerAction;
+import no.ntnu.ai.player.PokerHand;
 import no.ntnu.ai.player.PokerPlayer;
 import no.ntnu.ai.table.PokerTable;
 
@@ -17,6 +20,7 @@ public class PokerMaster extends AbstractMaster {
 
 	private final ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
 	private final PokerTable table;
+	private final OpponentModeller mod = OpponentModeller.getInstance();
 
 	public PokerMaster(int numPlayers, PokerTable table) {
 		super(numPlayers);
@@ -51,6 +55,7 @@ public class PokerMaster extends AbstractMaster {
 		for(int i = 0; i < numSims; i++){
 			this.table.nextRound();
 			this.reset();
+			this.mod.nextRound();
 			System.out.println("------------------------");
 			System.out.println("Round " + table.getCurrentRound() + " starting");
 //			System.out.println("Small blind player: " + table.getCurrentSmallBlindPlayer());
@@ -132,10 +137,12 @@ public class PokerMaster extends AbstractMaster {
 			if(winners.size() > 1){
 				System.out.println("Showdown between players:");
 				System.out.println("The table is " + Arrays.toString(getCards(true)));
+				List<PokerHand> winnerHands = new ArrayList<PokerHand>();
 				for(PokerPlayer p : winners){
 					System.out.println(p.toString() + " has hand " + p.getHand()); 
-					//TODO: show hands to the opponentModeler
+					winnerHands.add(p.getHand());
 				}
+				this.mod.showdown(winners, winnerHands);
 			}
 			ArrayList<PokerPlayer> win = this.declareWinner(winners);
 			if(win.size() > 1){
@@ -152,6 +159,7 @@ public class PokerMaster extends AbstractMaster {
 			}
 			
 		}
+		this.mod.printDebugInfo(false);
 		System.out.println("After " + numSims + " rounds the status is:");
 		for(PokerPlayer p : this.players){
 			System.out.println(p);
@@ -243,6 +251,9 @@ public class PokerMaster extends AbstractMaster {
 //							System.out.println(better + ": Folded");
 							folded.put(better, true); break;
 						}
+						this.mod.addContext(new PokerContext(better, cards, 
+								players.size() - folded.size(), act.getAct(), 
+								amount, this.potSum(bets)));
 					}else{
 						break;
 					}

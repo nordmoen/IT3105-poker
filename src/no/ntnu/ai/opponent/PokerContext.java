@@ -1,8 +1,7 @@
 package no.ntnu.ai.opponent;
 
-import java.util.Arrays;
-
 import no.ntnu.ai.deck.Card;
+import no.ntnu.ai.player.AbstractPokerPlayer;
 import no.ntnu.ai.player.Action;
 import no.ntnu.ai.player.PokerPlayer;
 
@@ -71,7 +70,7 @@ public class PokerContext {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((action == null) ? 0 : action.hashCode());
-		result = prime * result + Arrays.hashCode(cards);
+		result = prime * result + cards.length;
 		result = prime * result + numPlayers;
 		result = prime * result + ((player == null) ? 0 : player.hashCode());
 		result = prime * result + ((potOdds == null) ? 0 : potOdds.hashCode());
@@ -115,10 +114,23 @@ public class PokerContext {
 		}
 	}
 
+	private String getRoundName(){
+		if(this.isPreflop()){
+			return "Preflop";
+		}else if(this.isPostflop()){
+			return "Postflop";
+		}else if(this.isPostTurn()){
+			return "Post turn";
+		}else{
+			return "Post river";
+		}
+	}
+
 	@Override
 	public String toString(){
-		return this.player.toString() + ", Action: " + this.action + ", Community cards: " + 
-				Arrays.toString(this.cards) + ", Pot odds" + this.potOdds + 
+		return ((AbstractPokerPlayer) this.player).getName() + ", Action: " + 
+				this.action + ", Round: " + this.getRoundName() + 
+				", Pot odds: " + this.potOdds + 
 				", Number of players still in play: " + this.numPlayers;
 	}
 

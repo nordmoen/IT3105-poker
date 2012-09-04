@@ -61,7 +61,7 @@ public class OpponentModeller {
 		this.contexts.get(c).add(handStrength);
 	}
 	
-	public void showdown(ArrayList<PokerPlayer> players, ArrayList<PokerHand> hands){
+	public void showdown(List<PokerPlayer> players, List<PokerHand> hands){
 		for(int i = 0; i < players.size(); i++){
 			for(PokerContext pc : roundContexts){
 				if(pc.getPlayer().equals(players.get(i))){
