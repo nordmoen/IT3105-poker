@@ -11,10 +11,10 @@ public class Phase1Player extends AbstractPokerPlayer {
 
 	@Override
 	public PokerAction makeDecision(Card[] table, int smallBlind, int bigBlind, 
-			int amount,int potSize, int chipCount, int players) {
+			int amount,int potSize, int chipCount, int players, boolean allowedBet) {
 		double random = Math.random();
 		if(table == null){
-			if(random>0.7){
+			if(random>0.7 && allowedBet){
 				return new PokerAction(Action.FOLD);
 			}else if(random >0.3){
 				return new PokerAction(Action.CALL, amount);
@@ -32,7 +32,7 @@ public class Phase1Player extends AbstractPokerPlayer {
 			double simpleRating = (double)(myHand.getRank().ordinal() + 1) / 9;
 			if(random*random > simpleRating){
 				return new PokerAction(Action.FOLD);
-			}else if (simpleRating > 0.3){
+			}else if (simpleRating > 0.3 && allowedBet){
 				//TODO: need to know how many chips we need to bet and subtract that amount from our chipcount.
 				// the players that have payed blinds/called/betted have a different amount of chips needed to bet/call.
 				

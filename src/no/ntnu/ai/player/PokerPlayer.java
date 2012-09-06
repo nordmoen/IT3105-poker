@@ -13,7 +13,9 @@ public interface PokerPlayer {
 	 * @param amount - The amount the player must add to call
 	 * @return - The desired action
 	 */
-	public PokerAction getDecision(Card[] table, int smallBlind, int bigBlind, int amount, int potSize, int players);
+	public PokerAction getDecision(Card[] table, int smallBlind, int bigBlind, int amount, 
+			int potSize, int players, boolean allowedBet);
+	
 	
 	/**
 	 * Show the cards that make up the best hand the player can get, from the cards

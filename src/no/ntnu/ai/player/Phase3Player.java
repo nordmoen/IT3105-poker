@@ -1,5 +1,7 @@
 package no.ntnu.ai.player;
 
+import no.ntnu.ai.hands.PowerRating;
+
 
 public class Phase3Player extends Phase2Player{
 	//TODO: needs opponentModeler here and in constructor
@@ -15,11 +17,7 @@ public class Phase3Player extends Phase2Player{
 		return amount+big;
 	}
 	
-	@Override
-	protected double logicTest(double odds){
-		//TODO: need actual test here
-		return 0.0;
-	}
+	
 
 	@Override
 	public String getPhaseName(){
