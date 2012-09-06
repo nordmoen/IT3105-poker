@@ -15,10 +15,11 @@ public class Phase2Player extends AbstractPokerPlayer{
 	@Override
 	public PokerAction makeDecision(Card[] table, int small, int big,
 			int amount, int potSize, int chipCount, int numPlayers, boolean allowedBet) {
+		double random = Math.random()/2;
 		if(table == null){
 			double winOdds = stats.getStat(numPlayers, currentHand);
 			if(winOdds > 0.7 && allowedBet){
-				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, winOdds, potSize));
+				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, winOdds, potSize, numPlayers));
 			}else if(winOdds > 0.3){
 				return new PokerAction(Action.CALL, amount);
 			}else{
@@ -26,10 +27,12 @@ public class Phase2Player extends AbstractPokerPlayer{
 			}
 		}else{
 			double hs = HandStrength.calculateHandStrength(currentHand, table, numPlayers-1);
-			boolean shouldFold = (hs*(potSize + amount) - amount) <= 0;
-			if(hs > 0.7 && allowedBet && !shouldFold){
-				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, hs, potSize));
-			}else if(hs > 0.3 && !shouldFold){
+			System.out.println("numplayers = " + numPlayers);
+			System.out.println(this + " : " + hs);
+			boolean shouldFold = (hs*(potSize) - amount) <= 0;
+			if(hs + random > 0.9 && allowedBet && !shouldFold){
+				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, hs, potSize, numPlayers));
+			}else if(hs + random > 0.4 && !shouldFold){
 				return new PokerAction(Action.CALL, amount);
 			}else{
 				return new PokerAction(Action.FOLD);
@@ -37,9 +40,17 @@ public class Phase2Player extends AbstractPokerPlayer{
 		}
 	}
 
-	protected int calculateBet(int amount, int chipCount, int big, double chance, int potSize) {
-		int expected = (int) (chance*(potSize + amount) - amount);
-		return expected;
+	protected int calculateBet(int amount, int chipCount, int big, double chance, int potSize, int numPlayers) {
+		int expected = (int) (chance*(potSize) - amount);
+		if(chipCount < expected){
+			return amount;
+		}
+//		if(expected > chipCount){
+//			return Math.abs(chipCount) + amount;
+//		}
+		return (int) ((chance*expected)/((chipCount>0?chipCount : 1) * numPlayers)) + amount;
+//		return (expected/2) + amount;
+//		return (int) (chance*(chipCount - amount > 0? (chipCount-amount)/numPlayers: 0) + amount);
 	}
 
 	

@@ -231,6 +231,7 @@ public class PokerMaster extends AbstractMaster {
 		boolean started = false;
 		int betRounds = 0;
 		while(!equalBets(bets, folded) || !started){
+			betRounds ++;
 			started = true;
 			for(int j = 0; j < table.size(); j++){
 				PokerPlayer better = table.getBetterAt(j);
@@ -242,7 +243,7 @@ public class PokerMaster extends AbstractMaster {
 						int amount = java.util.Collections.max(bets.values()) - (bets.get(better) == null ? 0: bets.get(better));
 						PokerAction act = better.getDecision(cards, 
 								table.getSmallBlind(), table.getBigBlind(), 
-								amount, this.potSum(bets), bets.size() - folded.size(), betRounds < 3);
+								amount, this.potSum(bets), players.size() - folded.size(), (betRounds <= 2));
 						int prevAmount = bets.get(better) == null ? 0 : bets.get(better);
 						switch (act.getAct()) {
 						case BET:
@@ -266,7 +267,6 @@ public class PokerMaster extends AbstractMaster {
 					}
 				}
 			}
-			betRounds ++;
 		}
 		//		System.out.println("Pot is at " + potSum(bets));
 	}

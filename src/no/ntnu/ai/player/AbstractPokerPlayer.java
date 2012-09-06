@@ -21,12 +21,14 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	@Override
 	public PokerAction getDecision(Card[] table, int bigBlind, int smallBlind, 
 			int amount, int potSize, int players, boolean allowedBet){
-		PokerAction pAct = makeDecision(table, bigBlind, smallBlind, amount, potSize, this.chipCount, players, allowedBet);
+		PokerAction pAct = makeDecision(table, smallBlind, bigBlind, amount, potSize, 
+				this.chipCount, players, allowedBet);
 		switch (pAct.getAct()) {
 		case BET:
 			if(pAct.getAmount() > amount){
-				chipCount -= pAct.getAmount();
+				this.chipCount -= pAct.getAmount();
 			}else if (pAct.getAmount() == amount){
+				this.chipCount -= amount;
 				return new PokerAction(Action.CALL, amount);
 			}else{
 				throw new IllegalArgumentException("Can not bet with an amount " +

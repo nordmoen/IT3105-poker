@@ -1,6 +1,5 @@
 package no.ntnu.ai.player;
 
-import no.ntnu.ai.hands.PowerRating;
 
 
 public class Phase3Player extends Phase2Player{
@@ -12,7 +11,7 @@ public class Phase3Player extends Phase2Player{
 
 	
 	@Override
-	protected int calculateBet(int amount, int chipCount, int big, double chance, int potSize) {
+	protected int calculateBet(int amount, int chipCount, int big, double chance, int potSize, int numPlayers) {
 		//TODO: this needs to actually calculate something
 		return amount+big;
 	}
