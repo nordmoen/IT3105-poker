@@ -14,6 +14,8 @@ import no.ntnu.ai.deck.Deck;
 import no.ntnu.ai.player.PokerHand;
 
 public class HandStrength {
+	
+	private static ExecutorService pool;
 
 	/**
 	 * Calculate the hand strength of a given poker hand with a given set of
@@ -38,7 +40,7 @@ public class HandStrength {
 
 		List<PokerHand> otherHands = CardUtils.permuteDeck(d);
 		List<List<PokerHand>> splitOther = CardUtils.splitList(otherHands, numCores);
-		ExecutorService pool = Executors.newFixedThreadPool(numCores);
+		pool = Executors.newFixedThreadPool(numCores);
 
 		Set<Future<double[]>> results = new HashSet<Future<double[]>>();
 		for(List<PokerHand> ls : splitOther){			
@@ -99,14 +101,15 @@ public class HandStrength {
 		}
 
 		double a = (wins[0] + wins[1]/2) / (wins[0] + wins[1] + wins[2]);
+		
+		pool.shutdown();
 
 		return Math.pow(a, numOppns);
 	}
 
 	private static Set<Future<double[]>> createHandStrengthRunners(PokerHand hand, Card[] cs, Deck d, int numToSplit){
-		ExecutorService pool = Executors.newFixedThreadPool(numToSplit);
+		pool = Executors.newFixedThreadPool(numToSplit);
 		Set<Future<double[]>> results = new HashSet<Future<double[]>>();
-
 		if(d.size() == 47){
 			for(int i = 0; i < d.size(); i++){
 				for(int j = i + 1; j < d.size(); j++){
@@ -145,7 +148,6 @@ public class HandStrength {
 				results.add(pool.submit(new HandStrengthRunner(ls, cs, rs)));
 			}
 		}
-		pool.shutdown();
 		return results;
 	}
 }

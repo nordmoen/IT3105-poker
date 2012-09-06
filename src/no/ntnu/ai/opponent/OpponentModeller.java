@@ -32,6 +32,10 @@ public class OpponentModeller {
 		this.roundContexts = new HashSet<PokerContext>();
 	}
 	
+	/**
+	 * Print debug information about this opponent modeler to either out or err
+	 * @param err - Whether or not to use System.err or System.out
+	 */
 	public void printDebugInfo(boolean err){
 		PrintStream p = err ? System.err : System.out;
 		p.println("------ Opponent modeller ------");
@@ -49,6 +53,13 @@ public class OpponentModeller {
 		
 	}
 	
+	/**
+	 * Add a context to the currently seen context, if the player in the context
+	 * ends up in a showdown this round the context will be added to all the seen
+	 * contexts.
+	 * @param c - The context to preliminary add
+	 * @return - Returns true if the set did not already contain the context
+	 */
 	public boolean addContext(PokerContext c){
 		numContexts++;
 		return this.roundContexts.add(c);
@@ -61,18 +72,26 @@ public class OpponentModeller {
 		this.contexts.get(c).add(handStrength);
 	}
 	
-	public void showdown(List<PokerPlayer> players, List<PokerHand> hands){
-		for(int i = 0; i < players.size(); i++){
+	/**
+	 * Tell the opponent modeler that some players have reach a showdown. The modeler
+	 * will then search through the current contexts to find the contexts from the
+	 * players in the showdown and adds them to the seen context along with the
+	 * hand strength of the given situation. 
+	 * @param players - A list of players which has reached the showdown along with
+	 * their private cards.
+	 */
+	public void showdown(Map<PokerPlayer, PokerHand> players){
+		for(PokerPlayer p : players.keySet()){
 			for(PokerContext pc : roundContexts){
-				if(pc.getPlayer().equals(players.get(i))){
+				if(pc.getPlayer().equals(p)){
 					this.calculationFresh.put(pc, false);
 					if(!pc.isPreflop()){
 						this.addHandStrength(pc, 
-								HandStrength.calculateHandStrength(hands.get(i), 
+								HandStrength.calculateHandStrength(players.get(p), 
 										pc.getCards(), pc.getNumPlayers()));
 					}else{
 						this.addHandStrength(pc, 
-								RolloutStats.getInstance("").getStat(pc.getNumPlayers(), hands.get(i)));
+								RolloutStats.getInstance("").getStat(pc.getNumPlayers(), players.get(p)));
 					}
 				}
 			}
@@ -81,6 +100,10 @@ public class OpponentModeller {
 		this.roundContexts.clear();
 	}
 	
+	/**
+	 * Indicate that the next round was reached, this will clear the currently seen
+	 * contexts without doing anything to them
+	 */
 	public void nextRound(){
 		numRounds++;
 		this.roundContexts.clear();
@@ -94,13 +117,34 @@ public class OpponentModeller {
 			}
 			return map.get(c);
 		}
-		return -3.1415;
+		return -Math.PI;
 	}
 	
+	/**
+	 * Get the average hand strength of a given PokerContext
+	 * @param c - The context
+	 * @return - Either a positive value between [0, 1) or -PI to indicate no values for the context
+	 */
 	public double getAvgHandStrength(PokerContext c){
 		return this.getHandStrength(c, this.handStrengthAvg);
 	}
 	
+	public Map<PokerContext, List<Double>> getContextForPlayer(PokerPlayer p){
+		Map<PokerContext, List<Double>> res = new HashMap<PokerContext, List<Double>>();
+		for(PokerContext c : this.contexts.keySet()){
+			if(c.getPlayer().equals(p)){
+				res.put(c, this.contexts.get(c));
+			}
+		}
+		return res;
+	}
+	
+	/**
+	 * Get the standard deviation of a given poker context, this is a method
+	 * which can be used to see how much a given context has deviated
+	 * @param c - The poker context
+	 * @return - A positive double or -PI if no values are assosiated with the context
+	 */
 	public double getStdDevHandStrength(PokerContext c){
 		return this.getHandStrength(c, this.handStrengthDev);
 	}

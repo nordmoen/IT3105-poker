@@ -137,12 +137,12 @@ public class PokerMaster extends AbstractMaster {
 			if(winners.size() > 1){
 				System.out.println("Showdown between players:");
 				System.out.println("The table is " + Arrays.toString(getCards(true)));
-				List<PokerHand> winnerHands = new ArrayList<PokerHand>();
+				Map<PokerPlayer, PokerHand> winnerHands = new HashMap<PokerPlayer, PokerHand>();
 				for(PokerPlayer p : winners){
 					System.out.println(p.toString() + " has hand " + p.getHand()); 
-					winnerHands.add(p.getHand());
+					winnerHands.put(p, p.getHand());
 				}
-				this.mod.showdown(winners, winnerHands);
+				this.mod.showdown(winnerHands);
 			}
 			ArrayList<PokerPlayer> win = this.declareWinner(winners);
 			if(win.size() > 1){

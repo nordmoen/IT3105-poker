@@ -100,7 +100,7 @@ public class PowerRating implements Comparable<PowerRating> {
 			for(int i = 0; i < allCards.length; i++){
 				boolean cont = false;
 				for(Card c : cardsInRank){
-					if(allCards[i] == c){
+					if(allCards[i].equals(c)){
 						cont = true;;
 					}
 				}
@@ -295,6 +295,7 @@ public class PowerRating implements Comparable<PowerRating> {
 			}
 
 			//System.out.println(Arrays.toString(rankCards));
+			//System.out.println(Arrays.toString(otherRankCards));
 			for(int i = 0; i < this.rankCards.length; i++){
 				//Since cards used in the rank are sorted descending
 				//we can compare card by card
@@ -304,6 +305,7 @@ public class PowerRating implements Comparable<PowerRating> {
 					return -1;
 				}
 			}
+
 			//If we get here this means that both hands had the same card values in their hand
 			//Compare kickers
 			this.lazyEvalKickers(); //Since we need kickers now we force evauation
