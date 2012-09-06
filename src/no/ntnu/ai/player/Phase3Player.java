@@ -4,7 +4,7 @@ package no.ntnu.ai.player;
 public class Phase3Player extends Phase2Player{
 	//TODO: needs opponentModeler here and in constructor
 
-	public Phase3Player(String name, int count, int numPlayers, String filename) {
+	public Phase3Player(String name, int count, String filename) {
 		super(name, count, filename);
 	}
 
