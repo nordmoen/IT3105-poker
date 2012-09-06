@@ -5,7 +5,7 @@ public class Phase3Player extends Phase2Player{
 	//TODO: needs opponentModeler here and in constructor
 
 	public Phase3Player(String name, int count, int numPlayers, String filename) {
-		super(name, count, numPlayers, filename);
+		super(name, count, filename);
 	}
 
 	

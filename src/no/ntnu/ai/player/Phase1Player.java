@@ -10,7 +10,7 @@ public class Phase1Player extends AbstractPokerPlayer {
 	}
 
 	@Override
-	public PokerAction makeDecision(Card[] table, int smallBlind, int bigBlind, int amount, int chipCount) {
+	public PokerAction makeDecision(Card[] table, int smallBlind, int bigBlind, int amount, int chipCount, int players) {
 		double random = Math.random();
 		if(table == null){
 			if(random>0.7){

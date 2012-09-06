@@ -5,20 +5,18 @@ import no.ntnu.ai.hands.HandStrength;
 import no.ntnu.ai.simulator.RolloutStats;
 
 public class Phase2Player extends AbstractPokerPlayer{
-	protected final int numPlayers;
-	private final String fileName;
+	private final RolloutStats stats;
 
-	public Phase2Player(String name, int count, int numPlayers, String filename) {
+	public Phase2Player(String name, int count, String filename) {
 		super(name, count);
-		this.numPlayers = numPlayers;
-		this.fileName = filename;
+		this.stats = RolloutStats.getInstance(filename);
 	}
 
 	@Override
 	public PokerAction makeDecision(Card[] table, int small, int big,
-			int amount, int chipCount) {
+			int amount, int chipCount, int numPlayers) {
 		if(table == null){
-			double winOdds = RolloutStats.getInstance(fileName).getStat(numPlayers, currentHand);
+			double winOdds = stats.getStat(numPlayers, currentHand);
 			double test = logicTest(winOdds);
 			if(test > 0.7){
 				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, winOdds));
