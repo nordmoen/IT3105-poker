@@ -44,10 +44,14 @@ public class OpponentModeller {
 		p.println("There have been " + numShowdowns + " showdowns");
 		p.println("Those showdowns has led to " + contexts.size() + " contexts added");
 		p.println("Data gathered consist of:");
-		p.println("PokerContext:\t\tAvg: Std dev:");
+		String spaces = "";
+		for(int i = 0; i < contexts.keySet().iterator().next().toString().length(); i++){
+			spaces += " ";
+		}
+		p.println("PokerContext:" + spaces + "Avg: Std dev: Number seen:");
 		for(PokerContext pc : contexts.keySet()){
 			p.println(pc + "\t\t" + this.getAvgHandStrength(pc) + 
-					", " + this.getStdDevHandStrength(pc));
+					", " + this.getStdDevHandStrength(pc) + ", " + contexts.get(pc).size());
 		}
 		p.println("-------------------------------");
 		
