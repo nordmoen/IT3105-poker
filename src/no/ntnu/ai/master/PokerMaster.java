@@ -237,7 +237,7 @@ public class PokerMaster extends AbstractMaster {
 						int amount = java.util.Collections.max(bets.values()) - (bets.get(better) == null ? 0: bets.get(better));
 						PokerAction act = better.getDecision(cards, 
 								table.getSmallBlind(), table.getBigBlind(), 
-								amount, bets.size() - folded.size());
+								amount, this.potSum(bets), bets.size() - folded.size());
 						int prevAmount = bets.get(better) == null ? 0 : bets.get(better);
 						switch (act.getAct()) {
 						case BET:

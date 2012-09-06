@@ -15,11 +15,11 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 		this.name = name;
 	}
 
-	abstract public PokerAction makeDecision(Card[] table, int small, int big, int amount, int chipCount, int numPlayers);
+	abstract public PokerAction makeDecision(Card[] table, int small, int big, int amount, int potSize, int chipCount, int numPlayers);
 
 	@Override
-	public PokerAction getDecision(Card[] table, int bigBlind, int smallBlind, int amount, int players){
-		PokerAction pAct = makeDecision(table, bigBlind, smallBlind, amount, this.chipCount, players);
+	public PokerAction getDecision(Card[] table, int bigBlind, int smallBlind, int amount, int potSize, int players){
+		PokerAction pAct = makeDecision(table, bigBlind, smallBlind, amount, potSize, this.chipCount, players);
 		switch (pAct.getAct()) {
 		case BET:
 			if(pAct.getAmount() > amount){

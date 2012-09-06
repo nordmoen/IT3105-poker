@@ -10,7 +10,7 @@ public class Phase3Player extends Phase2Player{
 
 	
 	@Override
-	protected int calculateBet(int amount, int chipCount, int big, double chance) {
+	protected int calculateBet(int amount, int chipCount, int big, double chance, int potSize) {
 		//TODO: this needs to actually calculate something
 		return amount+big;
 	}

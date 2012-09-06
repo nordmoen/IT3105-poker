@@ -14,12 +14,12 @@ public class Phase2Player extends AbstractPokerPlayer{
 
 	@Override
 	public PokerAction makeDecision(Card[] table, int small, int big,
-			int amount, int chipCount, int numPlayers) {
+			int amount, int potSize, int chipCount, int numPlayers) {
 		if(table == null){
 			double winOdds = stats.getStat(numPlayers, currentHand);
 			double test = logicTest(winOdds);
 			if(test > 0.7){
-				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, winOdds));
+				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, winOdds, potSize));
 			}else if(test > 0.3){
 				return new PokerAction(Action.CALL, amount);
 			}else{
@@ -29,7 +29,7 @@ public class Phase2Player extends AbstractPokerPlayer{
 			double hs = HandStrength.calculateHandStrength(currentHand, table, numPlayers-1);
 			double test = logicTest(hs);
 			if(test > 0.7){
-				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, hs));
+				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, hs, potSize));
 			}else if(test > 0.3){
 				return new PokerAction(Action.CALL, amount);
 			}else{
@@ -38,7 +38,7 @@ public class Phase2Player extends AbstractPokerPlayer{
 		}
 	}
 
-	protected int calculateBet(int amount, int chipCount, int big, double chance) {
+	protected int calculateBet(int amount, int chipCount, int big, double chance, int potSize) {
 		//TODO: this needs to actually calculate something
 		return amount+big;
 	}
