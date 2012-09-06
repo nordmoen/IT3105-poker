@@ -37,8 +37,11 @@ public class PokerBot3000 {
 				players.add(new Phase3Player("Player " + i, 1000, filename));
 			}
 
-			PokerMaster master = new PokerMaster(players, table);
+			PokerMaster master = new PokerMaster(players, table, true);
 			master.simulate(simulations);
+			
+			master = new PokerMaster(players, table, false);
+			//master.simulate(simulations);
 		}
 
 	}

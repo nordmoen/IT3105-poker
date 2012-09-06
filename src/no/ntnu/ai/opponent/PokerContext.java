@@ -9,6 +9,7 @@ public class PokerContext {
 
 	private final Card[] cards;
 	private final TablePlayerSize players;
+	private final int numPlayers;
 	private final Action action;
 	private final PokerPlayer player;
 	private final PotOddsSize potOdds;
@@ -23,6 +24,7 @@ public class PokerContext {
 		this.players = this.getPlayerBucket(numPlayers);
 		this.action = act;
 		this.potOdds = this.getOddsBucket(callAmount / (double) (callAmount + potSize));
+		this.numPlayers = numPlayers;
 	}
 
 	public Card[] getCards() {
@@ -49,8 +51,8 @@ public class PokerContext {
 		return isRound(5);
 	}
 
-	public TablePlayerSize getNumPlayers() {
-		return players;
+	public int getNumPlayers() {
+		return numPlayers;
 	}
 
 	public Action getAction() {
