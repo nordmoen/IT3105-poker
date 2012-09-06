@@ -8,7 +8,7 @@ import no.ntnu.ai.player.PokerPlayer;
 public class PokerContext {
 
 	private final Card[] cards;
-	private final int numPlayers;
+	private final TablePlayerSize players;
 	private final Action action;
 	private final PokerPlayer player;
 	private final PotOddsSize potOdds;
@@ -20,7 +20,7 @@ public class PokerContext {
 		}else{
 			this.cards = new Card[0];
 		}
-		this.numPlayers = numPlayers;
+		this.players = this.getPlayerBucket(numPlayers);
 		this.action = act;
 		this.potOdds = this.getOddsBucket(callAmount / (double) (callAmount + potSize));
 	}
@@ -49,8 +49,8 @@ public class PokerContext {
 		return isRound(5);
 	}
 
-	public int getNumPlayers() {
-		return numPlayers;
+	public TablePlayerSize getNumPlayers() {
+		return players;
 	}
 
 	public Action getAction() {
@@ -71,7 +71,7 @@ public class PokerContext {
 		int result = 1;
 		result = prime * result + ((action == null) ? 0 : action.hashCode());
 		result = prime * result + cards.length;
-		result = prime * result + numPlayers;
+		result = prime * result + ((players == null) ? 0 : players.hashCode());
 		result = prime * result + ((player == null) ? 0 : player.hashCode());
 		result = prime * result + ((potOdds == null) ? 0 : potOdds.hashCode());
 		return result;
@@ -90,7 +90,7 @@ public class PokerContext {
 			return false;
 		if (cards.length != other.cards.length) // We are only interested in which round it is
 			return false;
-		if (numPlayers != other.numPlayers)
+		if (players != other.players)
 			return false;
 		if (player == null) {
 			if (other.player != null)
@@ -113,6 +113,15 @@ public class PokerContext {
 			return PotOddsSize.LARGE;
 		}
 	}
+	private TablePlayerSize getPlayerBucket(int numPlayers){
+		if(numPlayers < 3){
+			return TablePlayerSize.FEW;
+		}else if (numPlayers < 5){
+			return TablePlayerSize.NORMAL;
+		}else{
+			return TablePlayerSize.MANY;
+		}
+	}
 
 	private String getRoundName(){
 		if(this.isPreflop()){
@@ -131,7 +140,7 @@ public class PokerContext {
 		return ((AbstractPokerPlayer) this.player).getName() + ", Action: " + 
 				this.action + ", Round: " + this.getRoundName() + 
 				", Pot odds: " + this.potOdds + 
-				", Number of players still in play: " + this.numPlayers;
+				", Number of players still in play: " + this.players;
 	}
 
 }
