@@ -44,4 +44,6 @@ public interface PokerPlayer {
 	public int hashCode();
 	
 	public void getBlind(int sum);
+	
+	public void reset();
 }

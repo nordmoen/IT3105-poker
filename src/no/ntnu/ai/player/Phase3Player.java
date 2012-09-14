@@ -45,8 +45,8 @@ public class Phase3Player extends Phase2Player{
 			}
 			aggDev = aggressiveness*opMod.getStdDevHandStrength(highestContext);
 		}else{
-			contextOdds = 0.8;
-			aggDev = 0.05;
+			contextOdds = 0.9;
+			aggDev = 0.01;
 		}
 		if(table == null){
 			double winOdds = stats.getStat(numPlayers, currentHand);

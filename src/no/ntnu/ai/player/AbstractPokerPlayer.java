@@ -9,10 +9,12 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	protected PokerHand currentHand;
 	protected final String name;
 	private int chipCount = 0;
+	private final int originalChipCount;
 	
 	public AbstractPokerPlayer(String name, int count){
 		this.chipCount = count;
 		this.name = name;
+		this.originalChipCount = count;
 	}
 
 	abstract public PokerAction makeDecision(Card[] table, int small, int big, 
@@ -110,6 +112,11 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	
 	public String getName(){
 		return getPhaseName() + ", " + this.name;
+	}
+	
+	public void reset(){
+		this.chipCount = this.originalChipCount;
+		this.currentHand = null;
 	}
 
 }

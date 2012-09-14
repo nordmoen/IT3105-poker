@@ -20,7 +20,7 @@ public class PokerBot3000 {
 	private final static String[] phase3Aggs = System.getProperty("phase3Aggs").split(",");
 
 
-	private final static PokerTable table = new PokerTable(smallBlind, bigBlind);
+	
 
 	/**
 	 * @param args
@@ -38,11 +38,14 @@ public class PokerBot3000 {
 				players.add(new Phase3Player("Player " + i, 1000, filename, Double.parseDouble(phase3Aggs[i])));
 			}
 
-			PokerMaster master = new PokerMaster(players, table, true);
+			PokerMaster master = new PokerMaster(players, new PokerTable(smallBlind, bigBlind), true);
 			master.simulate(simulations);
 			
-			master = new PokerMaster(players, table, false);
-			//master.simulate(simulations);
+			for(PokerPlayer p:players){
+				p.reset();
+			}
+			master = new PokerMaster(players, new PokerTable(smallBlind, bigBlind), false);
+			master.simulate(simulations);
 		}
 
 	}
