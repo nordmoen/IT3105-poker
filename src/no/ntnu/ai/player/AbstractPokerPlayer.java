@@ -35,7 +35,7 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 			}else{
 				throw new IllegalArgumentException("Can not bet with an amount " +
 						"lower than the current needed amount. Player tried to bet" +
-						" with an amount equal to " + pAct.getAmount() + " " + this);
+						" with an amount equal to " + pAct.getAmount() + " of " + amount + " " + this);
 			}
 			break;
 		case CALL:
