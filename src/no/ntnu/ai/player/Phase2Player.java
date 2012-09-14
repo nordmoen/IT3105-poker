@@ -15,7 +15,7 @@ public class Phase2Player extends AbstractPokerPlayer{
 	@Override
 	public PokerAction makeDecision(Card[] table, int small, int big,
 			int amount, int potSize, int chipCount, int numPlayers, boolean allowedBet) {
-		double random = Math.random()/2;
+		double random = Math.random()/4;
 		if(table == null){
 			double winOdds = stats.getStat(numPlayers, currentHand);
 			if(winOdds > 0.7 && allowedBet){
@@ -30,9 +30,9 @@ public class Phase2Player extends AbstractPokerPlayer{
 //			System.out.println("numplayers = " + numPlayers);
 //			System.out.println(this + " : " + hs);
 			boolean shouldFold = (hs*(potSize) - amount) <= 0;
-			if(hs + random > 0.9 && allowedBet && !shouldFold){
+			if(hs + random > 0.7 && allowedBet && !shouldFold){
 				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, hs, potSize, numPlayers));
-			}else if(hs + random > 0.4 && !shouldFold){
+			}else if(hs + random > 0.3 && !shouldFold){
 				return new PokerAction(Action.CALL, amount);
 			}else{
 				return new PokerAction(Action.FOLD);
