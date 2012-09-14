@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import no.ntnu.ai.hands.HandStrength;
+import no.ntnu.ai.player.Action;
 import no.ntnu.ai.player.PokerHand;
 import no.ntnu.ai.player.PokerPlayer;
 import no.ntnu.ai.simulator.RolloutStats;
@@ -22,6 +23,7 @@ public class OpponentModeller {
 	private final Map<PokerContext, Double> handStrengthAvg;
 	private final Map<PokerContext, Double> handStrengthDev;
 	private final Set<PokerContext> roundContexts;
+	private final Set<PokerPlayer> roundFolded;
 	private long numRounds, numContexts, numShowdowns = 0;
 	
 	private OpponentModeller(){
@@ -30,6 +32,7 @@ public class OpponentModeller {
 		this.handStrengthAvg = new HashMap<PokerContext, Double>();
 		this.handStrengthDev = new HashMap<PokerContext, Double>();
 		this.roundContexts = new HashSet<PokerContext>();
+		this.roundFolded = new HashSet<PokerPlayer>();
 	}
 	
 	/**
@@ -66,6 +69,9 @@ public class OpponentModeller {
 	 */
 	public boolean addContext(PokerContext c){
 		numContexts++;
+		if(c.getAction() == Action.FOLD){
+			this.roundFolded.add(c.getPlayer());
+		}
 		return this.roundContexts.add(c);
 	}
 	
@@ -101,7 +107,7 @@ public class OpponentModeller {
 			}
 		}
 		numShowdowns++;
-		this.roundContexts.clear();
+		this.clearBetweenRounds();
 	}
 	
 	/**
@@ -110,7 +116,12 @@ public class OpponentModeller {
 	 */
 	public void nextRound(){
 		numRounds++;
+		this.clearBetweenRounds();
+	}
+	
+	private void clearBetweenRounds(){
 		this.roundContexts.clear();
+		this.roundFolded.clear();
 	}
 	
 	private double getHandStrength(PokerContext c, Map<PokerContext, Double> map){
@@ -172,11 +183,20 @@ public class OpponentModeller {
 	}
 	
 	/**
-	 * Get the contexts seen in this round of play
+	 * Get the contexts seen in this round of play with contexts only from not
+	 * folded players
 	 * @return - A set of {@link PokerContext}s
 	 */
 	public Set<PokerContext> getRoundContexts(){
-		return new HashSet<PokerContext>(this.roundContexts);
+		Set<PokerContext> res = new HashSet<PokerContext>(this.roundContexts);
+		for(PokerPlayer p : this.roundFolded){
+			for(PokerContext pc : res){
+				if(pc.getPlayer() == p){
+					res.remove(pc);
+				}
+			}
+		}
+		return res;
 	}
 
 	
