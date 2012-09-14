@@ -50,18 +50,24 @@ public class PokerMaster extends AbstractMaster {
 		Map<PokerPlayer, Integer> bets = new HashMap<PokerPlayer, Integer>();
 		Map<PokerPlayer, Boolean> folded = new HashMap<PokerPlayer, Boolean>();
 
-		System.out.println("------Texas Hold 'Em------");
-		System.out.println("There are " + this.numPlayers + " players");
-		System.out.println("Simulating " + numSims + " poker rounds");
+		if(!addContext){
+			System.out.println("------Texas Hold 'Em------");
+			System.out.println("There are " + this.numPlayers + " players");
+			System.out.println("Simulating " + numSims + " poker rounds");
+		}
 
 		for(int i = 0; i < numSims; i++){
 			this.table.nextRound();
 			this.reset();
-			this.mod.nextRound();
-			System.out.println("------------------------");
-			System.out.println("Round " + table.getCurrentRound() + " starting");
-			//			System.out.println("Small blind player: " + table.getCurrentSmallBlindPlayer());
-			//			System.out.println("Big blind player: " + table.getCurrentBigBlindPlayer());
+			if(addContext)
+				this.mod.nextRound();
+			if(!addContext){
+				System.out.println("------------------------");
+				System.out.println("Round " + table.getCurrentRound() + " starting");
+				//			System.out.println("Small blind player: " + table.getCurrentSmallBlindPlayer());
+				//			System.out.println("Big blind player: " + table.getCurrentBigBlindPlayer());
+			}
+
 			folded.clear();
 			bets.clear();
 
@@ -79,12 +85,15 @@ public class PokerMaster extends AbstractMaster {
 			PokerPlayer smallBlind = this.table.getCurrentSmallBlindPlayer();
 			smallBlind.getBlind(this.table.getSmallBlind());
 			bets.put(smallBlind, this.table.getSmallBlind());
-			System.out.println("Small blind: " + this.table.getSmallBlind());
+
+			if(!addContext)
+				System.out.println("Small blind: " + this.table.getSmallBlind());
 
 			PokerPlayer bigBlind = this.table.getCurrentBigBlindPlayer();
 			bigBlind.getBlind(this.table.getBigBlind());
 			bets.put(bigBlind, this.table.getBigBlind());
-			System.out.println("Big blind: " + this.table.getBigBlind());
+			if(!addContext)
+				System.out.println("Big blind: " + this.table.getBigBlind());
 
 			//Pre-flop betting
 			//			System.out.println("Pre-flop betting");
@@ -163,7 +172,8 @@ public class PokerMaster extends AbstractMaster {
 			}
 
 		}
-		this.mod.printDebugInfo(false);
+		if(addContext)
+			this.mod.printDebugInfo(false);
 		System.out.println("After " + numSims + " rounds the status is:");
 		for(PokerPlayer p : this.players){
 			System.out.println(p);
