@@ -170,6 +170,14 @@ public class OpponentModeller {
 		this.handStrengthAvg.put(c, sum);
 		this.handStrengthDev.put(c, sumSq);
 	}
+	
+	/**
+	 * Get the contexts seen in this round of play
+	 * @return - A set of {@link PokerContext}s
+	 */
+	public Set<PokerContext> getRoundContexts(){
+		return new HashSet<PokerContext>(this.roundContexts);
+	}
 
 	
 	public static OpponentModeller getInstance(){
