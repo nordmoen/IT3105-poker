@@ -18,6 +18,7 @@ public class PokerBot3000 {
 	private final static int simulations = Integer.parseInt(System.getProperty("sims", "1000"));
 	private final static String filename = System.getProperty("rolloutFilename", "100k.txt");
 	private final static String[] phase3Aggs = System.getProperty("phase3Aggs").split(",");
+	private final static int learningSims = Integer.parseInt(System.getProperty("learningSims", "10000"));
 
 
 	
@@ -39,7 +40,7 @@ public class PokerBot3000 {
 			}
 
 			PokerMaster master = new PokerMaster(players, new PokerTable(smallBlind, bigBlind), true);
-			master.simulate(simulations);
+			master.simulate(learningSims);
 			
 			for(PokerPlayer p:players){
 				p.reset();

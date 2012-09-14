@@ -187,11 +187,14 @@ public class OpponentModeller {
 	 * folded players
 	 * @return - A set of {@link PokerContext}s
 	 */
-	public Set<PokerContext> getRoundContexts(){
+	public Set<PokerContext> getRoundContexts(PokerPlayer player){
 		Set<PokerContext> res = new HashSet<PokerContext>(this.roundContexts);
 		for(PokerPlayer p : this.roundFolded){
 			for(PokerContext pc : this.roundContexts){
 				if(pc.getPlayer().equals(p)){
+					res.remove(pc);
+				}
+				if(pc.getPlayer() == player){
 					res.remove(pc);
 				}
 			}

@@ -31,7 +31,7 @@ public class Phase3Player extends Phase2Player{
 	public PokerAction makeDecision(Card[] table, int small, int big,
 			int amount, int potSize, int chipCount, int numPlayers, boolean allowedBet) {
 //		Set<PokerContext> contexts = null;
-		Set<PokerContext> contexts = opMod.getRoundContexts();
+		Set<PokerContext> contexts = opMod.getRoundContexts(this);
 		double contextOdds = 0;
 		double aggDev;
 		PokerContext highestContext = null;
@@ -45,12 +45,12 @@ public class Phase3Player extends Phase2Player{
 			}
 			aggDev = this.aggressiveness*opMod.getStdDevHandStrength(highestContext);
 		}else{
-			contextOdds = 0.4;
-			aggDev = 0.4;
+			contextOdds = 0.3;
+			aggDev = 0.5;
 		}
 		if(table == null){
 			double winOdds = stats.getStat(numPlayers, currentHand);
-			if(winOdds > 0.7 && allowedBet){
+			if(winOdds > 0.5 && allowedBet){
 				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, winOdds, potSize, numPlayers));
 			}else if(winOdds > 0.3){
 				return new PokerAction(Action.CALL, amount);
