@@ -1,21 +1,53 @@
 package no.ntnu.ai.player;
 
+import java.util.Set;
+
 import no.ntnu.ai.deck.Card;
 import no.ntnu.ai.hands.HandStrength;
+import no.ntnu.ai.opponent.OpponentModeller;
+import no.ntnu.ai.opponent.PokerContext;
 
 
 
 public class Phase3Player extends Phase2Player{
-	
-	public Phase3Player(String name, int count, String filename) {
+	private final OpponentModeller opMod;
+	private final double aggressiveness;
+
+	/**
+	 * 
+	 * @param name = name for this player
+	 * @param count = initial chipcount
+	 * @param filename = filename of the preflop calculations
+	 * @param agg = a positive double telling how aggressively the player should play, higher number means less aggressively
+	 */
+	public Phase3Player(String name, int count, String filename, double agg) {
 		super(name, count, filename);
+		this.opMod = OpponentModeller.getInstance();
+		this.aggressiveness = agg;
 	}
 
 
 	@Override
 	public PokerAction makeDecision(Card[] table, int small, int big,
 			int amount, int potSize, int chipCount, int numPlayers, boolean allowedBet) {
-		double random = Math.random()/2;
+		Set<PokerContext> contexts = null;
+//		Set<PokerContext> contexts = opMod.
+		double contextOdds = 0;
+		double aggDev;
+		PokerContext highestContext = null;
+		if(!contexts.isEmpty()){
+			for(PokerContext c:contexts){
+				double test = opMod.getAvgHandStrength(c);
+				if (test>contextOdds){
+					contextOdds = test;
+					highestContext = c;
+				}
+			}
+			aggDev = aggressiveness*opMod.getStdDevHandStrength(highestContext);
+		}else{
+			contextOdds = 0.8;
+			aggDev = 0.05;
+		}
 		if(table == null){
 			double winOdds = stats.getStat(numPlayers, currentHand);
 			if(winOdds > 0.7 && allowedBet){
@@ -30,9 +62,9 @@ public class Phase3Player extends Phase2Player{
 //			System.out.println("numplayers = " + numPlayers);
 //			System.out.println(this + " : " + hs);
 			boolean shouldFold = (hs*(potSize) - amount) <= 0;
-			if(hs + random > 0.9 && allowedBet && !shouldFold){
+			if(hs > (contextOdds + aggDev) && allowedBet && !shouldFold){
 				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, hs, potSize, numPlayers));
-			}else if(hs + random > 0.4 && !shouldFold){
+			}else if(hs > (contextOdds) && !shouldFold){
 				return new PokerAction(Action.CALL, amount);
 			}else{
 				return new PokerAction(Action.FOLD);
@@ -41,8 +73,8 @@ public class Phase3Player extends Phase2Player{
 	}
 	@Override
 	protected int calculateBet(int amount, int chipCount, int big, double chance, int potSize, int numPlayers) {
-		//TODO: this needs to actually calculate something
-		return amount+big;
+		//TODO: this should maybe use opponentmodelling.
+		return super.calculateBet(amount, chipCount, big, chance, potSize, numPlayers);
 	}
 
 
@@ -51,5 +83,4 @@ public class Phase3Player extends Phase2Player{
 	public String getPhaseName(){
 		return "Phase 3";
 	}
-
 }
