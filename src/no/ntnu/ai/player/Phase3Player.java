@@ -30,8 +30,8 @@ public class Phase3Player extends Phase2Player{
 	@Override
 	public PokerAction makeDecision(Card[] table, int small, int big,
 			int amount, int potSize, int chipCount, int numPlayers, boolean allowedBet) {
-		Set<PokerContext> contexts = null;
-//		Set<PokerContext> contexts = opMod.
+//		Set<PokerContext> contexts = null;
+		Set<PokerContext> contexts = opMod.getRoundContexts();
 		double contextOdds = 0;
 		double aggDev;
 		PokerContext highestContext = null;
