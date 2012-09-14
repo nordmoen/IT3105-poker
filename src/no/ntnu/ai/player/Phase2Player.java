@@ -5,7 +5,7 @@ import no.ntnu.ai.hands.HandStrength;
 import no.ntnu.ai.simulator.RolloutStats;
 
 public class Phase2Player extends AbstractPokerPlayer{
-	private final RolloutStats stats;
+	protected final RolloutStats stats;
 
 	public Phase2Player(String name, int count, String filename) {
 		super(name, count);
@@ -27,8 +27,8 @@ public class Phase2Player extends AbstractPokerPlayer{
 			}
 		}else{
 			double hs = HandStrength.calculateHandStrength(currentHand, table, numPlayers-1);
-			System.out.println("numplayers = " + numPlayers);
-			System.out.println(this + " : " + hs);
+//			System.out.println("numplayers = " + numPlayers);
+//			System.out.println(this + " : " + hs);
 			boolean shouldFold = (hs*(potSize) - amount) <= 0;
 			if(hs + random > 0.9 && allowedBet && !shouldFold){
 				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, hs, potSize, numPlayers));
