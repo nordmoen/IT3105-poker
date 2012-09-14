@@ -63,10 +63,13 @@ public class Phase3Player extends Phase2Player{
 //			System.out.println(this + " : " + hs);
 			boolean shouldFold = (hs*(potSize) - amount) <= 0;
 			if(hs > (contextOdds + aggDev) && allowedBet && !shouldFold){
+				//System.out.println(this.getName() + ", BET: " + new PowerRating(this.currentHand, table));
 				return new PokerAction(Action.BET, calculateBet(amount, chipCount, big, hs, potSize, numPlayers));
 			}else if(hs > (contextOdds) && !shouldFold){
+				//System.out.println(this.getName() + ", CALL: " + new PowerRating(this.currentHand, table));
 				return new PokerAction(Action.CALL, amount);
 			}else{
+				//System.out.println(this.getName() + ", FOLD: " + new PowerRating(this.currentHand, table));
 				return new PokerAction(Action.FOLD);
 			}
 		}

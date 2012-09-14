@@ -14,14 +14,14 @@ public class PokerContext {
 	private final PokerPlayer player;
 	private final PotOddsSize potOdds;
 
-	public PokerContext(PokerPlayer p, Card[] commCards, int numPlayers, Action act, int callAmount, int potSize){
+	public PokerContext(PokerPlayer p, Card[] commCards, int totalNumPlayers, int numPlayers, Action act, int callAmount, int potSize){
 		this.player = p;
 		if(commCards != null){
 			this.cards = commCards;
 		}else{
 			this.cards = new Card[0];
 		}
-		this.players = this.getPlayerBucket(numPlayers);
+		this.players = this.getPlayerBucket(numPlayers, totalNumPlayers);
 		this.action = act;
 		this.potOdds = this.getOddsBucket(callAmount / (double) (callAmount + potSize));
 		this.numPlayers = numPlayers;
@@ -115,10 +115,11 @@ public class PokerContext {
 			return PotOddsSize.LARGE;
 		}
 	}
-	private TablePlayerSize getPlayerBucket(int numPlayers){
-		if(numPlayers < 3){
+	private TablePlayerSize getPlayerBucket(double numPlayers, double totalPlayers){
+		double playerRatio = numPlayers/totalPlayers;
+		if(playerRatio <= 0.34){
 			return TablePlayerSize.FEW;
-		}else if (numPlayers < 5){
+		}else if (playerRatio <= 0.75){
 			return TablePlayerSize.NORMAL;
 		}else{
 			return TablePlayerSize.MANY;

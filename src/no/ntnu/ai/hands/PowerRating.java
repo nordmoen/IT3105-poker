@@ -49,6 +49,12 @@ public class PowerRating implements Comparable<PowerRating> {
 		cardsCopy = new Card[cards.length + 2];
 		for(int i = 0; i < cards.length; i++){
 			cardsCopy[i] = cards[i];
+			if(cards[i].equals(hand.getC1())){
+				throw new IllegalStateException("Hand contains same cards as on the table. " + hand + " " + Arrays.toString(cards));
+			}
+			if(cards[i].equals(hand.getC2())){
+				throw new IllegalStateException("Hand contains same cards as on the table. " + hand + " " + Arrays.toString(cards));
+			}
 		}
 		cardsCopy[cards.length] = hand.getC1();
 		cardsCopy[cards.length + 1] = hand.getC2();

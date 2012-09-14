@@ -235,7 +235,7 @@ public class PokerMaster extends AbstractMaster {
 							folded.put(better, true); break;
 						}
 						if(addContext){
-							this.mod.addContext(new PokerContext(better, cards, 
+							this.mod.addContext(new PokerContext(better, cards, players.size(), 
 									players.size() - folded.size(), act.getAct(), 
 									amount, this.potSum(bets)));
 						}
