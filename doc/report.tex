@@ -42,6 +42,7 @@ Of course multithreading is not everything and the speed afforded to us by Java 
 apparent compared to Python. This choice however did mean that we could not use the code that
 was given to us in the course which meant we had some catching up to do in the starting phases.
 
+\subsection{Poker playing}\label{poker playing}
 We started out by implementing the basic of any card game, the cards, the deck and power rating.
 The later was much inspired by the code that we had gotten from the course, but implemented as
 a class which could be compared to others with most of the Java interfaces\footnote{\url{http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html}}. We spent quite
@@ -53,7 +54,7 @@ just to determine the best rank that a player can get from either an array of ca
 a poker hand and some community cards and be able to compare it self with other power ratings.
 Looking through this code there might be some odd bits and pieces that stick out, the
 lazy evaluation is probably a bit of a surprise. The reason for this choice is that we quite
-quickly realized that when we compared power ratings in the rollout simulation most of the
+quickly realized that when we compared power ratings in the roll-out simulation most of the
 time we only need the rank it self because most evaluations of \textit{compareTo} will end then and
 there and doesn't need to do the costly evaluation of determining which cards should be
 kept and which kickers to use.
@@ -84,5 +85,27 @@ To give each player cards we designed the \textit{PokerHand} class which is just
 class to enable us to compare hands, easily create power ratings and have a simple way
 of passing two cards around. It can compare it self to other hands, but this is not
 used much since we mostly deal in power ratings.
+
+Since we share the \textit{PokerMaster} code between the different phases there
+is not much else to say about this code in regard to the phases. We have some
+opponent modeling code which is only used by phase 3, but we will come back to that
+in section \ref{opponent modeling}.
+
+\subsection{Roll-out simulation}\label{roll-out simulation}
+As the code progressed we started looking at roll-out simulation in phase 2 since
+that was one of the big challenges in this project.
+
+We started by looking at what we needed to simulate a complete poker game and came
+to the conclusion that we should make a separate poker simulator from \textit{PokerMaster}.
+Since the roll-out simulation is not dependant on any players playing the game
+or any notion of betting and calling we decided that the \textit{PreFlopMaster}
+would only deal cards and compare them at the end of the game to speed up the 
+calculation. The \textit{PreFlopMaster} gets the hand we want to gather statistics
+about and the number of players to play against. It then deals out cards to the
+"other" players and begins to deal the flop, turn and river. Once this is done
+it declares a winner and updates its statistics for that hand. It then goes on to
+simulate X amount of simulations, decidable on the command-line, with the given cards
+and a deck to play with. Once all the simulations are done it returns a
+\textit{TestResult} instance with the given wins, ties and loses and a ratio.
 
 \end{document}
