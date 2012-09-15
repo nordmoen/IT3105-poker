@@ -91,7 +91,7 @@ is not much else to say about this code in regard to the phases. We have some
 opponent modeling code which is only used by phase 3, but we will come back to that
 in section \ref{opponent modeling}.
 
-\subsection{Roll-out simulation}\label{roll-out simulation}
+\section{Roll-out simulation}\label{roll-out simulation}
 As the code progressed we started looking at roll-out simulation in phase 2 since
 that was one of the big challenges in this project.
 
@@ -124,5 +124,19 @@ each simulation.
 From our limited experiments this allows us to do 100 000 simulations per hand with
 2 to 10 players in about 15 minutes on a 4 core Intel i7 with HyperThreading.
 
+\section{Hand strength}\label{hand strength}
+As the roll-out simulation had started to work at this point we started looking at
+the phase 2 player and started to implement \textit{Hand strength} calculation.
+Hand strength is used after the flop in order for the phase 2 player to determine if
+the current hand can be beaten by other hands. This is done by comparing the current
+hand and the current community cards to all other combination of hands that is possible
+to achieve without the cards in the hand or on the table. This to is a simulation
+that can be done in parallel and we did this to. We have implemented two different
+calculations the one described in our handed out materials which does not take into
+account the possible turn and river cards and one which does. The first one is simply
+implemented by creating a fresh deck, remove the cards on the players hand and the
+given community cards and then create all permutations of poker hands that is possible
+to get and then compare each with the players hand to see how many times the player
+wins, ties and loses.
 
 \end{document}
