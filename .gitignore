@@ -4,3 +4,8 @@
 *.jar
 *.war
 *.ear
+*.aux
+*.log
+*.tox
+*.out
+*.swp

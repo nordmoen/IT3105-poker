@@ -21,7 +21,7 @@ public class PokerBot3000 {
 	private final static int learningSims = Integer.parseInt(System.getProperty("learningSims", "10000"));
 
 
-	
+
 
 	/**
 	 * @param args
@@ -41,12 +41,14 @@ public class PokerBot3000 {
 
 			PokerMaster master = new PokerMaster(players, new PokerTable(smallBlind, bigBlind), true);
 			master.simulate(learningSims);
-			
-			for(PokerPlayer p:players){
-				p.reset();
+
+			if(numPhase3 > 0){
+				for(PokerPlayer p:players){
+					p.reset();
+				}
+				master = new PokerMaster(players, new PokerTable(smallBlind, bigBlind), false);
+				master.simulate(simulations);
 			}
-			master = new PokerMaster(players, new PokerTable(smallBlind, bigBlind), false);
-			master.simulate(simulations);
 		}
 
 	}

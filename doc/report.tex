@@ -1,0 +1,88 @@
+\documentclass[titlepage, a4paper]{article}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+
+\title{
+	Artificial Poker Player \\
+	IT3105 \\
+}
+\author{
+	Nordmoen, Jørgen H. \\
+	Østensen, Trond
+}
+
+\date{\today}
+
+\begin{document}
+\pagenumbering{RomanType}
+\maketitle
+
+\begin{abstract}\label{abstract}
+In this text we will explain our implementation of an A.I. Poker player in the course
+IT3105. We will explain each phase of the project, what choices we made and our decisions
+that have effected the outcome in each phase. We will include some results of the different
+phases and wrap up with our thoughts on the implementation and possible future work.
+\end{abstract}
+
+\newpage
+\tableofcontents
+
+\pagenumbering{arabic}
+
+\section{Basic Structure}\label{basic}
+Since we chose to go with Java instead of Python as our programming language in this course
+our structure might not be as simple and straight forward because of limitations or design
+off Java.
+
+We chose to utilize Java because we both recognized the advantages of having the possibility
+of threading our code. Python does not support true multithreading\footnote{\url{http://wiki.python.org/moin/GlobalInterpreterLock}} and since we both have good experience with Java we chose to go with that.
+Of course multithreading is not everything and the speed afforded to us by Java is quite
+apparent compared to Python. This choice however did mean that we could not use the code that
+was given to us in the course which meant we had some catching up to do in the starting phases.
+
+We started out by implementing the basic of any card game, the cards, the deck and power rating.
+The later was much inspired by the code that we had gotten from the course, but implemented as
+a class which could be compared to others with most of the Java interfaces\footnote{\url{http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html}}. We spent quite
+some time getting this class right and have had some strange problems from time to time, but
+we ended up with something that can really do its job. 
+
+Most of the work of this class is
+just to determine the best rank that a player can get from either an array of cards or
+a poker hand and some community cards and be able to compare it self with other power ratings.
+Looking through this code there might be some odd bits and pieces that stick out, the
+lazy evaluation is probably a bit of a surprise. The reason for this choice is that we quite
+quickly realized that when we compared power ratings in the rollout simulation most of the
+time we only need the rank it self because most evaluations of \textit{compareTo} will end then and
+there and doesn't need to do the costly evaluation of determining which cards should be
+kept and which kickers to use.
+
+To implement the game it self we used a class called \textit{PokerMaster} which deals with
+all the poker playing in our code. To enable it to support multiple phases of poker players
+we designed an interface which allows the \textit{PokerMaster} to interact with all of the
+phases in a uniform manner. This interface, which can be found in \textit{PokerPlayer},
+supports all the methods that we needed in the later phases, but have seen several revisions
+before it got to this stage. This interface is then backed up by an abstract class which
+implements some of the tasks which every phase needed.
+
+\textit{AbstractPokerPlayer} does
+most of the work regarding chip count and make sures every phase pays what they need in
+order to participate further in a game. It also makes sure that blinds are payed when
+that is needed. When it comes to paying to the table we decided, for simplicity, that we
+would allow each phase to go negative. This has some ramifications for the game, because
+it means that there could potentially be much more chips involved than we intended at the
+start, but that have not been a huge problem as we force some of the phases to bet less
+when they are out of chips.
+
+To make it easier for us on determining which player goes when we created the
+\textit{PokerTable} class which contains some methods for keeping track of the
+blinds at the table and also which player is big and small blind. The \textit{PokerMaster}
+uses this class to retrieve the small and big blind and also who to deal cards from.
+
+To give each player cards we designed the \textit{PokerHand} class which is just a helper
+class to enable us to compare hands, easily create power ratings and have a simple way
+of passing two cards around. It can compare it self to other hands, but this is not
+used much since we mostly deal in power ratings.
+
+\end{document}
