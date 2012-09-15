@@ -6,6 +6,6 @@
 *.ear
 *.aux
 *.log
-*.tox
+*.toc
 *.out
 *.swp
