@@ -17,6 +17,8 @@ public class PokerBot3000 {
 	private final static int bigBlind = Integer.parseInt(System.getProperty("bigBlind", "20"));
 	private final static int simulations = Integer.parseInt(System.getProperty("sims", "1000"));
 	private final static String filename = System.getProperty("rolloutFilename", "100k.txt");
+	private final static String[] phase1Aggs = System.getProperty("phase1Aggs").split(",");
+	private final static String[] phase2Aggs = System.getProperty("phase2Aggs").split(",");
 	private final static String[] phase3Aggs = System.getProperty("phase3Aggs").split(",");
 	private final static int learningSims = Integer.parseInt(System.getProperty("learningSims", "10000"));
 
@@ -30,10 +32,10 @@ public class PokerBot3000 {
 		if(numPhase1 + numPhase2 + numPhase3 < 11){
 			ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
 			for(int i = 0; i < numPhase1; i++){
-				players.add(new Phase1Player("Player " + i, 1000));
+				players.add(new Phase1Player("Player " + i, 1000, Double.parseDouble(phase1Aggs[i])));
 			}
 			for(int i = 0; i < numPhase2; i++){
-				players.add(new Phase2Player("Player " + i, 1000, filename));
+				players.add(new Phase2Player("Player " + i, 1000, filename, Double.parseDouble(phase2Aggs[i])));
 			}
 			for(int i = 0; i < numPhase3; i++){
 				players.add(new Phase3Player("Player " + i, 1000, filename, Double.parseDouble(phase3Aggs[i])));

@@ -10,11 +10,19 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	protected final String name;
 	private int chipCount = 0;
 	private final int originalChipCount;
+	protected final double aggressiveness;
 	
-	public AbstractPokerPlayer(String name, int count){
+	/**
+	 * 
+	 * @param name The name of the player to be created.
+	 * @param count The initial chipcount of the player.
+	 * @param agg How aggressive the player should be, a non-negative double. Higher number means less aggressive.
+	 */
+	public AbstractPokerPlayer(String name, int count, double agg){
 		this.chipCount = count;
 		this.name = name;
 		this.originalChipCount = count;
+		this.aggressiveness = agg;
 	}
 
 	abstract public PokerAction makeDecision(Card[] table, int small, int big, 

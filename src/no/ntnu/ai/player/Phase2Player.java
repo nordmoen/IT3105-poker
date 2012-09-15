@@ -7,15 +7,15 @@ import no.ntnu.ai.simulator.RolloutStats;
 public class Phase2Player extends AbstractPokerPlayer{
 	protected final RolloutStats stats;
 
-	public Phase2Player(String name, int count, String filename) {
-		super(name, count);
+	public Phase2Player(String name, int count, String filename, double agg) {
+		super(name, count, agg);
 		this.stats = RolloutStats.getInstance(filename);
 	}
 
 	@Override
 	public PokerAction makeDecision(Card[] table, int small, int big,
 			int amount, int potSize, int chipCount, int numPlayers, boolean allowedBet) {
-		double random = Math.random()/2;
+		double random = Math.random()/((this.aggressiveness != 0 ? 2 * this.aggressiveness : 1));
 		if(table == null){
 			double winOdds = stats.getStat(numPlayers, currentHand);
 			if(winOdds > 0.5 && allowedBet){

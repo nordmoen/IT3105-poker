@@ -5,21 +5,21 @@ import no.ntnu.ai.hands.PowerRating;
 
 public class Phase1Player extends AbstractPokerPlayer {
 	
-	public Phase1Player(String name, int amount){
-		super(name, amount);
+	public Phase1Player(String name, int amount, double agg){
+		super(name, amount, agg);
 	}
 
 	@Override
 	public PokerAction makeDecision(Card[] table, int smallBlind, int bigBlind, 
 			int amount,int potSize, int chipCount, int players, boolean allowedBet) {
-		double random = Math.random();
+		double random = (Math.random() * this.aggressiveness);
 		if(table == null){
-			if(random>0.7 && allowedBet){
-				return new PokerAction(Action.FOLD);
-			}else if(random >0.3){
+			if(random < 0.3 && allowedBet){
+				return new PokerAction(Action.BET, bigBlind + amount);
+			}else if(random < 0.7){
 				return new PokerAction(Action.CALL, amount);
 			}else{
-				return new PokerAction(Action.BET, bigBlind + amount);
+				return new PokerAction(Action.FOLD);	
 			}
 		}else{
 			Card[] cards = new Card[table.length+2];
@@ -33,9 +33,6 @@ public class Phase1Player extends AbstractPokerPlayer {
 			if(random*random > simpleRating){
 				return new PokerAction(Action.FOLD);
 			}else if (simpleRating > 0.3 && allowedBet){
-				//TODO: need to know how many chips we need to bet and subtract that amount from our chipcount.
-				// the players that have payed blinds/called/betted have a different amount of chips needed to bet/call.
-				
 				return new PokerAction(Action.BET, bigBlind + amount);
 			}else{
 				return new PokerAction(Action.CALL, amount);

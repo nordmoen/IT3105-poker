@@ -11,19 +11,16 @@ import no.ntnu.ai.opponent.PokerContext;
 
 public class Phase3Player extends Phase2Player{
 	private final OpponentModeller opMod;
-	private final double aggressiveness;
 
 	/**
 	 * 
 	 * @param name = name for this player
 	 * @param count = initial chipcount
 	 * @param filename = filename of the preflop calculations
-	 * @param agg = a positive double telling how aggressively the player should play, higher number means less aggressively
 	 */
 	public Phase3Player(String name, int count, String filename, double agg) {
-		super(name, count, filename);
+		super(name, count, filename, agg);
 		this.opMod = OpponentModeller.getInstance();
-		this.aggressiveness = agg;
 	}
 
 
