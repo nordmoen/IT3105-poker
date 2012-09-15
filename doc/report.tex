@@ -108,4 +108,21 @@ simulate X amount of simulations, decidable on the command-line, with the given 
 and a deck to play with. Once all the simulations are done it returns a
 \textit{TestResult} instance with the given wins, ties and loses and a ratio.
 
+As we mentioned before we decided to go with Java because we realized that this roll-out
+simulation could easily be threaded to increase performance and so we did. We
+start by creating all the possible poker hands according to the hole-card equivalence
+classes\footnote{\url{www.idi.ntnu.no/emner/it3105/lectures/ai-poker-players.pdf}}.
+Then we split these poker hands into lists of equal lengths with the number of
+lists equal to the number of processors reported by Java\footnote{\url{http://docs.oracle.com/javase/7/docs/api/java/lang/Runtime.html\#availableProcessors\%28\%29}}.
+We then create \textit{RolloutSimulators} which get a list each which then for each
+card create a new \textit{PreFlopMaster} and simulates from 2 to 10 players and
+writes the results to a file. From what we can see this threading makes it possible
+to do quite a lot more simulations than without the threading and the factor
+that dominates the time is the shuffling of the deck which is done 7 times for
+each simulation.
+
+From our limited experiments this allows us to do 100 000 simulations per hand with
+2 to 10 players in about 15 minutes on a 4 core Intel i7 with HyperThreading.
+
+
 \end{document}
