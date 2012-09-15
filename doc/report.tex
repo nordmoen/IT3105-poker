@@ -162,6 +162,37 @@ nothing can beat them. But the flaw is that the turn could be a card with the sa
 as the 7 and 10 and then someone might have a flush or even a straight might begin to
 appear. The second implementation would account for this and give the lowest ratio
 that could possibly appear which would be an underestimate, but it could be
-much more accurate because of it doesn't overestimate for the player.
+much more accurate because of it doesn't overestimate.
+
+\section{Player behavior}\label{player behavior}
+In this section we will describe each player phase in a bit more detail than what
+we have seen up until now. As we said in section \ref{poker playing} some of the
+code is shared between all phases, but for the betting decision everything is
+up to the implementation.
+
+\subsection{Phase 1}\label{phase 1 player}
+The first phase player is the simplest player of any of the phases. It has no 
+information about the start of the game or opponent modelling and bases most
+of its decisions on chance and power rating. Before the flop this player
+has nothing to base its decision on so it just uses chance to decide whether
+to bet, call or fold. Most of the time the player should just try to call to
+get to the flop, but sometimes it will bet and sometimes it will fold with the folding
+as the least possible outcome.
+
+The intuition here is much the same as for a novice poker player which has little
+grasp of the game. Before the flop it is hard to estimate what sort of chances
+one has and thus we just leave it up to chance, but with a preference for calling.
+This is done because none of the other player will likely bet a lot at this stage
+and a flop will give us so much more information to continue so seeing it is a 
+smart choice to make.
+
+If this phase 1 player get to see the flop be do things a bit different. Now we
+can use our power rating as a basis for telling us if the hand is worth something.
+We still utilize random chance, but this time we lay more emphasis on the value
+of the hand. What we do is to see what kind of hand we have, if it is a good hand
+our value will be higher than random chance and we do not fold, but we retain this
+randomness to sometime bluff and throwaway somewhat good cards in order to not
+play static all the time. Then we see if we have a very good hand, if so we bet and
+if not we just call to see if we can improve or have the other players fold.
 
 \end{document}
