@@ -130,13 +130,38 @@ the phase 2 player and started to implement \textit{Hand strength} calculation.
 Hand strength is used after the flop in order for the phase 2 player to determine if
 the current hand can be beaten by other hands. This is done by comparing the current
 hand and the current community cards to all other combination of hands that is possible
-to achieve without the cards in the hand or on the table. This to is a simulation
-that can be done in parallel and we did this to. We have implemented two different
+to achieve without the cards in the hand or on the table. 
+
+This to is a simulation that can be done in parallel and we did this to. 
+
+We have implemented two different
 calculations the one described in our handed out materials which does not take into
 account the possible turn and river cards and one which does. The first one is simply
 implemented by creating a fresh deck, remove the cards on the players hand and the
 given community cards and then create all permutations of poker hands that is possible
 to get and then compare each with the players hand to see how many times the player
-wins, ties and loses.
+wins, ties and loses. To run this in parallel we just split the poker hand permutations
+into lists as before and calculated all the wins, ties and loses in parallel before
+we collected all the statistics together and return a hand strength ratio.
+
+For the second implementation we deal out all possible turn and river cards, again
+except for the players cards and the community cards, and create all possible poker
+hand permutations and do the same calculation as above. The result of this calculation
+is the lowest possible score that a pair of cards can give, meaning it is much more
+accurate than the above calculation.
+
+A flaw in the first hand strength calculation above is that it will most likely
+over estimate the strength of a hand after the flop. For instance lets say the player
+we are looking at are sitting with two aces on h*s hand and one ace is on the table
+together with a 7 and a 10 of some suits. Since there can not be a straight present
+and lets say for this example that only the 7 and 10 are of the same suit, while
+the ace on the table is of a different suit there can not be a flush either. So the
+simple hand strength calculation reports that the strength is 1.0. This might be
+a basis for a player to bet because he/she thinks that they have the best cards and
+nothing can beat them. But the flaw is that the turn could be a card with the same suit
+as the 7 and 10 and then someone might have a flush or even a straight might begin to
+appear. The second implementation would account for this and give the lowest ratio
+that could possibly appear which would be an underestimate, but it could be
+much more accurate because of it doesn't overestimate for the player.
 
 \end{document}
