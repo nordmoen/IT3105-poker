@@ -89,7 +89,7 @@ used much since we mostly deal in power ratings.
 Since we share the \textit{PokerMaster} code between the different phases there
 is not much else to say about this code in regard to the phases. We have some
 opponent modeling code which is only used by phase 3, but we will come back to that
-in section \ref{opponent modeling}.
+in section \ref{opponent modelling}.
 
 \section{Roll-out simulation}\label{roll-out simulation}
 As the code progressed we started looking at roll-out simulation in phase 2 since
@@ -164,6 +164,9 @@ appear. The second implementation would account for this and give the lowest rat
 that could possibly appear which would be an underestimate, but it could be
 much more accurate because of it doesn't overestimate.
 
+\section{Opponent modelling}\label{opponent modelling}
+TODO: Write
+
 \section{Player behavior}\label{player behavior}
 In this section we will describe each player phase in a bit more detail than what
 we have seen up until now. As we said in section \ref{poker playing} some of the
@@ -194,5 +197,79 @@ our value will be higher than random chance and we do not fold, but we retain th
 randomness to sometime bluff and throwaway somewhat good cards in order to not
 play static all the time. Then we see if we have a very good hand, if so we bet and
 if not we just call to see if we can improve or have the other players fold.
+
+TODO: Add results
+
+\subsection{Phase 2}\label{phase 2 player}
+The second phase player is quite a bit more sophisticated than the first one. This
+is due to the new information available in this phase. In phase 2 the player has
+access to both roll-out simulation(\ref{roll-out simulation}) and hand 
+strength(\ref{hand strength}) calculation. With all this information the player
+can take a much more qualified decision about what to do. 
+
+With the roll-out simulation
+the player has some statistics to tell whether or not the hole-cards is worth
+continuing with before the flop. This information enables the player to know
+whether or not he/she should continue to see the flop or fold the cards. This
+enables strategies based on folding before the flop because the player has
+an idea of how strong the cards are or have the potential to become later
+in the game. 
+
+The hand strength calculation is used after the flop. Because there are now cards
+on the table we need to know if we have gotten anything better than just the two
+hole-cards. The hand strength calculation helps with this because it calculates,
+as mentioned above, the strength of the current hole-cards and community cards
+compared to all the other possible hole-cards. This helps the player decide if
+he/she should continue to play or, if there is a high chance anyone else has better
+cards, fold.
+
+In our code, before the flop, we consult the roll-out simulation statistics to see
+if our cards are any good. If the statistics is over a certain threshold we decide
+to bet. Should the statistics not be good enough to bet we check to see if the
+hole-cards have the potential to become something after the flop and call. If this
+is not the case we fold as this means the hole-cards have little potential for improvement.
+
+After the flop we move over to combining hand strength, a bit of chance and a
+configurable aggressiveness. We have again used chance to incorporate some element
+of bluffing. If the random dice throw is large enough and the hand strength is weak
+we fold, but if the dice throw had been smaller we could potentially call with a weak
+hand just to try our luck. We also calculate whether or not the winnings are good
+enough that we should play, if we might lose more than we could win, we fold.
+For the decision the hand strength is what we rely on most because it tells us the
+most about our hand\footnote{At the time of writing we are currently using the
+	simple calculation because we had some problems with the more advanced.
+	The advanced should be working now, but we have to little time to test
+and so we have used the simple one}. Although with a more aggressive player this
+can be changed.
+
+For the betting decision we look at what is on the table and what we can potentially
+win. We calculate an expected amount and bet according to this. If the player has a negative
+amount of chips we only put in the amount needed to call so we don't end up with chip counts in the
+billions.
+
+TODO: Add results
+
+\subsection{Phase 3}\label{phase 3 player}
+In this phase we finally have all the bells and whistles to play poker. Combining
+roll-out simulation, hand strength calculation and opponent modelling. Phase 3 does
+not have the big advantage that phase 2 had over phase 1, but it has the potential
+to become better than phase 1 and 2.
+
+The big change is of course opponent modelling(\ref{opponent modelling}) which enables
+this player to take a more informed decision about what the other players might be
+doing.
+
+As with phase 2 we just check the statistics when it comes to the pre flop betting round.
+Since very little information is available to us and since using the opponent modelling
+would be quite uncertain at this stage there is not much else to do. After the
+flop however we can start using our arsenal to our advantage.
+
+What we then do is
+to look at our hand strength compared to the what the opponent modeller thinks is
+the best other player at the table. We then combine the average strength from the
+opponent modeller with the standard deviation\footnote{\url{http://mathworld.wolfram.com/StandardDeviation.html}}. To incorporate some aggressiveness we can apply different levels of confidence
+in the weight of the standard deviation, meaning a conservative player might like
+95\% confidence, but a more aggressive player might be good with only the average
+or maybe even less.
 
 \end{document}
