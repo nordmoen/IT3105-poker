@@ -162,10 +162,46 @@ nothing can beat them. But the flaw is that the turn could be a card with the sa
 as the 7 and 10 and then someone might have a flush or even a straight might begin to
 appear. The second implementation would account for this and give the lowest ratio
 that could possibly appear which would be an underestimate, but it could be
-much more accurate because of it doesn't overestimate.
+much more accurate because it doesn't overestimate.
 
 \section{Opponent modelling}\label{opponent modelling}
-TODO: Write
+When it comes to opponent modelling most of the interesting features is in the
+contexts that we use to define a situation in the poker game that we think might
+come up again.
+
+Each context gets added by the \textit{PokerMaster} after each
+player make a move. When a game reaches showdown the \textit{PokerMaster} informs
+the opponent modeller that a showdown has been reached and gives the modeller the
+players that have reached the showdown. The modeller then looks through all the 
+contexts that have been added this round and selects those that have the players
+in the showdown in them. It then calculates their hand strength at each context
+and add these contexts to the pool of all seen contexts. When a player later
+gives the opponent modeller a context it checks the list to see if that context
+has been seen before and if it has it calculates an average hand strength and
+a standard deviation\footnote{\url{http://mathworld.wolfram.com/StandardDeviation.html}}
+and returns this to the player. The player can then use this information
+to assess the potential hand of an opponent and select an action based on this.
+
+\subsection{Context model}\label{context model}
+In our setup we have chosen to take the below factors into account when creating
+a context.
+
+\begin{itemize}
+	\item The player
+	\item The action the player took. I.e. Bet or call
+	\item The current round. E.g. Pre-flop, post-flop etc.
+	\item The amount of players still playing. We chose to split this into
+		three categories, "FEW", "NORMAL" and "MANY". Where few players
+		are anything below 1/3, normal is below 3/4 and many is above that.
+	\item The pot odds size which is split into three again "SMALL", "MEDIUM"
+		and "LARGE". Where small is pot odds above 0.45, medium is above
+		0.25 and large is below that.
+\end{itemize}
+
+From testing this seems to be a good fit, because we get a few different context, but
+we also seem them again quite often. For the most part this is a good fit, we could
+extend the number of different possibilities for the amount of players and pot odds, but
+that has not been a big problem up until now.
 
 \section{Player behavior}\label{player behavior}
 In this section we will describe each player phase in a bit more detail than what
@@ -271,5 +307,7 @@ opponent modeller with the standard deviation\footnote{\url{http://mathworld.wol
 in the weight of the standard deviation, meaning a conservative player might like
 95\% confidence, but a more aggressive player might be good with only the average
 or maybe even less.
+
+TODO: Add results
 
 \end{document}
