@@ -15,7 +15,7 @@ public class Phase2Player extends AbstractPokerPlayer{
 	@Override
 	public PokerAction makeDecision(Card[] table, int small, int big,
 			int amount, int potSize, int chipCount, int numPlayers, boolean allowedBet) {
-		double random = Math.random()/((this.aggressiveness != 0 ? 2 * this.aggressiveness : 1));
+		double random = Math.random()/(this.aggressiveness);
 		if(table == null){
 			double winOdds = stats.getStat(numPlayers, currentHand);
 			if(winOdds > 0.5 && allowedBet){

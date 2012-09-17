@@ -16,13 +16,18 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	 * 
 	 * @param name The name of the player to be created.
 	 * @param count The initial chipcount of the player.
-	 * @param agg How aggressive the player should be, a non-negative double. Higher number means less aggressive.
+	 * @param agg How aggressive the player should be, a double (0, 2). Higher number means more aggressive.
 	 */
 	public AbstractPokerPlayer(String name, int count, double agg){
 		this.chipCount = count;
 		this.name = name;
 		this.originalChipCount = count;
-		this.aggressiveness = agg;
+		if(agg<=0){
+			agg = 0.1;
+		}else if(agg>=2){
+			agg = 1.9;
+		}
+		this.aggressiveness = 2-agg;
 	}
 
 	abstract public PokerAction makeDecision(Card[] table, int small, int big, 
@@ -115,11 +120,11 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	
 	@Override
 	public String toString(){
-		return getName() + ", chip count: " + this.getChipCount();
+		return getName() + ", chip count: " + this.getChipCount() + ", Aggressiveness: " + this.aggressiveness;
 	}
 	
 	public String getName(){
-		return getPhaseName() + ", " + this.name + ", Aggressiveness: " + this.aggressiveness;
+		return getPhaseName() + ", " + this.name;
 	}
 	
 	public void reset(){
