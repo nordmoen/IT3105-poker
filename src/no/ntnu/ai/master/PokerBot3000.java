@@ -17,9 +17,9 @@ public class PokerBot3000 {
 	private final static int bigBlind = Integer.parseInt(System.getProperty("bigBlind", "20"));
 	private final static int simulations = Integer.parseInt(System.getProperty("sims", "1000"));
 	private final static String filename = System.getProperty("rolloutFilename", "100k.txt");
-	private final static String[] phase1Aggs = System.getProperty("phase1Aggs").split(",");
-	private final static String[] phase2Aggs = System.getProperty("phase2Aggs").split(",");
-	private final static String[] phase3Aggs = System.getProperty("phase3Aggs").split(",");
+	private final static String[] phase1Aggs = getAggressiveness("phase1Aggs");
+	private final static String[] phase2Aggs = getAggressiveness("phase2Aggs");
+	private final static String[] phase3Aggs = getAggressiveness("phase3Aggs");
 	private final static int learningSims = Integer.parseInt(System.getProperty("learningSims", "10000"));
 
 
@@ -41,7 +41,7 @@ public class PokerBot3000 {
 				players.add(new Phase3Player("Player " + i, 1000, filename, Double.parseDouble(phase3Aggs[i])));
 			}
 
-			PokerMaster master = new PokerMaster(players, new PokerTable(smallBlind, bigBlind), true);
+			PokerMaster master = new PokerMaster(players, new PokerTable(smallBlind, bigBlind), numPhase3 > 0);
 			master.simulate(learningSims);
 
 			if(numPhase3 > 0){
@@ -53,6 +53,15 @@ public class PokerBot3000 {
 			}
 		}
 
+	}
+	
+	private static String[] getAggressiveness(String phase){
+		String phaseProp = System.getProperty(phase);
+		if(phaseProp != null){
+			return phaseProp.split(",");
+		}else{
+			return new String[0];
+		}
 	}
 
 }

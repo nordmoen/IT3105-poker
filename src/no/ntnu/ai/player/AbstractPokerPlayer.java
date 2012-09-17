@@ -119,7 +119,7 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	}
 	
 	public String getName(){
-		return getPhaseName() + ", " + this.name;
+		return getPhaseName() + ", " + this.name + ", Aggressiveness: " + this.aggressiveness;
 	}
 	
 	public void reset(){
