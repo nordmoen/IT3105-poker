@@ -120,7 +120,7 @@ public abstract class AbstractPokerPlayer implements PokerPlayer {
 	
 	@Override
 	public String toString(){
-		return getName() + ", chip count: " + this.getChipCount() + ", Aggressiveness: " + this.aggressiveness;
+		return getName() + ", chip count: " + this.getChipCount() + ", Aggressiveness: " + (2-this.aggressiveness );
 	}
 	
 	public String getName(){
