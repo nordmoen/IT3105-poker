@@ -32,7 +32,7 @@ public class PokerBot3000 {
 		if(numPhase1 + numPhase2 + numPhase3 < 11){
 			ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
 			for(int i = 0; i < numPhase1; i++){
-				players.add(new Phase1Player("Player " + i, 1000, Double.parseDouble(phase1Aggs[i])));
+				players.add(new Phase1Player("Player " + i, 1000,Double.parseDouble(phase1Aggs[i])));
 			}
 			for(int i = 0; i < numPhase2; i++){
 				players.add(new Phase2Player("Player " + i, 1000, filename, Double.parseDouble(phase2Aggs[i])));
